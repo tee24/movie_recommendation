@@ -24,5 +24,10 @@ class Movie(db.Model):
 def hello():
 	return render_template('index.html')
 
+@app.route('/<movie>')
+def movie(movie):
+	movie = Movie.query.filter_by(title=movie).first()
+	return render_template('index.html', movie=movie)
+
 if __name__ == '__main__':
 	app.run(debug=True)
