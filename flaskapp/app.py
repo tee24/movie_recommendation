@@ -20,15 +20,14 @@ class Movie(db.Model):
 	def __repr__(self):
 		return f"{self.id}, {self.title}, {self.rec_1}, {self.rec_2} ..."
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 def index():
 	return render_template('index.html')
 
-@app.route('/movie', methods=['GET', 'POST'])
+@app.route('/recommendations', methods=['GET', 'POST'])
 def movie():
 	if request.method == "POST":
 		user_movie = request.form["user_movie"]
-		print(user_movie)
 		movie = Movie.query.filter_by(title=user_movie).first()
 		return render_template('index.html', movie=movie)
 	else:
