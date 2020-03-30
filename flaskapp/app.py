@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for, request
 from flask_sqlalchemy import SQLAlchemy
 import os
 app = Flask(__name__)
@@ -20,14 +20,19 @@ class Movie(db.Model):
 	def __repr__(self):
 		return f"{self.id}, {self.title}, {self.rec_1}, {self.rec_2} ..."
 
-@app.route('/')
-def hello():
+@app.route('/', methods=['GET', 'POST'])
+def index():
 	return render_template('index.html')
 
-@app.route('/<movie>')
-def movie(movie):
-	movie = Movie.query.filter_by(title=movie).first()
-	return render_template('index.html', movie=movie)
+@app.route('/movie', methods=['GET', 'POST'])
+def movie():
+	if request.method == "POST":
+		user_movie = request.form["user_movie"]
+		print(user_movie)
+		movie = Movie.query.filter_by(title=user_movie).first()
+		return render_template('index.html', movie=movie)
+	else:
+		return render_template('index.html')
 
 if __name__ == '__main__':
 	app.run(debug=True)
