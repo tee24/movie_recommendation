@@ -30,6 +30,16 @@
             <p class="lead">Don't know what to watch? Just enter a movie you enjoyed and let us do the rest!</p>
         </div>
     </div>
+        <!-- Error messages -->
+     {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }} text-center">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+    {% endwith %}
         <!-- Button trigger modal -->
     <div class="text-center">
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
@@ -64,9 +74,9 @@
         </button>
       </div>
       <div class="modal-body">
-        <form method="POST" action="{{ url_for('movie') }}">
+        <form method="POST" action="{{ url_for('movie', movie_title=user_movie) }}">
           <div class="form-group">
-            <input class="form-control" name="user_movie" placeholder="Enter Movie">
+            <input type="text" class="form-control" name="user_movie" placeholder="Enter Movie" list="movie-list"/>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
               <button type="submit" class="btn btn-primary">Save changes</button>
@@ -77,4 +87,9 @@
     </div>
   </div>
 </div>
+<datalist id="movie-list">
+    {% for item in movie_list %}
+      <option value="{{ item }}">{{ item }}</option>
+    {% endfor %}
+</datalist>
 </html>

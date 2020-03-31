@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, flash
 from flask_sqlalchemy import SQLAlchemy
 import os
 app = Flask(__name__)
@@ -20,18 +20,24 @@ class Movie(db.Model):
 	def __repr__(self):
 		return f"{self.id}, {self.title}, {self.rec_1}, {self.rec_2} ..."
 
+movie_list = [m.title for m in Movie.query.all()]
+
 @app.route('/')
 def index():
-	return render_template('index.html')
+	return render_template('index.html', movie_list=movie_list)
 
-@app.route('/recommendations', methods=['GET', 'POST'])
-def movie():
+@app.route('/recommendations/', methods=['GET', 'POST'])
+def movie(movie_title):
 	if request.method == "POST":
 		user_movie = request.form["user_movie"]
 		movie = Movie.query.filter_by(title=user_movie).first()
-		return render_template('index.html', movie=movie)
+		if movie:
+			return render_template('index.html', movie=movie, movie_list=movie_list)
+		else:
+			flash("No movie found please try another!", 'danger')
+			return render_template('index.html', movie_list=movie_list)
 	else:
-		return render_template('index.html')
+		return render_template('index.html', movie_list=movie_list)
 
 if __name__ == '__main__':
 	app.run(debug=True)
