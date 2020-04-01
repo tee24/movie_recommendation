@@ -7,7 +7,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI'
 db = SQLAlchemy(app)
 from flaskapp import models
 
-
 @app.route('/')
 def index():
 	return render_template('index.html', movie_list=models.movie_list)
@@ -18,7 +17,8 @@ def movie():
 		user_movie = request.form["user_movie"]
 		movie = models.Movie.query.filter_by(title=user_movie).first()
 		if movie:
-			return render_template('recommend.html', movie=movie, movie_list=models.movie_list)
+			return render_template('recommend.html', movie=movie,
+								   movie_list=models.movie_list)
 		else:
 			flash("No movie found please try another!", 'danger')
 			return render_template('index.html', movie_list=models.movie_list)

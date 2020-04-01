@@ -1,7 +1,8 @@
 {% extends "template.html" %}
 {% block content %}
+<img src="https://image.tmdb.org/t/p/w500/ilrZAV2klTB0FLxLb01bOp5pzD9.jpg" height="300"/>
 <ul class="list-group py-3">
-  <li class="list-group-item">{{ movie.rec_1 }}</li>
+  <li class="list-group-item">{{ movie.rec_1 }} {{ movie.overview }}</li>
   <li class="list-group-item">{{ movie.rec_2 }}</li>
   <li class="list-group-item">{{ movie.rec_3 }}</li>
   <li class="list-group-item">{{ movie.rec_4 }}</li>
