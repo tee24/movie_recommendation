@@ -27,12 +27,12 @@ def index():
 	return render_template('index.html', movie_list=movie_list)
 
 @app.route('/recommendations/', methods=['GET', 'POST'])
-def movie(movie_title):
+def movie():
 	if request.method == "POST":
 		user_movie = request.form["user_movie"]
 		movie = Movie.query.filter_by(title=user_movie).first()
 		if movie:
-			return render_template('index.html', movie=movie, movie_list=movie_list)
+			return render_template('recommend.html', movie=movie, movie_list=movie_list)
 		else:
 			flash("No movie found please try another!", 'danger')
 			return render_template('index.html', movie_list=movie_list)
