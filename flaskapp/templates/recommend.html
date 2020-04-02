@@ -1,12 +1,30 @@
 {% extends "template.html" %}
 {% block content %}
-<img src="https://image.tmdb.org/t/p/w500/ilrZAV2klTB0FLxLb01bOp5pzD9.jpg" height="300"/>
-<ul class="list-group py-3">
-  <li class="list-group-item">{{ movie.rec_1 }} {{ movie.overview }}</li>
-  <li class="list-group-item">{{ movie.rec_2 }}</li>
-  <li class="list-group-item">{{ movie.rec_3 }}</li>
-  <li class="list-group-item">{{ movie.rec_4 }}</li>
-  <li class="list-group-item">{{ movie.rec_5 }}</li>
-  <li class="list-group-item">{{ movie.rec_6 }}</li>
-</ul>
+
+<div class="row px-5 py-5">
+  <div class="col-4">
+    <div class="list-group" id="list-tab" role="tablist">
+      <a class="list-group-item list-group-item-action active" id="list-rec1-list" data-toggle="list" href="#list-rec1" role="tab" aria-controls="home">{{ movie.rec_1 }}</a>
+      <a class="list-group-item list-group-item-action" id="list-rec2-list" data-toggle="list" href="#list-rec2" role="tab" aria-controls="home">{{ movie.rec_2 }}</a>
+      <a class="list-group-item list-group-item-action" id="list-rec3-list" data-toggle="list" href="#list-rec3" role="tab" aria-controls="home">{{ movie.rec_3 }}</a>
+      <a class="list-group-item list-group-item-action" id="list-rec4-list" data-toggle="list" href="#list-rec4" role="tab" aria-controls="home">{{ movie.rec_4 }}</a>
+      <a class="list-group-item list-group-item-action" id="list-rec5-list" data-toggle="list" href="#list-rec5" role="tab" aria-controls="home">{{ movie.rec_5 }}</a>
+      <a class="list-group-item list-group-item-action" id="list-rec6-list" data-toggle="list" href="#list-rec6" role="tab" aria-controls="home">{{ movie.rec_6 }}</a>
+
+    </div>
+  </div>
+  <div class="col-8">
+    <div class="tab-content" id="nav-tabContent">
+      <div class="tab-pane fade show active" id="list-rec1" role="tabpanel" aria-labelledby="list-rec_1-list">
+        {{ table.query.filter_by(title=movie.rec_1).first().overview }}
+      </div>
+      <div class="tab-pane fade" id="list-rec2" role="tabpanel" aria-labelledby="list-rec_2-list">
+      </div>
+      <div class="tab-pane fade" id="list-rec3" role="tabpanel" aria-labelledby="list-rec_3-list">...</div>
+      <div class="tab-pane fade" id="list-rec4" role="tabpanel" aria-labelledby="list-rec_4-list">...</div>
+      <div class="tab-pane fade" id="list-rec5" role="tabpanel" aria-labelledby="list-rec_5-list">...</div>
+      <div class="tab-pane fade" id="list-rec6" role="tabpanel" aria-labelledby="list-rec_6-list">...</div>
+    </div>
+  </div>
+</div>
 {% endblock content %}

@@ -11,24 +11,44 @@
     <title>Hello, world!</title>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">Navbar</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-          <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
-          <a class="nav-item nav-link" href="#">Features</a>
-          <a class="nav-item nav-link" href="#">Pricing</a>
-        </div>
-      </div>
-    </nav>
-    <div class="jumbotron jumbotron-fluid text-white text-center" style="background-color: #2a3457">
+    <div class="pos-f-t">
+      <div class="row">
+  <div class="collapse col-md-6" id="navbarToggleExternalContent">
+    <div class="bg-dark p-4">
+      <h4 class="text-white">About</h4>
+      <span class="text-muted">
+        Lorem ipsum dolor sit amet, usu ea vide civibus. In sed purto delectus, ne has iuvaret postulant reprimique. Id equidem dolorem usu. Mea saepe possit integre at, vitae conceptam mea an. Nam fugit lucilius te, an mediocrem adversarium quo. Sea ea noluisse sapientem, et vix aliquam propriae philosophia, qui dicit antiopam cu.
+      </span>
+    </div>
+  </div>
+      <div class="collapse col-md-6" id="navbarToggleExternalContent2">
+    <div class="bg-dark p-4">
+      <h4 class="text-white">About</h4>
+      <span class="text-muted">
+        fooknkln;
+      </span>
+    </div>
+  </div>
+</div>
+  <nav class="navbar navbar-dark bg-dark navbar-fixed-top">
+    <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse"
+      data-target="#navbarToggleExternalContent,#navbarToggleExternalContent2" aria-controls="navbarToggleExternalContent"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </nav>
+</div>
+
+    <div class="jumbotron jumbotron-fluid text-center">
         <div class="container">
-            <h1 class="display-1">Movie Picker</h1>
-            <p class="lead">Don't know what to watch? Just enter a movie you enjoyed and let us do the rest!</p>
+            <h1 class="jumbotron-heading">Movie Picker</h1>
+          <p class="lead text-muted p-3">Lorem ipsum dolor sit amet, usu ea vide civibus. In sed purto delectus, ne has iuvaret postulant reprimique. Id equidem dolorem usu. Mea saepe possit integre at, vitae conceptam mea an. Nam fugit lucilius te, an mediocrem adversarium quo. Sea ea noluisse sapientem, et vix aliquam propriae philosophia, qui dicit antiopam cu.</p>
         </div>
+      <p>
+       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+        Enter Your Favourite Movie
+      </button>
+      </p>
     </div>
         <!-- Error messages -->
      {% with messages = get_flashed_messages(with_categories=true) %}
@@ -40,12 +60,7 @@
           {% endfor %}
         {% endif %}
     {% endwith %}
-        <!-- Button trigger modal -->
-    <div class="text-center">
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-        Enter Your Favourite Movie
-      </button>
-    </div>
+
     {% block content %}{% endblock %}
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -78,7 +93,8 @@
     </div>
   </div>
 </div>
-<datalist id="movie-list">
+<!-- datalist -->
+  <datalist id="movie-list">
     {% for item in movie_list %}
       <option value="{{ item }}">{{ item }}</option>
     {% endfor %}
