@@ -17,7 +17,6 @@ class Movie(db.Model):
 	rec_5 = db.Column(db.String, nullable=False)
 	rec_6 = db.Column(db.String, nullable=False)
 
-
 	def __repr__(self):
 		return f"{self.id}, {self.title}, {self.rec_1}, {self.rec_2} ..."
 
