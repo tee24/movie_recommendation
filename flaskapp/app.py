@@ -18,7 +18,7 @@ def movie():
 		movie = models.Movie.query.filter_by(title=user_movie).first()
 		if movie:
 			return render_template('recommend.html', movie=movie,
-								   movie_list=models.movie_list)
+								   movie_list=models.movie_list, table=models.Movie)
 		else:
 			flash("No movie found please try another!", 'danger')
 			return render_template('index.html', movie_list=models.movie_list)
