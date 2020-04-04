@@ -16,7 +16,27 @@
   <div class="col-8">
     <div class="tab-content" id="nav-tabContent">
       <div class="tab-pane fade show active" id="list-rec1" role="tabpanel" aria-labelledby="list-rec_1-list">
-        {{ table.query.filter_by(title=movie.rec_1).first().overview }}
+        <div class="row">
+          <div class="col-2 px-2">
+              <img src="http://image.tmdb.org/t/p/w342{{ table.query.filter_by(title=movie.rec_1).first().poster_path }}" height="300"
+              class="img-responsive"/>
+          </div>
+          <div class="col px-4">
+            <h3>Synopsis</h3>
+            <p>
+            {{ table.query.filter_by(title=movie.rec_1).first().overview }}
+            </p>
+            <p>
+                <a href="https://www.imdb.com/title/{{ table.query.filter_by(title=movie.rec_1).first().imdb_id }}">
+                  <img src="https://m.media-amazon.com/images/G/01/IMDb/BG_rectangle._CB1509060989_SY230_SX307_AL_.png" height="25">
+                </a>
+              </p>
+          </div>
+          <div class="col px-4">
+            <h5>Rating: </h5> {{ (table.query.filter_by(title=movie.rec_1).first().vote_avg)|round(1) }}
+            <p></p><h5>Release: </h5> {{ table.query.filter_by(title=movie.rec_1).first().date_released.strftime('%Y-%m-%d') }}</p>
+          </div>
+        </div>
       </div>
       <div class="tab-pane fade" id="list-rec2" role="tabpanel" aria-labelledby="list-rec_2-list">
       </div>
