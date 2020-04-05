@@ -1,11 +1,13 @@
 from flask import Flask, render_template, url_for, request, flash, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flaskapp.forms import RegistrationForm, LoginForm
+from flask_bcrypt import Bcrypt
 import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')
 db = SQLAlchemy(app)
+bcrypt = Bcrypt(app)
 from flaskapp import models
 
 @app.route('/')
@@ -31,6 +33,7 @@ def register():
 	recommend = False
 	form = RegistrationForm()
 	if form.validate_on_submit():
+		hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
 		flash('Account created!', 'success')
 		return redirect(url_for('index'))
 	return render_template('register.html', form=form, recommend=recommend)
