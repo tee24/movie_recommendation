@@ -4,13 +4,13 @@
 <div class="row px-5 py-5">
   <div class="col-4">
     <div class="list-group" id="list-tab" role="tablist">
+      {% for i in range(1,6) %}
+       {% if i==1 %}
       <a class="list-group-item list-group-item-action active" id="list-rec1-list" data-toggle="list" href="#list-rec1" role="tab" aria-controls="home">{{ movie.rec_1 }}</a>
-      <a class="list-group-item list-group-item-action" id="list-rec2-list" data-toggle="list" href="#list-rec2" role="tab" aria-controls="home">{{ movie.rec_2 }}</a>
-      <a class="list-group-item list-group-item-action" id="list-rec3-list" data-toggle="list" href="#list-rec3" role="tab" aria-controls="home">{{ movie.rec_3 }}</a>
-      <a class="list-group-item list-group-item-action" id="list-rec4-list" data-toggle="list" href="#list-rec4" role="tab" aria-controls="home">{{ movie.rec_4 }}</a>
-      <a class="list-group-item list-group-item-action" id="list-rec5-list" data-toggle="list" href="#list-rec5" role="tab" aria-controls="home">{{ movie.rec_5 }}</a>
-      <a class="list-group-item list-group-item-action" id="list-rec6-list" data-toggle="list" href="#list-rec6" role="tab" aria-controls="home">{{ movie.rec_6 }}</a>
-
+      {% else %}
+       <a class="list-group-item list-group-item-action" id="list-rec{{ i }}-list" data-toggle="list" href="#list-rec{{ i }}" role="tab" aria-controls="home">getattr(movie, 'rec_'+str(i))</a>
+        {% endif %}
+        {% endfor %}
     </div>
   </div>
   <div class="col-8">
@@ -34,11 +34,11 @@
           </div>
           <div class="col px-4">
             <h5>Rating: </h5> {{ (table.query.filter_by(title=movie.rec_1).first().vote_avg)|round(1) }}
-            <p></p><h5>Release: </h5> {{ table.query.filter_by(title=movie.rec_1).first().date_released.strftime('%Y-%m-%d') }}</p>
+            <p><h5>Release: </h5> {{ table.query.filter_by(title=movie.rec_1).first().date_released.strftime('%Y-%m-%d') }}</p>
           </div>
         </div>
       </div>
-      <div class="tab-pane fade" id="list-rec2" role="tabpanel" aria-labelledby="list-rec_2-list">
+      <div class="tab-pane fade" id="list-rec2" role="tabpanel" aria-labelledby="list-rec_2-list">...
       </div>
       <div class="tab-pane fade" id="list-rec3" role="tabpanel" aria-labelledby="list-rec_3-list">...</div>
       <div class="tab-pane fade" id="list-rec4" role="tabpanel" aria-labelledby="list-rec_4-list">...</div>
