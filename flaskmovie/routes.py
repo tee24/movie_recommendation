@@ -1,5 +1,5 @@
 from flask import render_template, request, url_for, flash, redirect
-from flaskmovie import app, bcrypt
+from flaskmovie import app, bcrypt, db
 from flaskmovie.forms import RegistrationForm, LoginForm
 from flaskmovie.models import Movie, User, movie_list
 
@@ -27,8 +27,11 @@ def register():
 	form = RegistrationForm()
 	if form.validate_on_submit():
 		hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+		user = User(username=form.username.data, email=form.email.data, password=hashed_password)
+		db.session.add(user)
+		db.session.commit()
 		flash('Account created!', 'success')
-		return redirect(url_for('index'))
+		return redirect(url_for('login'))
 	return render_template('register.html', form=form, recommend=recommend)
 
 @app.route('/login', methods=['GET', 'POST'])
