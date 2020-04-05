@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, flash
+from flask import Flask, render_template, url_for, request, flash, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flaskapp.forms import RegistrationForm, LoginForm
 import os
@@ -26,16 +26,25 @@ def movie():
 	else:
 		return render_template('index.html', movie_list=models.movie_list)
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def register():
 	recommend = False
 	form = RegistrationForm()
+	if form.validate_on_submit():
+		flash('Account created!', 'success')
+		return redirect(url_for('index'))
 	return render_template('register.html', form=form, recommend=recommend)
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
 	recommend = False
 	form = LoginForm()
+	if form.validate_on_submit():
+		if form.email.data == "test@root.com" and form.password.data == "pass":
+			flash('You have successfully logged in', 'success')
+			return redirect(url_for('index'))
+		else:
+			flash('Login Failed', 'danger')
 	return render_template('login.html', form=form, recommend=recommend)
 
 
