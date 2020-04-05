@@ -28,13 +28,15 @@ def movie():
 
 @app.route('/register')
 def register():
+	recommend = False
 	form = RegistrationForm()
-	return render_template('register.html', form=form)
+	return render_template('register.html', form=form, recommend=recommend)
 
 @app.route('/login')
-def register():
+def login():
+	recommend = False
 	form = LoginForm()
-	return render_template('login.html', form=form)
+	return render_template('login.html', form=form, recommend=recommend)
 
 
 
