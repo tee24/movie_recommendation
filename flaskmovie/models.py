@@ -27,7 +27,7 @@ class User(db.Model):
 	password = db.Column(db.String(30), nullable=False)
 
 	def __repr__(self):
-		return f"User('{self.username}', '{self.email}', '{self.image_file}')"
+		return f"User('{self.username}', '{self.email}')"
 
 
 movie_list = [m.title for m in Movie.query.all()]
