@@ -24,8 +24,13 @@
     <div class="collapse col-md-6" id="navbarToggleExternalContent2">
     <div class="p-5">
       <h4 class="text-white">Links</h4>
-        <a href="#" class="text-white py-1">Sign In</a><br>
-        <a href="{{ url_for('register') }}" class="text-white py-1">Sign Up</a><br>
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('logout') }}" class="text-white py-1">Logout</a><br>
+            <a href="{{ url_for('account') }}" class="text-white py-1">Account</a><br>
+        {% else %}
+            <a href="{{ url_for('login') }}" class="text-white py-1">Sign In</a><br>
+            <a href="{{ url_for('register') }}" class="text-white py-1">Sign Up</a><br>
+        {% endif %}
         <a href="#" class="text-white py-1">FAQ's</a><br>
         <a href="#" class="text-white py-1">Contact</a><br>
     </div>

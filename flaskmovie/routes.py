@@ -2,6 +2,7 @@ from flask import render_template, request, url_for, flash, redirect
 from flaskmovie import app, bcrypt, db
 from flaskmovie.forms import RegistrationForm, LoginForm
 from flaskmovie.models import Movie, User, movie_list
+from flask_login import login_user, current_user, logout_user, login_required
 
 @app.route('/')
 def index():
@@ -39,10 +40,27 @@ def login():
 	recommend = False
 	form = LoginForm()
 	if form.validate_on_submit():
-		if form.email.data == "test@root.com" and form.password.data == "pass":
+		user = User.query.filter_by(email=form.email.data).first()
+		if user and bcrypt.check_password_hash(user.password, form.password.data):
+			login_user(user, remember=form.remember.data)
 			flash('You have successfully logged in', 'success')
-			return redirect(url_for('index'))
+			next = request.args.get('next')
+			if next:
+				return redirect(next)
+			else:
+				return redirect(url_for('index'))
 		else:
-			flash('Login Failed', 'danger')
+			flash('Login Failed. Check Credentials', 'danger')
 	return render_template('login.html', form=form, recommend=recommend)
+
+@app.route('/logout')
+def logout():
+	logout_user()
+	flash('You have logged out', 'success')
+	return redirect(url_for('index'))
+
+@app.route('/account')
+@login_required
+def account():
+	return render_template('account.html')
 

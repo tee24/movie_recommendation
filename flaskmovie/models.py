@@ -1,4 +1,10 @@
-from flaskmovie import db
+from flaskmovie import db, login_manager
+from flask_login import UserMixin
+
+@login_manager.user_loader
+def load_user(user_id):
+	user = User.query.get(int(user_id))
+	return user
 
 class Movie(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
@@ -20,7 +26,7 @@ class Movie(db.Model):
 	def __repr__(self):
 		return f"{self.id}, {self.title}, {self.rec_1}, {self.rec_2} ..."
 
-class User(db.Model):
+class User(db.Model, UserMixin):
 	id = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.String(16), unique=True, nullable=False)
 	email = db.Column(db.String(100), unique=True, nullable=False)
