@@ -1,5 +1,6 @@
 from flask import Flask, render_template, url_for, request, flash
 from flask_sqlalchemy import SQLAlchemy
+from flaskapp.forms import RegistrationForm, LoginForm
 import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
@@ -24,6 +25,18 @@ def movie():
 			return render_template('index.html', movie_list=models.movie_list)
 	else:
 		return render_template('index.html', movie_list=models.movie_list)
+
+@app.route('/register')
+def register():
+	form = RegistrationForm()
+	return render_template('register.html', form=form)
+
+@app.route('/login')
+def register():
+	form = LoginForm()
+	return render_template('login.html', form=form)
+
+
 
 if __name__ == '__main__':
 	app.run(debug=True)
