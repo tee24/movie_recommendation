@@ -1,6 +1,6 @@
 from flask import render_template, request, url_for, flash, redirect
 from flaskmovie import app, bcrypt, db
-from flaskmovie.forms import RegistrationForm, LoginForm
+from flaskmovie.forms import RegistrationForm, LoginForm, AccountUpdateForm
 from flaskmovie.models import Movie, User, movie_list
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -59,8 +59,21 @@ def logout():
 	flash('You have logged out', 'success')
 	return redirect(url_for('index'))
 
-@app.route('/account')
+@app.route('/account', methods=['GET', 'POST'])
 @login_required
 def account():
-	return render_template('account.html')
+	form = AccountUpdateForm()
+	if form.validate_on_submit():
+		if bcrypt.check_password_hash(current_user.password, form.current_password.data):
+			current_user.email = form.email.data
+			current_user.password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+			db.session.commit()
+			flash("Account has been updated!", "success")
+			return redirect(url_for('index'))
+		else:
+			flash("Please check your current password is correct!", 'danger')
+
+	elif request.method == "GET":
+		form.email.data = current_user.email
+	return render_template('account.html', form=form)
 
