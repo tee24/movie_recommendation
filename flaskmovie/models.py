@@ -1,5 +1,6 @@
 from flaskmovie import db, login_manager
 from flask_login import UserMixin
+from datetime import datetime
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -22,6 +23,10 @@ class Movie(db.Model):
 	rec_4 = db.Column(db.String, nullable=False)
 	rec_5 = db.Column(db.String, nullable=False)
 	rec_6 = db.Column(db.String, nullable=False)
+	posts = db.relationship('Post', backref='movie', lazy=True)
+
+
+
 
 	def __repr__(self):
 		return f"{self.id}, {self.title}, {self.rec_1}, {self.rec_2} ..."
@@ -31,9 +36,17 @@ class User(db.Model, UserMixin):
 	username = db.Column(db.String(16), unique=True, nullable=False)
 	email = db.Column(db.String(100), unique=True, nullable=False)
 	password = db.Column(db.String(30), nullable=False)
+	posts = db.relationship('Post', backref='author', lazy=True)
 
 	def __repr__(self):
 		return f"User('{self.username}', '{self.email}')"
+
+class Post(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	date_time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+	message = db.Column(db.Text, nullable=False)
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+	movie_id = db.Column(db.Integer, db.ForeignKey('movie.id'), nullable=False)
 
 
 movie_list = [m.title for m in Movie.query.all()]
