@@ -1,0 +1,68 @@
+{% extends "template.html" %}
+{% block content %}
+ <div class="container justify-content-center">
+     <div class="row">
+         <div class="col-4">
+            <img src="http://image.tmdb.org/t/p/w342{{ movie.poster_path }}" height="500"
+              class="img-fluid image rounded"/>
+        </div>
+        <div class="col-8">
+            <h4 class="heading-1 p-2">Similar Movies</h4>
+            <div class="list-group">
+    <a href="#" class="list-group-item list-group-item-action">
+        <div class="d-flex w-120 justify-content-between">
+            <h4>Title</h4>
+            <small>rating or year</small>
+        </div>
+        <p>Comment</p>
+    </a>
+    <a href="#" class="list-group-item list-group-item-action">
+        <div class="d-flex w-120 justify-content-between">
+            <h4>title</h4>
+            <small>rating or year</small>
+        </div>
+        <p>comment</p>
+    </a>
+    <a href="#" class="list-group-item list-group-item-action">
+        <div class="d-flex w-120 justify-content-between">
+            <h4>title</h4>
+            <small>rating/year</small>
+        </div>
+        <p>some comment</p>
+    </a>
+</div>
+        </div>
+
+    <div class="row">
+      <div class="col">
+        <div class="card mt-4">
+          <div class="card-body">
+            <h3 class="card-title">{{ movie.title }}</h3>
+            <p class="card-text">{{ movie.overview }}</p>
+            <div class="p-3 mb-2 bg-primary text-white">{{ movie.vote_avg|round(1) }}</div>
+          </div>
+        </div>
+        <!-- /.card -->
+
+        <div class="card card-outline-secondary my-3">
+          <div class="card-header">
+            Movie Comments
+          </div>
+          <div class="card-body">
+            <p>Lorem ipsum dolor sit amet, usu ea vide civibus. In sed purto delectus, ne has iuvaret postulant reprimique. Id equidem dolorem usu. Mea saepe possit integre at, vitae conceptam mea an. Nam fugit lucilius te, an mediocrem adversarium quo. Sea ea noluisse sapientem, et vix aliquam propriae philosophia, qui dicit antiopam cu.</p>
+            <small class="text-muted">poster by foo</small>
+            <hr>
+            <p>Lorem ipsum dolor sit amet, usu ea vide civibus. In sed purto delectus, ne has iuvaret postulant reprimique. Id equidem dolorem usu. Mea saepe possit integre at, vitae conceptam mea an. Nam fugit lucilius te, an mediocrem adversarium quo. Sea ea noluisse sapientem, et vix aliquam propriae philosophia, qui dicit antiopam cu.</p>
+            <small class="text-muted">Posted by </small>
+            <hr>
+            <p>Lorem ipsum dolor sit amet, usu ea vide civibus. In sed purto delectus, ne has iuvaret postulant reprimique. Id equidem dolorem usu. Mea saepe possit integre at, vitae conceptam mea an. Nam fugit lucilius te, an mediocrem adversarium quo. Sea ea noluisse sapientem, et vix aliquam propriae philosophia, qui dicit antiopam cu.</p>
+            <small class="text-muted">Posted by</small>
+            <hr>
+            <a href="#" class="btn btn-success">Leave a comment</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+ </div>
+{% endblock content %}

@@ -9,7 +9,7 @@ def index():
 	return render_template('index.html', movie_list=movie_list)
 
 @app.route('/recommendations/', methods=['GET', 'POST'])
-def movie():
+def recommend():
 	if request.method == "POST":
 		user_movie = request.form["user_movie"]
 		movie = Movie.query.filter_by(title=user_movie).first()
@@ -76,4 +76,10 @@ def account():
 	elif request.method == "GET":
 		form.email.data = current_user.email
 	return render_template('account.html', form=form)
+
+@app.route('/movie/<int:movie_id>')
+def movie(movie_id):
+	movie = Movie.query.filter_by(id=movie_id).first()
+	return render_template('movie.html', movie=movie)
+
 
