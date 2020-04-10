@@ -9,26 +9,13 @@
         <div class="col-8">
             <h4 class="heading-1 p-2">Similar Movies</h4>
             <div class="list-group">
-    <a href="#" class="list-group-item list-group-item-action">
+
+    <a href="{{ url_for('movie', movie_id=Movie.query.filter_by(title=movie.rec_1).first().id) }}" class="list-group-item list-group-item-action">
         <div class="d-flex w-120 justify-content-between">
-            <h4>Title</h4>
-            <small>rating or year</small>
+            <h4>{{ movie.rec_1 }}</h4>
+            <small class="font-weight-bold">{{ Movie.query.filter_by(title=movie.rec_1).first().vote_avg|round(1) }}/10</small>
         </div>
-        <p>Comment</p>
-    </a>
-    <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex w-120 justify-content-between">
-            <h4>title</h4>
-            <small>rating or year</small>
-        </div>
-        <p>comment</p>
-    </a>
-    <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex w-120 justify-content-between">
-            <h4>title</h4>
-            <small>rating/year</small>
-        </div>
-        <p>some comment</p>
+        <p>{{ Movie.query.filter_by(title=movie.rec_1).first().overview }}</p>
     </a>
 </div>
         </div>
@@ -49,16 +36,32 @@
             Movie Comments
           </div>
           <div class="card-body">
-            <p>Lorem ipsum dolor sit amet, usu ea vide civibus. In sed purto delectus, ne has iuvaret postulant reprimique. Id equidem dolorem usu. Mea saepe possit integre at, vitae conceptam mea an. Nam fugit lucilius te, an mediocrem adversarium quo. Sea ea noluisse sapientem, et vix aliquam propriae philosophia, qui dicit antiopam cu.</p>
-            <small class="text-muted">poster by foo</small>
+              {% for post in posts %}
+            <p>{{ post.message }}</p>
+            <small class="text-muted">Posted by {{ post.author.username }} on {{ post.date_time.strftime('%Y-%m-%d') }}</small>
             <hr>
-            <p>Lorem ipsum dolor sit amet, usu ea vide civibus. In sed purto delectus, ne has iuvaret postulant reprimique. Id equidem dolorem usu. Mea saepe possit integre at, vitae conceptam mea an. Nam fugit lucilius te, an mediocrem adversarium quo. Sea ea noluisse sapientem, et vix aliquam propriae philosophia, qui dicit antiopam cu.</p>
-            <small class="text-muted">Posted by </small>
-            <hr>
-            <p>Lorem ipsum dolor sit amet, usu ea vide civibus. In sed purto delectus, ne has iuvaret postulant reprimique. Id equidem dolorem usu. Mea saepe possit integre at, vitae conceptam mea an. Nam fugit lucilius te, an mediocrem adversarium quo. Sea ea noluisse sapientem, et vix aliquam propriae philosophia, qui dicit antiopam cu.</p>
-            <small class="text-muted">Posted by</small>
-            <hr>
-            <a href="#" class="btn btn-success">Leave a comment</a>
+              {% endfor %}
+              <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <div class="form-group">
+                    {{ form.comment.label(class="form-control-label") }}
+                    {% if form.comment.errors %}
+                        {{ form.comment(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.comment.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.comment(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                 </fieldset>
+                <div class="form-group pt-2">
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
+              </form>
           </div>
         </div>
       </div>
