@@ -81,6 +81,11 @@ def account():
 def movie(movie_id):
 	form = CommentForm()
 	movie = Movie.query.filter_by(id=movie_id).first()
+	movie_recs = []
+	for i in range(1,7):
+		x = f"movie.rec_{i}"
+		rec = Movie.query.filter_by(title=eval(x)).first()
+		movie_recs.append(rec)
 	if form.validate_on_submit():
 		if current_user.is_authenticated:
 			post = Post(message=form.comment.data, movie_id=movie.id, user_id=current_user.id)
@@ -89,6 +94,7 @@ def movie(movie_id):
 			flash('Comment Posted', 'success')
 		else:
 			flash('Please sign in to post a comment!', 'info')
-	return render_template('movie.html', movie=movie, Movie=Movie, form=form, posts=reversed(movie.posts))
+	return render_template('movie.html', movie=movie, Movie=Movie, form=form, posts=reversed(movie.posts),
+						   recs=movie_recs)
 
 
