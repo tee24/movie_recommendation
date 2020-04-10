@@ -1,32 +1,22 @@
 {% extends "template.html" %}
 {% block content %}
- <div class="container justify-content-center">
-     <div class="row">
-         <div class="col-4">
-            <img src="http://image.tmdb.org/t/p/w342{{ movie.poster_path }}" height="500"
-              class="img-fluid image rounded"/>
-        </div>
-        <div class="col-8">
-            <h4 class="heading-1 p-2">Similar Movies</h4>
-            <div class="list-group">
-
-    <a href="{{ url_for('movie', movie_id=Movie.query.filter_by(title=movie.rec_1).first().id) }}" class="list-group-item list-group-item-action">
-        <div class="d-flex w-120 justify-content-between">
-            <h4>{{ movie.rec_1 }}</h4>
-            <small class="font-weight-bold">{{ Movie.query.filter_by(title=movie.rec_1).first().vote_avg|round(1) }}/10</small>
-        </div>
-        <p>{{ Movie.query.filter_by(title=movie.rec_1).first().overview }}</p>
-    </a>
-</div>
-        </div>
-
+<div class="container">
     <div class="row">
       <div class="col">
         <div class="card mt-4">
           <div class="card-body">
             <h3 class="card-title">{{ movie.title }}</h3>
             <p class="card-text">{{ movie.overview }}</p>
-            <div class="p-3 mb-2 bg-primary text-white">{{ movie.vote_avg|round(1) }}</div>
+            <div class="progress">
+                {% set score = (movie.vote_avg * 10)|round(0) %}
+                {% if score < 35 %}
+                    <div class="progress-bar bg-success" role="progressbar" style="width: {{ score }}%" aria-valuemin="0" aria-valuemax="100">{{ score }}/100</div>
+                {% elif score< 60  %}
+                    <div class="progress-bar bg-success" role="progressbar" style="width: {{ score }}%" aria-valuemin="0" aria-valuemax="100">{{ score }}/100</div>
+                {% else %}
+                    <div class="progress-bar bg-success" role="progressbar" style="width: {{ score }}%" aria-valuemin="0" aria-valuemax="100">{{ score }}/100</div>
+                {% endif %}
+            </div>
           </div>
         </div>
         <!-- /.card -->
@@ -66,6 +56,5 @@
         </div>
       </div>
     </div>
-  </div>
- </div>
-{% endblock content %}
+</div>
+ {% endblock content %}
