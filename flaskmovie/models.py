@@ -25,9 +25,6 @@ class Movie(db.Model):
 	rec_6 = db.Column(db.String, nullable=False)
 	posts = db.relationship('Post', backref='movie', lazy=True)
 
-
-
-
 	def __repr__(self):
 		return f"{self.id}, {self.title}, {self.rec_1}, {self.rec_2} ..."
 
@@ -47,6 +44,9 @@ class Post(db.Model):
 	message = db.Column(db.Text, nullable=False)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 	movie_id = db.Column(db.Integer, db.ForeignKey('movie.id'), nullable=False)
+
+	def __repr__(self):
+		return f"Post('{self.message[:100]}', '{self.date_time}', '{self.user_id}', '{self.movie_id}')"
 
 
 movie_list = [m.title for m in Movie.query.all()]

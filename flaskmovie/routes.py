@@ -1,7 +1,7 @@
 from flask import render_template, request, url_for, flash, redirect
 from flaskmovie import app, bcrypt, db
-from flaskmovie.forms import RegistrationForm, LoginForm, AccountUpdateForm
-from flaskmovie.models import Movie, User, movie_list
+from flaskmovie.forms import RegistrationForm, LoginForm, AccountUpdateForm, CommentForm
+from flaskmovie.models import Movie, User, Post, movie_list
 from flask_login import login_user, current_user, logout_user, login_required
 
 @app.route('/')
@@ -77,9 +77,18 @@ def account():
 		form.email.data = current_user.email
 	return render_template('account.html', form=form)
 
-@app.route('/movie/<int:movie_id>')
+@app.route('/movie/<int:movie_id>', methods=['GET', 'POST'])
 def movie(movie_id):
+	form = CommentForm()
 	movie = Movie.query.filter_by(id=movie_id).first()
-	return render_template('movie.html', movie=movie)
+	if form.validate_on_submit():
+		if current_user.is_authenticated:
+			post = Post(message=form.comment.data, movie_id=movie.id, user_id=current_user.id)
+			db.session.add(post)
+			db.session.commit()
+			flash('Comment Posted', 'success')
+		else:
+			flash('Please sign in to post a comment!', 'info')
+	return render_template('movie.html', movie=movie, Movie=Movie, form=form, posts=reversed(movie.posts))
 
 
