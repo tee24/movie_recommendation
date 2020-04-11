@@ -48,13 +48,6 @@
             <h1 class="jumbotron-heading">Movie Picker</h1>
           <p class="lead text-muted p-3">Lorem ipsum dolor sit amet, usu ea vide civibus. In sed purto delectus, ne has iuvaret postulant reprimique. Id equidem dolorem usu. Mea saepe possit integre at, vitae conceptam mea an. Nam fugit lucilius te, an mediocrem adversarium quo. Sea ea noluisse sapientem, et vix aliquam propriae philosophia, qui dicit antiopam cu.</p>
         </div>
-      {% if recommend or not recommend is defined%}
-      <p>
-       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-        Enter Your Favourite Movie
-      </button>
-      </p>
-      {% endif %}
     </div>
         <!-- Error messages -->
      {% with messages = get_flashed_messages(with_categories=true) %}

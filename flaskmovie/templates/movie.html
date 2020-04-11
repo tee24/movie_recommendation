@@ -2,6 +2,21 @@
 {% block content %}
 <div class="container">
     <div class="row">
+    {% for item in recs %}
+        <div class="col-md-6 col-lg-4 py-1 d-flex align-items-stretch">
+            <div class="card">
+                <a href="{{ url_for('movie', movie_id=item.id) }}">
+                <img class="card-img-top img-fluid" src="http://image.tmdb.org/t/p/w342{{ item.poster_path }}" style="height: 100">
+                </a>
+                <div class="card-block">
+                    <h3 class="card-title">{{ item.title }}</h3>
+                    <p class="card-text">{{ item.overview[:200] }}</p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+    <div class="row">
       <div class="col">
         <div class="card mt-4">
           <div class="card-body">
@@ -10,9 +25,9 @@
             <div class="progress">
                 {% set score = (movie.vote_avg * 10)|round(0) %}
                 {% if score < 35 %}
-                    <div class="progress-bar bg-success" role="progressbar" style="width: {{ score }}%" aria-valuemin="0" aria-valuemax="100">{{ score }}/100</div>
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: {{ score }}%" aria-valuemin="0" aria-valuemax="100">{{ score }}/100</div>
                 {% elif score< 60  %}
-                    <div class="progress-bar bg-success" role="progressbar" style="width: {{ score }}%" aria-valuemin="0" aria-valuemax="100">{{ score }}/100</div>
+                    <div class="progress-bar bg-warning" role="progressbar" style="width: {{ score }}%" aria-valuemin="0" aria-valuemax="100">{{ score }}/100</div>
                 {% else %}
                     <div class="progress-bar bg-success" role="progressbar" style="width: {{ score }}%" aria-valuemin="0" aria-valuemax="100">{{ score }}/100</div>
                 {% endif %}

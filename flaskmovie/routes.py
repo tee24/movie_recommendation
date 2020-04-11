@@ -8,23 +8,8 @@ from flask_login import login_user, current_user, logout_user, login_required
 def index():
 	return render_template('index.html', movie_list=movie_list)
 
-@app.route('/recommendations/', methods=['GET', 'POST'])
-def recommend():
-	if request.method == "POST":
-		user_movie = request.form["user_movie"]
-		movie = Movie.query.filter_by(title=user_movie).first()
-		if movie:
-			return render_template('recommend.html', movie=movie,
-								   movie_list=movie_list, table=Movie)
-		else:
-			flash("No movie found please try another!", 'danger')
-			return render_template('index.html', movie_list=movie_list)
-	else:
-		return render_template('index.html', movie_list=movie_list)
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-	recommend = False
 	form = RegistrationForm()
 	if form.validate_on_submit():
 		hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
@@ -33,11 +18,10 @@ def register():
 		db.session.commit()
 		flash('Account created!', 'success')
 		return redirect(url_for('login'))
-	return render_template('register.html', form=form, recommend=recommend)
+	return render_template('register.html', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-	recommend = False
 	form = LoginForm()
 	if form.validate_on_submit():
 		user = User.query.filter_by(email=form.email.data).first()
@@ -51,7 +35,7 @@ def login():
 				return redirect(url_for('index'))
 		else:
 			flash('Login Failed. Check Credentials', 'danger')
-	return render_template('login.html', form=form, recommend=recommend)
+	return render_template('login.html', form=form)
 
 @app.route('/logout')
 def logout():
