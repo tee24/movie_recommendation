@@ -17,7 +17,7 @@ def register():
 		db.session.add(user)
 		db.session.commit()
 		user.confirmation_email()
-		flash('Account created, please verify email!', 'success')
+		flash('Account created, please check your email to verify your account', 'success')
 		return redirect(url_for('login'))
 	return render_template('register.html', form=form)
 
@@ -73,23 +73,26 @@ def movie(movie_id):
 		movie_recs.append(rec)
 	if form.validate_on_submit():
 		if current_user.is_authenticated:
-			post = Post(message=form.comment.data, movie_id=movie.id, user_id=current_user.id)
-			db.session.add(post)
-			db.session.commit()
-			form.comment.data = ""
-			flash('Comment Posted', 'success')
+			if current_user.confirmed:
+				post = Post(message=form.comment.data, movie_id=movie.id, user_id=current_user.id)
+				db.session.add(post)
+				db.session.commit()
+				form.comment.data = ""
+				flash('Comment Posted', 'success')
+			else:
+				flash('You must verify your email before commenting!', 'info')
 		else:
 			flash('Please sign in to post a comment!', 'info')
 	return render_template('movie.html', movie=movie, Movie=Movie, form=form, posts=reversed(movie.posts),
 						   recs=movie_recs)
 
 @app.route('/confirm/<token>', methods=['GET', 'POST'])
-@login_required
 def confirm_email(token):
 	user = User.confirm_token(token)
 	if not user:
 		flash('Invalid token', 'danger')
-		return redirect(url_for('account'))
+		return redirect(url_for('index'))
 	user.confirmed = True
 	db.session.commit()
-
+	flash('Email verified!', 'success')
+	return redirect(url_for('index'))
