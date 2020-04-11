@@ -1,5 +1,8 @@
-from flaskmovie import db, login_manager
+from flaskmovie import db, login_manager, app, mail
+from flask import url_for
+from flask_mail import Message
 from flask_login import UserMixin
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from datetime import datetime
 
 @login_manager.user_loader
@@ -33,7 +36,29 @@ class User(db.Model, UserMixin):
 	username = db.Column(db.String(16), unique=True, nullable=False)
 	email = db.Column(db.String(100), unique=True, nullable=False)
 	password = db.Column(db.String(30), nullable=False)
+	confirmed = db.Column(db.Boolean, nullable=False, default=False)
 	posts = db.relationship('Post', backref='author', lazy=True)
+
+	def generate_confirm_token(self, expiry=600):
+		serial = Serializer(app.config['SECRET_KEY'], expiry)
+		return serial.dumps({'user_id': self.id}).decode('utf-8')
+
+	@staticmethod
+	def confirm_token(token):
+		serial = Serializer(app.config['SECRET_KEY'])
+		user_id = serial.loads(token).get('user_id')
+		return User.query.get(user_id)
+
+	def confirmation_email(self):
+		token = self.generate_confirm_token()
+		message = Message('Email confirmation link', sender='noreply@moviesite.com',
+				   recipients=[self.email])
+		message.body = f""" Confirm your email address by visiting the following link:
+{url_for('confirm_email', token=token, _external=True)}
+Thank you!
+		"""
+		mail.send(message)
+
 
 	def __repr__(self):
 		return f"User('{self.username}', '{self.email}')"

@@ -16,7 +16,8 @@ def register():
 		user = User(username=form.username.data, email=form.email.data, password=hashed_password)
 		db.session.add(user)
 		db.session.commit()
-		flash('Account created!', 'success')
+		user.confirmation_email()
+		flash('Account created, please verify email!', 'success')
 		return redirect(url_for('login'))
 	return render_template('register.html', form=form)
 
@@ -82,4 +83,13 @@ def movie(movie_id):
 	return render_template('movie.html', movie=movie, Movie=Movie, form=form, posts=reversed(movie.posts),
 						   recs=movie_recs)
 
+@app.route('/confirm/<token>', methods=['GET', 'POST'])
+@login_required
+def confirm_email(token):
+	user = User.confirm_token(token)
+	if not user:
+		flash('Invalid token', 'danger')
+		return redirect(url_for('account'))
+	user.confirmed = True
+	db.session.commit()
 
