@@ -75,6 +75,7 @@ def movie(movie_id):
 			post = Post(message=form.comment.data, movie_id=movie.id, user_id=current_user.id)
 			db.session.add(post)
 			db.session.commit()
+			form.comment.data = ""
 			flash('Comment Posted', 'success')
 		else:
 			flash('Please sign in to post a comment!', 'info')
