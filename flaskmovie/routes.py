@@ -1,12 +1,12 @@
 from flask import render_template, request, url_for, flash, redirect
 from flaskmovie import app, bcrypt, db
 from flaskmovie.forms import RegistrationForm, LoginForm, AccountUpdateForm, CommentForm, RequestResetPasswordForm, ResetPasswordForm
-from flaskmovie.models import Movie, User, Post, movie_list
+from flaskmovie.models import Movie, User, Post
 from flask_login import login_user, current_user, logout_user, login_required
 
 @app.route('/')
 def index():
-	return render_template('index.html', movie_list=movie_list)
+	return render_template('index.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
