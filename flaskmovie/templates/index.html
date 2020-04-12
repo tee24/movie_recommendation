@@ -2,54 +2,19 @@
 {% block content %}
 <div class="container-fluid">
     <div class="row mb-5">
-        <div class="col-md-6 col-lg-3 py-1 d-flex align-items-stretch">
-            <div class="card">
-                <img src="https://image.tmdb.org/t/p/w780/upUy2QhMZEmtypPW3PdieKLAHxh.jpg" class="card-img-top"
-                     alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Bad Boys For Life</h5>
-                    <p class="card-text">Miami detectives Mike Lowrey and Marcus Burnett must face off against a
-                        mother-and-son pair of drug lords who wreak vengeful havoc on their city.</p>
-                    <a href="#" class="btn btn-sm btn-primary">More Info</a>
+        {% for item in movies %}
+            <div class="col-md-6 col-lg-3 py-1 d-flex align-items-stretch">
+                <div class="card">
+                    <img src="https://image.tmdb.org/t/p/original/{{ item.poster_path }}" class="card-img-top" style="width: 100%;"
+                         alt="image">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.original_title }}</h5>
+                        <p class="card-text">{{ item.overview }}</p>
+                        <a href="#" class="btn btn-sm btn-primary">More Info</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6 col-lg-3 py-1 d-flex align-items-stretch">
-            <div class="card">
-                <img src="https://image.tmdb.org/t/p/w780/upUy2QhMZEmtypPW3PdieKLAHxh.jpg" class="card-img-top"
-                     alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Bad Boys For Life</h5>
-                    <p class="card-text">Miami detectives Mike Lowrey and Marcus Burnett must face off against a
-                        mother-and-son pair of drug lords who wreak vengeful havoc on their city.</p>
-                    <a href="#" class="btn btn-sm btn-primary">More Info</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-lg-3 py-1 d-flex align-items-stretch">
-            <div class="card">
-                <img src="https://image.tmdb.org/t/p/w780/upUy2QhMZEmtypPW3PdieKLAHxh.jpg" class="card-img-top"
-                     alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Bad Boys For Life</h5>
-                    <p class="card-text">Miami detectives Mike Lowrey and Marcus Burnett must face off against a
-                        mother-and-son pair of drug lords who wreak vengeful havoc on their city.</p>
-                    <a href="#" class="btn btn-sm btn-primary">More Info</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 col-lg-3 py-1 d-flex align-items-stretch">
-            <div class="card">
-                <img src="https://image.tmdb.org/t/p/w780/upUy2QhMZEmtypPW3PdieKLAHxh.jpg" class="card-img-top"
-                     alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Bad Boys For Life</h5>
-                    <p class="card-text">Miami detectives Mike Lowrey and Marcus Burnett must face off against a
-                        mother-and-son pair of drug lords who wreak vengeful havoc on their city.</p>
-                    <a href="#" class="btn btn-sm btn-primary">More Info</a>
-                </div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

@@ -1,12 +1,15 @@
 from flask import render_template, request, url_for, flash, redirect
-from flaskmovie import app, bcrypt, db
+from flaskmovie import app, bcrypt, db, key
 from flaskmovie.forms import RegistrationForm, LoginForm, AccountUpdateForm, CommentForm, RequestResetPasswordForm, ResetPasswordForm
 from flaskmovie.models import Movie, User, Post
 from flask_login import login_user, current_user, logout_user, login_required
+import requests
 
 @app.route('/')
 def index():
-	return render_template('index.html')
+	r_dict = requests.get(f"https://api.themoviedb.org/3/movie/popular?api_key={key}&language=en-US&page=1").json()
+	movies  = r_dict['results']
+	return render_template('index.html', movies=movies)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
