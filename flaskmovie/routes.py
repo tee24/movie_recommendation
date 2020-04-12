@@ -1,6 +1,6 @@
 from flask import render_template, request, url_for, flash, redirect
 from flaskmovie import app, bcrypt, db
-from flaskmovie.forms import RegistrationForm, LoginForm, AccountUpdateForm, CommentForm
+from flaskmovie.forms import RegistrationForm, LoginForm, AccountUpdateForm, CommentForm, RequestResetPasswordForm, ResetPasswordForm
 from flaskmovie.models import Movie, User, Post, movie_list
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -96,3 +96,32 @@ def confirm_email(token):
 	db.session.commit()
 	flash('Email verified!', 'success')
 	return redirect(url_for('index'))
+
+@app.route('/reset/password', methods=['GET', 'POST'])
+def reset_password_token():
+	form = RequestResetPasswordForm()
+	if form.validate_on_submit():
+		user = User.query.filter_by(email=form.email.data).first()
+		user.password_reset_email()
+		flash('A password reset link has been sent to your email!', 'info')
+		return redirect(url_for('index'))
+	return render_template('password_reset_request.html', form=form)
+
+@app.route('/reset/password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+	user = User.confirm_token(token)
+	if not user:
+		flash('Invalid token', 'danger')
+		return redirect(url_for('login'))
+	form = ResetPasswordForm()
+	if form.validate_on_submit():
+		hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+		user.password = hashed_password
+		db.session.commit()
+		flash('Your password has been updated!', 'success')
+		return redirect(url_for('login'))
+	return render_template('password_reset.html', form=form)
+
+
+
+

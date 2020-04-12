@@ -54,7 +54,21 @@ class User(db.Model, UserMixin):
 		message = Message('Email confirmation link', sender='noreply@moviesite.com',
 				   recipients=[self.email])
 		message.body = f""" Confirm your email address by visiting the following link:
+
 {url_for('confirm_email', token=token, _external=True)}
+
+Thank you!
+		"""
+		mail.send(message)
+
+	def password_reset_email(self):
+		token = self.generate_confirm_token()
+		message = Message('Password reset link', sender='noreply@moviesite.com',
+						  recipients=[self.email])
+		message.body = f""" To reset your password please visit the following link:
+
+{url_for('reset_password', token=token, _external=True)}
+
 Thank you!
 		"""
 		mail.send(message)
