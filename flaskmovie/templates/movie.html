@@ -1,39 +1,10 @@
 {% extends "template.html" %}
 {% block content %}
+
+<!-- COMMENTS -->
 <div class="container">
     <div class="row">
       <div class="col">
-        <div class="card mt-4">
-          <div class="card-body">
-            <h3 class="card-title">{{ movie.title }}</h3>
-            <p class="card-text">{{ movie.overview }}</p>
-            <div class="progress">
-                {% set score = (movie.vote_avg * 10)|round(0) %}
-                {% if score < 35 %}
-                    <div class="progress-bar bg-danger" role="progressbar" style="width: {{ score }}%" aria-valuemin="0" aria-valuemax="100">{{ score }}/100</div>
-                {% elif score< 60  %}
-                    <div class="progress-bar bg-warning" role="progressbar" style="width: {{ score }}%" aria-valuemin="0" aria-valuemax="100">{{ score }}/100</div>
-                {% else %}
-                    <div class="progress-bar bg-success" role="progressbar" style="width: {{ score }}%" aria-valuemin="0" aria-valuemax="100">{{ score }}/100</div>
-                {% endif %}
-            </div>
-          </div>
-        </div>
-          <h3 class="display-4 text-center p-5">Similar Movies</h3>
-    <div class="row">
-    {% for item in recs %}
-        <div class="col-md-6 col-lg-4 py-1 d-flex align-items-stretch">
-            <div class="card">
-                <a href="{{ url_for('movie', movie_id=item.id) }}" class="stretched-link"></a>
-                <img class="card-img-top img-fluid" src="http://image.tmdb.org/t/p/w342{{ item.poster_path }}" style="height: 100">
-                <div class="card-block">
-                    <h3 class="card-title">{{ item.title }}</h3>
-                    <p class="card-text">{{ item.overview }}</p>
-                </div>
-            </div>
-        </div>
-    {% endfor %}
-</div>
         <!-- /.card -->
         <div class="card card-outline-secondary my-3">
           <div class="card-header">
