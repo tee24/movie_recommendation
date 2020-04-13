@@ -15,7 +15,9 @@
 <body>
 
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <a class="navbar-brand" href="#">
+    <img src="{{ url_for('static', filename='logo2.png') }}" width="40" height="40" alt="">
+    </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
             aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -24,21 +26,21 @@
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('index') }}"><i class="fas fa-home"></i></a>
+                <a class="nav-link" data-toggle="tooltip" title="Home" data-placement="bottom" href="{{ url_for('index') }}"><i class="fas fa-home"></i></a>
             </li>
             {% if current_user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('account') }}"><i class="far fa-user-circle"></i></a>
+                    <a class="nav-link" data-toggle="tooltip" title="Account" href="{{ url_for('account') }}"><i class="far fa-user-circle"></i></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i></a>
+                    <a class="nav-link" data-toggle="tooltip" title="Logout" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i></a>
                 </li>
             {% else %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('register') }}"><i class="fas fa-user-plus"></i></a>
+                    <a class="nav-link" data-toggle="tooltip" title="Register" href="{{ url_for('register') }}"><i class="fas fa-user-plus"></i></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('login') }}"><i class="fas fa-sign-in-alt"></i></a>
+                    <a class="nav-link" data-toggle="tooltip" title="Login" href="{{ url_for('login') }}"><i class="fas fa-sign-in-alt"></i></a>
                 </li>
             {% endif %}
         </ul>
@@ -89,5 +91,11 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+<script>
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
+
 </body>
 </html>
