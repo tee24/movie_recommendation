@@ -12,24 +12,11 @@ def load_user(user_id):
 
 class Movie(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
-	imdb_id = db.Column(db.String, unique=True)
-	title = db.Column(db.String, nullable=False)
-	overview = db.Column(db.String)
-	date_released = db.Column(db.DateTime)
-	poster_path = db.Column(db.String)
-	runtime = db.Column(db.Integer)
-	vote_count = db.Column(db.Integer)
-	vote_avg = db.Column(db.DECIMAL)
-	rec_1 = db.Column(db.String, nullable=False)
-	rec_2 = db.Column(db.String, nullable=False)
-	rec_3 = db.Column(db.String, nullable=False)
-	rec_4 = db.Column(db.String, nullable=False)
-	rec_5 = db.Column(db.String, nullable=False)
-	rec_6 = db.Column(db.String, nullable=False)
+	tmdb_id = db.Column(db.String, unique=True)
 	posts = db.relationship('Post', backref='movie', lazy=True)
 
 	def __repr__(self):
-		return f"{self.id}, {self.title}, {self.rec_1}, {self.rec_2} ..."
+		return f"{self.id}, {self.tmdb_id}"
 
 class User(db.Model, UserMixin):
 	id = db.Column(db.Integer, primary_key=True)
@@ -82,10 +69,7 @@ class Post(db.Model):
 	date_time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 	message = db.Column(db.Text, nullable=False)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-	movie_id = db.Column(db.Integer, db.ForeignKey('movie.id'), nullable=False)
+	movie_id = db.Column(db.Integer, db.ForeignKey('movie.tmdb_id'), nullable=False)
 
 	def __repr__(self):
 		return f"Post('{self.message[:100]}', '{self.date_time}', '{self.user_id}', '{self.movie_id}')"
-
-
-movie_list = [m.title for m in Movie.query.all()]

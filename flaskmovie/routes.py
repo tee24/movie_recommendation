@@ -67,17 +67,17 @@ def account():
 
 @app.route('/movie/<int:movie_id>', methods=['GET', 'POST'])
 def movie(movie_id):
+	movie = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={key}&language=en-US").json()
+	my_movie = Movie.query.filter_by(tmdb_id=movie_id).first()
+	if not my_movie:
+		new_movie = Movie(tmdb_id=movie_id)
+		db.session.add(new_movie)
+		db.session.commit()
 	form = CommentForm()
-	movie = Movie.query.filter_by(id=movie_id).first()
-	movie_recs = []
-	for i in range(1,7):
-		x = f"movie.rec_{i}"
-		rec = Movie.query.filter_by(title=eval(x)).first()
-		movie_recs.append(rec)
 	if form.validate_on_submit():
 		if current_user.is_authenticated:
 			if current_user.confirmed:
-				post = Post(message=form.comment.data, movie_id=movie.id, user_id=current_user.id)
+				post = Post(message=form.comment.data, movie_id=movie.tmdb_id, user_id=current_user.id)
 				db.session.add(post)
 				db.session.commit()
 				form.comment.data = ""
@@ -86,8 +86,7 @@ def movie(movie_id):
 				flash('You must verify your email before commenting!', 'info')
 		else:
 			flash('Please sign in to post a comment!', 'info')
-	return render_template('movie.html', movie=movie, Movie=Movie, form=form, posts=reversed(movie.posts),
-						   recs=movie_recs)
+	return render_template('movie.html', movie=movie, form=form, posts=my_movie.posts)
 
 @app.route('/confirm/<token>', methods=['GET', 'POST'])
 def confirm_email(token):
