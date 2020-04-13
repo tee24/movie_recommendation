@@ -73,6 +73,7 @@ def movie(movie_id):
 		new_movie = Movie(tmdb_id=movie_id)
 		db.session.add(new_movie)
 		db.session.commit()
+		return redirect(url_for('movie', movie_id=movie_id))
 	form = CommentForm()
 	if form.validate_on_submit():
 		if current_user.is_authenticated:

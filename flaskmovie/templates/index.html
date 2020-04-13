@@ -3,9 +3,9 @@
 <div class="container-fluid">
     <div class="row mb-5">
         {% for item in movies %}
-        <div class="col-sm-6 col-md-4 col-lg-2 py-1">
+        <div class="col-6 col-sm-4 col-md-3 col-xl-2 py-1">
             <div class="card h-100">
-                <img src="https://image.tmdb.org/t/p/w500/{{ item.poster_path }}" class="card-img-top"
+                <img src="https://image.tmdb.org/t/p/w500/{{ item.poster_path }}" class="card-img-top movie-header"
                      alt="image">
                 <div class="card-body">
                     <h5 class="card-title">{{ item.original_title }}</h5>
