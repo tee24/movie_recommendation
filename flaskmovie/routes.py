@@ -78,7 +78,7 @@ def movie(movie_id):
 	if form.validate_on_submit():
 		if current_user.is_authenticated:
 			if current_user.confirmed:
-				post = Post(message=form.comment.data, movie_id=movie.tmdb_id, user_id=current_user.id)
+				post = Post(message=form.comment.data, movie_id=my_movie.tmdb_id, user_id=current_user.id)
 				db.session.add(post)
 				db.session.commit()
 				form.comment.data = ""

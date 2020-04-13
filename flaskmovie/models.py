@@ -33,7 +33,10 @@ class User(db.Model, UserMixin):
 	@staticmethod
 	def confirm_token(token):
 		serial = Serializer(app.config['SECRET_KEY'])
-		user_id = serial.loads(token).get('user_id')
+		try:
+			user_id = serial.loads(token).get('user_id')
+		except:
+			return None
 		return User.query.get(user_id)
 
 	def confirmation_email(self):
