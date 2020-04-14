@@ -1,10 +1,9 @@
 {% extends "template.html" %}
 {% block content %}
-
-<div class="container">
-    <div class="row">
-        <img src="https://image.tmdb.org/t/p/w500/{{ movie.backdrop_path }}" id="tomName">
-    </div>
+<div class="jumbotron mb-0" id="banner" style="background-image: url(https://image.tmdb.org/t/p/original/{{ movie.backdrop_path }}); background-size: cover; height: 400px;">
+   <div class="container">
+   <h1 id="bannerText">About</h1>
+   </div>
 </div>
 <!-- COMMENTS -->
 <div class="container">
