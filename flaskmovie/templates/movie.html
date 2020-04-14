@@ -1,9 +1,37 @@
 {% extends "template.html" %}
 {% block content %}
-<div class="jumbotron mb-0" id="banner" style="background-image: url(https://image.tmdb.org/t/p/original/{{ movie.backdrop_path }}); background-size: cover; height: 400px;">
+<!-- BANNER -->
+<div class="jumbotron jumbotron-fluid mb-0" id="banner" style="background-image: url(https://image.tmdb.org/t/p/original/{{ movie.backdrop_path }}); background-size: cover; height: 400px;">
    <div class="container">
-   <h1 id="bannerText">About</h1>
    </div>
+</div>
+<!-- INFO -->
+<div class="container-fluid" id="movie_info">
+    <div class="row">
+        <div class="col-sm-6 col-lg-4 text-center">
+            <img src="https://image.tmdb.org/t/p/w185/{{ movie.poster_path }}" id="icon">
+        </div>
+        <div class="col-sm-6 col-lg-4 align-self-center">
+            {{ movie.overview }}
+        </div>
+        <div class="col-sm-12 col-lg-4 align-self-center">
+            <p>Genre:
+            {% for genre in movie.genres %}
+                {{ genre['name'] }}
+            {% endfor %}
+            </p>
+            <p>
+                Runtime: {{ movie.runtime }}
+            </p>
+            <p>
+                Release Date: {{ movie.release_date }}
+            </p>
+        </div>
+    </div>
+</div>
+<!-- VIDEO? -->
+<div class="container-fluid" style="height:300px; background-color:#e9ecef;">
+
 </div>
 <!-- COMMENTS -->
 <div class="container">

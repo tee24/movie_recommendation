@@ -8,8 +8,9 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Muli&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
     <title>Hello, world!</title>
 </head>
 <body>
@@ -55,11 +56,12 @@
         </form>
     </div>
 </nav>
+<span style="display:block; height: 66px;"></span>
 <!-- Error messages -->
 {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}
 {% for category, message in messages %}
-<div class="container mb-5">
+<div class="container-fluid mb-5">
     <div class="row justify-content-center">
         <div class="col-12 text-center alert alert-{{ category }}">
             {{ message }}
