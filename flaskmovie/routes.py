@@ -125,11 +125,12 @@ def reset_password(token):
 		return redirect(url_for('login'))
 	return render_template('password_reset.html', form=form)
 
-@app.route('/update', methods=['POST', 'GET'])
+@app.route('/update', methods=['GET', 'POST'])
 def update():
-	# r = requests.get(f"https://api.themoviedb.org/3/movie/popular?api_key={key}&language=en-US&page=2").json()['results']
-	x = request.args.get('foo')
-	print(x)
-	return jsonify({'result': 'success'})
+	#r = requests.get(f"https://api.themoviedb.org/3/movie/popular?api_key={key}&language=en-US&page=2").json()['results']
+	y = request.args.get('foo')
+	print(y)
+	return jsonify({'result': y})
+
 
 

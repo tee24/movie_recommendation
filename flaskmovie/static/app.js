@@ -1,9 +1,16 @@
 $(document).ready(function(){
+
   $("#topRated").click(function() {
-      $.ajax({
-      url: '/update',
-      type: "GET",
-      data: { foo: 'blahblahblah'}
-});
+
+      req = $.ajax({
+              url: '/update',
+              type: "GET",
+              data: { foo: 'blahblahblah'}
+            });
+
+       req.done(function(data){
+            $('#testText').text(data.result);
+       });
   });
+
 });
