@@ -1,4 +1,4 @@
-from flask import render_template, request, url_for, flash, redirect
+from flask import render_template, request, url_for, flash, redirect, jsonify
 from flaskmovie import app, bcrypt, db, key
 from flaskmovie.forms import RegistrationForm, LoginForm, AccountUpdateForm, CommentForm, RequestResetPasswordForm, ResetPasswordForm
 from flaskmovie.models import Movie, User, Post
@@ -125,6 +125,11 @@ def reset_password(token):
 		return redirect(url_for('login'))
 	return render_template('password_reset.html', form=form)
 
-
+@app.route('/update', methods=['POST', 'GET'])
+def update():
+	# r = requests.get(f"https://api.themoviedb.org/3/movie/popular?api_key={key}&language=en-US&page=2").json()['results']
+	x = request.args.get('foo')
+	print(x)
+	return jsonify({'result': 'success'})
 
 
