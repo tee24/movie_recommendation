@@ -1,6 +1,6 @@
 {% extends "template.html" %}
 {% block content %}
-    <div class="input-group justify-content-center">
+    <div class="input-group justify-content-center"  style="margin-top:66px">
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
@@ -39,7 +39,7 @@
                     {{ form.submit(class="btn btn-primary") }}
                 </div>
             <small class="text-muted">
-                <a href="#">Forgot Password</a><br>
+                <a href="{{ url_for('reset_password_token') }}">Forgot Password</a><br>
                 <span class="py-2">Need to Register? <a href="{{ url_for('register') }}">Click Here</a></span>
             </small>
         </form>
