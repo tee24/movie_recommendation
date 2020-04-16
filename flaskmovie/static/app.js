@@ -1,15 +1,15 @@
 $(document).ready(function(){
 
-  $("#topRated").click(function() {
+  $("#page2").click(function() {
 
       req = $.ajax({
               url: '/update',
               type: "POST",
-              data: { foo: 'blahblahblah'}
+              data: { foo : 'PAGE2'}
             });
 
        req.done(function(data){
-            $('#testText').text(data.result);
+            $('#movie_tiles').replaceWith(data);
        });
   });
 
