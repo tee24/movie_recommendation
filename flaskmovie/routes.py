@@ -128,7 +128,7 @@ def reset_password(token):
 @app.route('/update', methods=['GET', 'POST'])
 def update():
 	#r = requests.get(f"https://api.themoviedb.org/3/movie/popular?api_key={key}&language=en-US&page=2").json()['results']
-	y = request.args.get('foo')
+	y = request.values.get('foo')
 	print(y)
 	return jsonify({'result': y})
 

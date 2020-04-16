@@ -4,7 +4,7 @@ $(document).ready(function(){
 
       req = $.ajax({
               url: '/update',
-              type: "GET",
+              type: "POST",
               data: { foo: 'blahblahblah'}
             });
 
