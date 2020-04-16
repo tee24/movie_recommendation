@@ -127,35 +127,41 @@ def reset_password(token):
 
 @app.route('/update', methods=['GET', 'POST'])
 def update():
-	get = request.values.get('foo')
-	if get == "PAGE2":
-		movie = requests.get(f"https://api.themoviedb.org/3/movie/popular?api_key={key}&language=en-US&page=2").json()['results']
-		html = ""
-		for result in movie:
-			html += f"""
-<div class="col-6 col-sm-4 col-md-3 col-xl-2 py-1">
-	<div class="card h-100">
-		<img src="https://image.tmdb.org/t/p/w500/{result['poster_path']}" class="card-img-top movie-header"
-			 alt="image">
-		<div class="card-body">
-			<h5 class="card-title">{result['original_title']}</h5>
-			<a href="{url_for('movie', movie_id=result['id'])}" class="stretched-link"></a>
-		</div>
-		<div class="card-footer">
-			<small class="text-muted">{result['release_date']}</small>
+	data = request.values.get('command')
+	print(html_gen(movie_api_call(data)))
+	return html_gen(movie_api_call(data))
+
+def html_gen(list):
+	html = ""
+	for result in list:
+		html += f"""
+	<div class="col-6 col-sm-4 col-md-3 col-xl-2 py-1">
+		<div class="card h-100">
+			<img src="https://image.tmdb.org/t/p/w500/{result['poster_path']}" class="card-img-top movie-header"
+				 alt="image">
+			<div class="card-body">
+				<h5 class="card-title">{result['original_title']}</h5>
+				<a href="{url_for('movie', movie_id=result['id'])}" class="stretched-link"></a>
+			</div>
+			<div class="card-footer">
+				<small class="text-muted">{result['release_date']}</small>
+			</div>
 		</div>
 	</div>
-</div>
-	"""
-		html = f"""
-<div class="container-fluid">
-<div class="row mb-5">
-{html}
-</div>
-</div>
 		"""
-		print(html)
-		return html
+	html = f"""
+	<div class="container-fluid">
+	<div class="row mb-5">
+	{html}
+	</div>
+	</div>
+			"""
+	return html
+
+def movie_api_call(endpoint):
+	return requests.get(f"https://api.themoviedb.org/3/movie/{endpoint}?api_key={key}&language=en-US&region=US").json()['results']
+
+
 
 
 
