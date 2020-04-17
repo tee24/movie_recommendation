@@ -1,4 +1,4 @@
-from flask import render_template, request, url_for, flash, redirect, jsonify
+from flask import render_template, request, url_for, flash, redirect, jsonify, session
 from flaskmovie import app, bcrypt, db, key
 from flaskmovie.forms import RegistrationForm, LoginForm, AccountUpdateForm, CommentForm, RequestResetPasswordForm, ResetPasswordForm
 from flaskmovie.models import Movie, User, Post
@@ -7,7 +7,9 @@ import requests
 
 @app.route('/')
 def index():
-	r_dict = requests.get(f"https://api.themoviedb.org/3/movie/popular?api_key={key}&language=en-US&page=1").json()
+	if "movie" in session:
+		return render_template('index.html', movies=session['movie'])
+	r_dict = requests.get(f"https://api.themoviedb.org/3/movie/popular?api_key={key}&language=en-US&page=1&region=US").json()
 	movies  = r_dict['results']
 	return render_template('index.html', movies=movies)
 
@@ -128,7 +130,6 @@ def reset_password(token):
 @app.route('/update', methods=['GET', 'POST'])
 def update():
 	data = request.values.get('command')
-	print(html_gen(movie_api_call(data)))
 	return html_gen(movie_api_call(data))
 
 def html_gen(list):
@@ -159,7 +160,17 @@ def html_gen(list):
 	return html
 
 def movie_api_call(endpoint):
-	return requests.get(f"https://api.themoviedb.org/3/movie/{endpoint}?api_key={key}&language=en-US&region=US").json()['results']
+	movie = requests.get(f"https://api.themoviedb.org/3/movie/{endpoint}?api_key={key}&language=en-US&region=US").json()['results']
+	#session['movie'] = movie
+	return movie
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+	search = request.args.get('search')
+	movies = requests.get(f"https://api.themoviedb.org/3/search/movie?api_key={key}&language=en-US&query={search}&page=1&region=US").json()['results']
+	if not movies:
+		flash('No results found, please check your search!', 'info')
+	return render_template('search.html', movies=movies)
 
 
 

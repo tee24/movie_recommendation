@@ -1,0 +1,25 @@
+{% extends "template.html" %}
+{% block content %}
+<div class="container-fluid mt-3" id="movie_tiles">
+    <div class="row mb-5">
+        {% for item in movies %}
+        <div class="col-6 col-sm-4 col-md-3 col-xl-2 py-1">
+            <div class="card h-100">
+                {% if item.poster_path is not none %}
+                    <img src="https://image.tmdb.org/t/p/w500/{{ item.poster_path }}" class="card-img-top movie-header">
+                {% else %}
+                    <img src="{{ url_for('static', filename='background.jpg') }}" class="card-img-top movie-header">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.original_title }}</h5>
+                    <a href="{{ url_for('movie', movie_id=item.id) }}" class="stretched-link"></a>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">{{ item.release_date }}</small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

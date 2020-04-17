@@ -50,8 +50,8 @@
             </li>
             {% endif %}
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search">
+        <form class="form-inline my-2 my-lg-0" action="{{ url_for('search') }}">
+            <input class="form-control mr-sm-2" name="search" type="search" placeholder="Search">
             <button class="btn btn-outline-light my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
         </form>
     </div>
