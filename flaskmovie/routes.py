@@ -135,10 +135,12 @@ def update():
 def html_gen(list):
 	html = ""
 	for result in list:
+		image_src = f"https://image.tmdb.org/t/p/w500/{result['poster_path']}" if result['poster_path'] is not None else url_for('static', filename='background.jpg')
+		print(image_src)
 		html += f"""
 	<div class="col-6 col-sm-4 col-md-3 col-xl-2 py-1">
 		<div class="card h-100">
-			<img src="https://image.tmdb.org/t/p/w500/{result['poster_path']}" class="card-img-top movie-header"
+			<img src="{image_src}" class="card-img-top movie-header"
 				 alt="image">
 			<div class="card-body">
 				<h5 class="card-title">{result['original_title']}</h5>
