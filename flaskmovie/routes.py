@@ -4,6 +4,10 @@ from flaskmovie.forms import RegistrationForm, LoginForm, AccountUpdateForm, Com
 from flaskmovie.models import Movie, User, Post
 from flask_login import login_user, current_user, logout_user, login_required
 import requests
+import requests_cache
+
+requests_cache.install_cache(cache_name='movie_cache', backend='sqlite', expire_after=180)
+
 
 @app.route('/')
 def index():
