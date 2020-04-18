@@ -13,6 +13,9 @@ def load_user(user_id):
 class Movie(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	tmdb_id = db.Column(db.String, unique=True)
+	backdrop_path = db.Column(db.Text)
+	poster_path = db.Column(db.Text)
+	original_title = db.Column(db.Text)
 	posts = db.relationship('Post', backref='movie', lazy=True)
 
 	def __repr__(self):
@@ -25,6 +28,7 @@ class User(db.Model, UserMixin):
 	password = db.Column(db.String(30), nullable=False)
 	confirmed = db.Column(db.Boolean, nullable=False, default=False)
 	posts = db.relationship('Post', backref='author', lazy=True)
+	movies = db.relationship('MovieList', backref='movies', lazy=True)
 
 	def generate_confirm_token(self, expiry=600):
 		serial = Serializer(app.config['SECRET_KEY'], expiry)
@@ -83,4 +87,7 @@ class MovieList(db.Model):
 	movie_id = db.Column(db.Integer, db.ForeignKey('movie.tmdb_id'), nullable=False)
 	watch_list = db.Column(db.Boolean, nullable=False)
 	favourite_list = db.Column(db.Boolean, nullable=False)
+
+	def __repr__(self):
+		return f"Post('{self.id}', '{self.user_id}', '{self.movie_id}', '{self.watch_list}', '{self.favourite_list}')"
 
