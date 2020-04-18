@@ -8,27 +8,31 @@
 <!-- INFO -->
 <div class="container-fluid" id="movie_info">
     <div class="row">
-        <div class="col-sm-6 col-lg-3 text-center">
+        <div class="col-sm-12 col-lg-3 text-center">
             <img src="https://image.tmdb.org/t/p/w185/{{ movie.poster_path }}" id="icon">
         </div>
-        <div class="col-sm-6 col-lg-3 align-self-center text-left">
-            {{ movie.overview }}
+        <div class="col-sm-12 col-lg-3 align-self-center text-left">
+            <p><span class="font-weight-bold h2">{{ movie.original_title }}</span></p>
+            <p>{{ movie.overview }}</p>
         </div>
-        <div class="col-sm-12 col-lg-3 align-self-center">
-            <p>Genre:
+        <div class="col-sm-12 col-lg-3 align-self-center" id="movie_basic_data">
+            <p>
+                <span class="font-weight-bold">Genre:</span>
             {% for genre in movie.genres %}
-                {{ genre['name'] }}
+                {{ genre['name'] }}{{ "," if not loop.last }}
             {% endfor %}
             </p>
             <p>
-                Runtime: {{ movie.runtime }}
+                <span class="font-weight-bold">Runtime:</span>
+                {{ movie.runtime }} minutes
             </p>
             <p>
-                Release Date: {{ movie.release_date }}
+                <span class="font-weight-bold">Release Date:</span>
+                {{ movie.release_date }}
             </p>
         </div>
-        <div class="col-sm-6 col-lg-3 align-self-center">
-            <a href="{{ url_for('watchlist_add', movie_id=movie.id) }}" class="btn btn-primary">Add To Watchlist</a>
+        <div class="col-sm-12 col-lg-3 align-self-center">
+            <a href="{{ url_for('watchlist_add', movie_id=movie.id) }}" class="btn btn-primary mb-2"><i class="fas fa-plus mr-2"></i>Add To Watchlist</a><br>
         </div>
     </div>
 </div>
