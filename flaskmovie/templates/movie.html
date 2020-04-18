@@ -8,13 +8,13 @@
 <!-- INFO -->
 <div class="container-fluid" id="movie_info">
     <div class="row">
-        <div class="col-sm-6 col-lg-4 text-center">
+        <div class="col-sm-6 col-lg-3 text-center">
             <img src="https://image.tmdb.org/t/p/w185/{{ movie.poster_path }}" id="icon">
         </div>
-        <div class="col-sm-6 col-lg-4 align-self-center">
+        <div class="col-sm-6 col-lg-3 align-self-center text-left">
             {{ movie.overview }}
         </div>
-        <div class="col-sm-12 col-lg-4 align-self-center">
+        <div class="col-sm-12 col-lg-3 align-self-center">
             <p>Genre:
             {% for genre in movie.genres %}
                 {{ genre['name'] }}
@@ -26,6 +26,9 @@
             <p>
                 Release Date: {{ movie.release_date }}
             </p>
+        </div>
+        <div class="col-sm-6 col-lg-3 align-self-center">
+            <a href="{{ url_for('watchlist_add', movie_id=movie.id) }}" class="btn btn-primary">Add To Watchlist</a>
         </div>
     </div>
 </div>
