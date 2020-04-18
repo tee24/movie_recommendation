@@ -78,7 +78,8 @@ def movie(movie_id):
 	movie = movie.json()
 	my_movie = Movie.query.filter_by(tmdb_id=movie_id).first()
 	if not my_movie:
-		new_movie = Movie(tmdb_id=movie_id)
+		new_movie = Movie(tmdb_id=movie_id, original_title=movie['original_title'],
+						  backdrop_path=movie['backdrop_path'], poster_path=movie['poster_path'])
 		db.session.add(new_movie)
 		db.session.commit()
 		return redirect(url_for('movie', movie_id=movie_id))
@@ -182,9 +183,9 @@ def search():
 @app.route('/watchlist/', methods=['GET', 'POST'])
 @login_required
 def watchlist():
-	user_watchlist = MovieList.query.filter_by(user_id=current_user.id).all()
-	user_watchlist = [x.movie_id for x in user_watchlist]
-	return render_template('watchlist.html', watchlist=user_watchlist)
+	ids = [movie.movie_id for movie in current_user.movies]
+	watchlist = db.session.query(Movie).filter(Movie.tmdb_id.in_(ids)).all()
+	return render_template('watchlist.html', watchlist=watchlist)
 
 @app.route('/watchlist/add/<int:movie_id>', methods=['GET', 'POST'])
 @login_required
