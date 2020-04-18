@@ -37,7 +37,17 @@
     </div>
 </div>
 <!-- VIDEO? -->
-<div class="container-fluid" style="height:300px; background-color:#e9ecef;">
+<div class="container-fluid scrollmenu" style="height:300px; background-color:#e9ecef;">
+  {% for person in movie_credits %}
+    <div class="card">
+        <img class="card-img-top" src="http://image.tmdb.org/t/p/w185/{{ person.profile_path }}">
+        <div class="card-body">
+            <h4 class="card-title font-weight-bold">{{ person.name }}</h4>
+            <p class="card-text text-muted">{{ person.character }}</p>
+            <a href="#" class="stretched-link"></a>
+        </div>
+   {% endfor %}
+</div>
 
 </div>
 <!-- COMMENTS -->

@@ -7,3 +7,27 @@ top: -50px;}
 #movie_info{
 font-family: 'Muli', sans-serif;
 }
+
+.card-img-top {
+    width: 100% !important;
+    height: 15vw !important;
+    object-fit: cover !important;
+}
+
+div.scrollmenu {
+  background-color: #333;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+div.scrollmenu a {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
