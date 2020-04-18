@@ -76,3 +76,11 @@ class Post(db.Model):
 
 	def __repr__(self):
 		return f"Post('{self.message[:100]}', '{self.date_time}', '{self.user_id}', '{self.movie_id}')"
+
+class MovieList(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+	movie_id = db.Column(db.Integer, db.ForeignKey('movie.tmdb_id'), nullable=False)
+	watch_list = db.Column(db.Boolean, nullable=False)
+	favourite_list = db.Column(db.Boolean, nullable=False)
+

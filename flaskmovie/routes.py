@@ -1,19 +1,20 @@
 from flask import render_template, request, url_for, flash, redirect, jsonify, session
 from flaskmovie import app, bcrypt, db, key
 from flaskmovie.forms import RegistrationForm, LoginForm, AccountUpdateForm, CommentForm, RequestResetPasswordForm, ResetPasswordForm
-from flaskmovie.models import Movie, User, Post
+from flaskmovie.models import Movie, User, Post, MovieList
 from flask_login import login_user, current_user, logout_user, login_required
 import requests
 import requests_cache
 
-requests_cache.install_cache(cache_name='movie_cache', backend='sqlite', expire_after=180)
+requests_cache.install_cache(cache_name='movie_cache', backend='sqlite', expire_after=86400)
 
 
 @app.route('/')
 def index():
 	if "movie" in session:
 		return render_template('index.html', movies=session['movie'])
-	r_dict = requests.get(f"https://api.themoviedb.org/3/movie/popular?api_key={key}&language=en-US&page=1&region=US").json()
+	r_dict = requests.get(f"https://api.themoviedb.org/3/movie/popular?api_key={key}&language=en-US&page=1&region=US")
+	r_dict = r_dict.json()
 	movies  = r_dict['results']
 	return render_template('index.html', movies=movies)
 
@@ -73,7 +74,8 @@ def account():
 
 @app.route('/movie/<int:movie_id>', methods=['GET', 'POST'])
 def movie(movie_id):
-	movie = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={key}&language=en-US").json()
+	movie = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={key}&language=en-US")
+	movie = movie.json()
 	my_movie = Movie.query.filter_by(tmdb_id=movie_id).first()
 	if not my_movie:
 		new_movie = Movie(tmdb_id=movie_id)
@@ -177,7 +179,25 @@ def search():
 		flash('No results found, please check your search!', 'info')
 	return render_template('search.html', movies=movies)
 
+@app.route('/watchlist/', methods=['GET', 'POST'])
+@login_required
+def watchlist():
+	user_watchlist = MovieList.query.filter_by(user_id=current_user.id).all()
+	user_watchlist = [x.movie_id for x in user_watchlist]
+	return render_template('watchlist.html', watchlist=user_watchlist)
 
-
+@app.route('/watchlist/add/<int:movie_id>', methods=['GET', 'POST'])
+@login_required
+def watchlist_add(movie_id):
+	check = MovieList.query.filter_by(user_id=current_user.id, movie_id=movie_id).first()
+	if check:
+		check.watch_list = True
+		db.session.commit()
+	else:
+		movie_to_add = MovieList(user_id=current_user.id, movie_id=movie_id, watch_list=True, favourite_list=False)
+		db.session.add(movie_to_add)
+		db.session.commit()
+	flash('Movie added to watchlist', 'success')
+	return redirect(url_for('movie', movie_id=movie_id))
 
 
