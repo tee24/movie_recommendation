@@ -29,7 +29,7 @@ div.scrollmenu a {
 .wrapper{
 border: 1px solid red;
 width: 80%;
-height: 400px;
+height: 300px;
 margin: 0px auto;
 overflow: hidden;
 }
@@ -37,12 +37,9 @@ overflow: hidden;
 .wrapper .post{
 background-color: white;
 display: inline-block;
-padding: 10px 0px 10px 0px;
-border-top-left-radius: 5px;
-border-top-right-radius: 5px;
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-width: 80%;
-height: 75%;
+height: 300px;
+width: 185px;
+margin: 0px 10px;
 }
 
 .wrapper .post .post-image{
@@ -59,10 +56,12 @@ i.back{
 position: absolute;
 left: 20px;
 top: 50%;
+cursor: pointer;
 }
 
 i.forward{
 position: absolute;
 right: 20px;
 top: 50%;
+cursor: pointer;
 }

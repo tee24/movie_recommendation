@@ -33,13 +33,50 @@ $(document).ready(function(){
 });
 
 $('.wrapper').slick({
-  infinite: true,
-  slidesToShow: 3,
-  slidesToScroll: 3,
+  dots: true,
+  infinite: false,
+  speed: 1000,
+  slidesToShow: 6,
+  slidesToScroll: 6,
+  responsive: [
+    {
+      breakpoint: 1600,
+      settings: {
+        slidesToShow: 5,
+        slidesToScroll: 5,
+        infinite: true,
+        dots: true
+      }
+    },
+    {
+      breakpoint: 1300,
+      settings: {
+        slidesToShow: 4,
+        slidesToScroll: 4
+      }
+    },
+    {
+      breakpoint: 1000,
+      settings: {
+        slidesToShow: 3,
+        slidesToScroll: 3
+      }
+    },
+    {
+      breakpoint: 700,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 2
+      }
+    },
+    {
+      breakpoint: 550,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1
+      }
+    }
+  ],
   nextArrow: $('.forward'),
   prevArrow: $('.back')
 });
-
-
-         //nextArrow: $('.forward'),
-  //prevArrow: $('.back')
