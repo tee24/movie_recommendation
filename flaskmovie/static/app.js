@@ -33,9 +33,9 @@ $(document).ready(function(){
 });
 
 $('.wrapper').slick({
-  dots: true,
-  infinite: false,
-  speed: 1000,
+  lazyLoad: 'ondemand',
+  speed: 700,
+  draggable: true,
   slidesToShow: 6,
   slidesToScroll: 6,
   responsive: [
@@ -44,8 +44,6 @@ $('.wrapper').slick({
       settings: {
         slidesToShow: 5,
         slidesToScroll: 5,
-        infinite: true,
-        dots: true
       }
     },
     {

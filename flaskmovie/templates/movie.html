@@ -39,17 +39,19 @@
 <!-- CAST SLICK CAROUSEL -->
 <div class="container-fluid slider" style="background-color:#e9ecef;">
     <div>
-        <h1 class="text-center">Cast</h1>
+        <h1 class="text-center heading-1">Cast</h1>
         <i class="fas fa-caret-left fa-2x back"></i>
         <i class="fas fa-caret-right fa-2x forward"></i>
         <div class="wrapper">
+            {% for item in movie_credits %}
             <div class="post">
-                <img src="https://image.tmdb.org/t/p/w500/{{ movie.poster_path }}" class="post-image">
+                <img src="https://image.tmdb.org/t/p/w500/{{ item.profile_path }}" class="post-image">
                 <div class="post-info text-center">
-                    <span class="font-weight-bold">{{ movie.title }}</span>
-                    <span class="text-muted">{{ movie.title }}</span>
+                    <span class="font-weight-bold">{{ item.name }}</span><br>
+                    <span class="text-muted">{{ item.character }}</span>
                 </div>
             </div>
+            {% endfor %}
 </div>
     </div>
 </div>
