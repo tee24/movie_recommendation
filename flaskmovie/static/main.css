@@ -55,7 +55,14 @@ object-fit: cover;
 }
 
 .wrapper .post .post-info{
-margin-top: 15%
+margin-top: 15%;
+display: block;
+white-space: nowrap;
+text-overflow: ellipsis;
+width: 100%;
+padding-left: 5%;
+padding-right: 5%;
+overflow: hidden;
 }
 
 .slider{
