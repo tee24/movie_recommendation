@@ -31,3 +31,15 @@ $(document).ready(function(){
   });
 
 });
+
+$('.wrapper').slick({
+  infinite: true,
+  slidesToShow: 3,
+  slidesToScroll: 3,
+  nextArrow: $('.forward'),
+  prevArrow: $('.back')
+});
+
+
+         //nextArrow: $('.forward'),
+  //prevArrow: $('.back')

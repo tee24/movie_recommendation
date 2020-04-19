@@ -8,12 +8,6 @@ top: -50px;}
 font-family: 'Muli', sans-serif;
 }
 
-.card-img-top {
-    width: 100% !important;
-    height: 15vw !important;
-    object-fit: cover !important;
-}
-
 div.scrollmenu {
   background-color: #333;
   overflow: auto;
@@ -30,4 +24,45 @@ div.scrollmenu a {
 
 ::-webkit-scrollbar {
   display: none;
+}
+
+.wrapper{
+border: 1px solid red;
+width: 80%;
+height: 400px;
+margin: 0px auto;
+overflow: hidden;
+}
+
+.wrapper .post{
+background-color: white;
+display: inline-block;
+padding: 10px 0px 10px 0px;
+border-top-left-radius: 5px;
+border-top-right-radius: 5px;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+width: 80%;
+height: 75%;
+}
+
+.wrapper .post .post-image{
+border-radius: 5px;
+width: 80%;
+height: 80%;
+}
+
+.slider{
+position: relative;
+}
+
+i.back{
+position: absolute;
+left: 20px;
+top: 50%;
+}
+
+i.forward{
+position: absolute;
+right: 20px;
+top: 50%;
 }
