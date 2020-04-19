@@ -86,3 +86,14 @@ cursor: pointer;
 #slick-slide-control00{
 visibility: hidden;
 }
+
+.iframe-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 40px;
+}
+.iframe-container iframe{
+  max-height: 315px;
+  max-width: 560px;
+}
