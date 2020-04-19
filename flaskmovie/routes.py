@@ -74,8 +74,8 @@ def account():
 
 @app.route('/movie/<int:movie_id>', methods=['GET', 'POST'])
 def movie(movie_id):
-	movie = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={key}&language=en-US").json()
-	movie_credits = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}/credits?api_key={key}&language=en-US").json()['cast']
+	movie = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={key}&language=en-US&append_to_response=videos,credits").json()
+	movie_credits = movie['credits']['cast']
 	movie_credits = [x for x in movie_credits if x['profile_path'] is not None]
 	my_movie = Movie.query.filter_by(tmdb_id=movie_id).first()
 	if not my_movie:
