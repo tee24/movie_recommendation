@@ -29,23 +29,33 @@ div.scrollmenu a {
 .wrapper{
 border: 1px solid red;
 width: 80%;
-height: 300px;
+height: 400px;
 margin: 0px auto;
 overflow: hidden;
+padding: 10px;
 }
 
 .wrapper .post{
 background-color: white;
 display: inline-block;
-height: 300px;
-width: 185px;
+height: 375px;
 margin: 0px 10px;
+border-top-left-radius: 5px;
+border-top-right-radius: 5px;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .wrapper .post .post-image{
-border-radius: 5px;
-width: 80%;
-height: 80%;
+border-top-left-radius: 5px;
+border-top-right-radius: 5px;
+width: 100%;
+height: 70%;
+border-radius: 10px;
+object-fit: cover;
+}
+
+.wrapper .post .post-info{
+margin-top: 15%
 }
 
 .slider{
@@ -64,4 +74,8 @@ position: absolute;
 right: 20px;
 top: 50%;
 cursor: pointer;
+}
+
+#slick-slide-control00{
+visibility: hidden;
 }
