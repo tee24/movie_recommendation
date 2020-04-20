@@ -30,6 +30,7 @@ div.scrollmenu a {
 .container-fluid.slider{
 background-color:#e9ecef;
 padding-bottom: 50px;
+padding-top: 50px;
 }
 
 .wrapper{
@@ -90,12 +91,12 @@ cursor: pointer;
 #slick-slide-control00{
 visibility: hidden;
 }
-
+/*Styling for YT video*/
 .iframe-container{
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 40px;
+  padding: 40px;
 }
 .iframe-container iframe{
   max-height: 315px;
