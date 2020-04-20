@@ -1,3 +1,4 @@
+ //top rated ajax
 $(document).ready(function(){
 
   $("#topRated").click(function() {
@@ -15,6 +16,7 @@ $(document).ready(function(){
 
 });
 
+ //upcoming ajax
 $(document).ready(function(){
 
   $("#upcoming").click(function() {
@@ -32,6 +34,7 @@ $(document).ready(function(){
 
 });
 
+ //slick functionality
 $('.wrapper').slick({
   lazyLoad: 'ondemand',
   speed: 700,
@@ -77,4 +80,28 @@ $('.wrapper').slick({
   ],
   nextArrow: $('.forward'),
   prevArrow: $('.back')
+});
+
+
+//infinite loading
+$(document).ready(function() {
+	var win = $(window);
+
+	// Each time the user scrolls
+	win.scroll(function() {
+		// End of the document reached?
+		if ($(document).height() - win.height() == win.scrollTop()) {
+			$('#loading').show();
+
+			$.ajax({
+				url: 'load',
+				type: "POST",
+                data: { page : 2 },
+				success: function(html) {
+					$('#posts').append(html);
+					$('#loading').hide();
+				}
+			});
+		}
+	});
 });
