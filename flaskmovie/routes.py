@@ -79,6 +79,10 @@ def movie(movie_id):
 	movie_credits = [x for x in movie_credits if x['profile_path'] is not None]
 	movie_reviews = movie['reviews']['results']
 	movie_video = movie['videos']['results'][0]
+	if current_user:
+		user_movies = MovieList.query.filter_by(user_id=current_user.id, movie_id=movie_id).first()
+	else:
+		user_movies = None
 	my_movie = Movie.query.filter_by(tmdb_id=movie_id).first()
 	if not my_movie:
 		new_movie = Movie(tmdb_id=movie_id, original_title=movie['original_title'],
@@ -101,7 +105,7 @@ def movie(movie_id):
 			flash('Please sign in to post a comment!', 'info')
 	return render_template('movie.html', movie=movie, movie_credits=movie_credits,
 						   form=form, posts=my_movie.posts, movie_video=movie_video,
-						   movie_reviews=movie_reviews)
+						   movie_reviews=movie_reviews, user_movies=user_movies)
 
 @app.route('/confirm/<token>', methods=['GET', 'POST'])
 def confirm_email(token):
@@ -188,7 +192,7 @@ def search():
 @app.route('/watchlist/', methods=['GET', 'POST'])
 @login_required
 def watchlist():
-	ids = [movie.movie_id for movie in current_user.movies]
+	ids = [movie.movie_id for movie in current_user.movies if movie.watch_list == True]
 	watchlist = db.session.query(Movie).filter(Movie.tmdb_id.in_(ids)).all()
 	return render_template('watchlist.html', watchlist=watchlist)
 
@@ -206,4 +210,16 @@ def watchlist_add(movie_id):
 	flash('Movie added to watchlist', 'success')
 	return redirect(url_for('movie', movie_id=movie_id))
 
+@app.route('/watchlist/remove/<int:movie_id>', methods=['GET', 'POST'])
+@login_required
+def watchlist_remove(movie_id):
+	check = MovieList.query.filter_by(user_id=current_user.id, movie_id=movie_id, watch_list=True).first()
+	if check:
+		check.watch_list = False
+		db.session.commit()
+		print(check)
+		flash('Movie removed from watchlist!', 'success')
+	else:
+		flash('Movie not in watchlist', 'danger')
+	return redirect(url_for('movie', movie_id=movie_id))
 

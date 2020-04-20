@@ -8,6 +8,10 @@ top: -50px;}
 font-family: 'Muli', sans-serif;
 }
 
+.fixed_button{
+width: 80px !important;
+}
+
 div.scrollmenu {
   background-color: #333;
   overflow: auto;
@@ -101,5 +105,13 @@ visibility: hidden;
 .iframe-container iframe{
   max-height: 315px;
   max-width: 560px;
+}
+
+#overlay{
+   background-color: #000;
+   z-index: 0;
+}
+#video{
+   z-index: 999
 }
 
