@@ -8,15 +8,21 @@ import requests_cache
 
 requests_cache.install_cache(cache_name='movie_cache', backend='sqlite', expire_after=86400)
 
+def movie_api_call(endpoint, page=1):
+	movie = requests.get(f"https://api.themoviedb.org/3/movie/{endpoint}?api_key={key}&language=en-US&page={page}&region=US").json()['results']
+	return movie
 
 @app.route('/')
 def index():
-	if "movie" in session:
-		return render_template('index.html', movies=session['movie'])
-	r_dict = requests.get(f"https://api.themoviedb.org/3/movie/popular?api_key={key}&language=en-US&page=1&region=US")
-	r_dict = r_dict.json()
-	movies  = r_dict['results']
+	movies  = movie_api_call('popular')
 	return render_template('index.html', movies=movies)
+
+@app.route('/load', methods=['GET', 'POST'])
+def load():
+	data = request.values.get('page')
+	print(data)
+	html = html_gen(movie_api_call('popular', 400))
+	return html
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -175,11 +181,6 @@ def html_gen(list):
 	</div>
 			"""
 	return html
-
-def movie_api_call(endpoint):
-	movie = requests.get(f"https://api.themoviedb.org/3/movie/{endpoint}?api_key={key}&language=en-US&region=US").json()['results']
-	#session['movie'] = movie
-	return movie
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
