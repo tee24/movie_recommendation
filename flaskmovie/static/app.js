@@ -93,15 +93,16 @@ $(document).ready(function() {
 		if ($(document).height() - win.height() == win.scrollTop()) {
 			$('#loading').show();
 
-			$.ajax({
-				url: 'load',
-				type: "POST",
-                data: { page : 2 },
-				success: function(html) {
-					$('#posts').append(html);
-					$('#loading').hide();
-				}
-			});
+			req = $.ajax({
+              url: '/load',
+              type: "POST",
+              data: { page : 2 }
+            });
+
+       req.done(function(html){
+            $('#movie_tiles').append(html);
+            $('#loading').hide();
+       });
 		}
 	});
 });

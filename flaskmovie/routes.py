@@ -11,7 +11,6 @@ requests_cache.install_cache(cache_name='movie_cache', backend='sqlite', expire_
 def movie_api_call(endpoint, page=1):
 	movie = requests.get(f"https://api.themoviedb.org/3/movie/{endpoint}?api_key={key}&language=en-US&page={page}&region=US").json()['results']
 	return movie
-
 @app.route('/')
 def index():
 	movies  = movie_api_call('popular')
@@ -21,7 +20,7 @@ def index():
 def load():
 	data = request.values.get('page')
 	print(data)
-	html = html_gen(movie_api_call('popular', 400))
+	html = html_gen(movie_api_call('popular', 4))
 	return html
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -85,7 +84,7 @@ def movie(movie_id):
 	movie_credits = [x for x in movie_credits if x['profile_path'] is not None]
 	movie_reviews = movie['reviews']['results']
 	movie_video = movie['videos']['results'][0]
-	if current_user:
+	if current_user.is_authenticated:
 		user_movies = MovieList.query.filter_by(user_id=current_user.id, movie_id=movie_id).first()
 	else:
 		user_movies = None
