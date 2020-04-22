@@ -1,47 +1,62 @@
-{% extends "template.html" %}
+{% extends 'template.html' %}
 {% block content %}
-    <div class="input-group justify-content-center"  style="margin-top:66px">
-        <form method="POST" action="">
-            {{ form.hidden_tag() }}
-            <fieldset class="form-group">
-                <div class="form-group">
-                    {{ form.email.label(class="form-control-label") }}
-                    {% if form.email.errors %}
-                        {{ form.email(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.email.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 d-none d-md-flex background_image"></div>
+        <div class="col-md-6">
+            <div class="login_column d-flex align-items-center py-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-10 col-xl-7 mx-auto">
+                            <h3 class="display-4">Login Page</h3>
+                            <form method="POST" action="">
+                                {{ form.hidden_tag() }}
+                                <fieldset class="form-group">
+                                    <div class="form-group">
+                                        {{ form.email.label(class="form-control-label") }}
+                                        {% if form.email.errors %}
+                                        {{ form.email(class="form-control form-control-lg is-invalid") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.email.errors %}
+                                            <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                        {% else %}
+                                        {{ form.email(class="form-control form-control-lg") }}
+                                        {% endif %}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form.password.label(class="form-control-label") }}
+                                        {% if form.password.errors %}
+                                        {{ form.password(class="form-control form-control-lg is-invalid") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.password.errors %}
+                                            <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                        {% else %}
+                                        {{ form.password(class="form-control form-control-lg") }}
+                                        {% endif %}
+                                    </div>
+                                    <div class="form-check">
+                                        {{ form.remember(class="form-check-input") }}
+                                        {{ form.remember.label(class="form-check-label") }}
+                                    </div>
+                                </fieldset>
+                                <div class="form-group pt-2">
+                                    {{ form.submit(class="btn btn-success btn-rounded") }}
+                                </div>
+                                <small class="text-muted">
+                                    <a href="{{ url_for('reset_password_token') }}">Forgot Password</a><br>
+                                    <span class="py-2">Need to Register? <a
+                                            href="{{ url_for('register') }}">Click Here</a></span>
+                                </small>
+                            </form>
                         </div>
-                    {% else %}
-                        {{ form.email(class="form-control form-control-lg") }}
-                    {% endif %}
+                    </div>
                 </div>
-                <div class="form-group">
-                    {{ form.password.label(class="form-control-label") }}
-                    {% if form.password.errors %}
-                        {{ form.password(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.password.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.password(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-                <div class="form-check">
-                    {{ form.remember(class="form-check-input") }}
-                    {{ form.remember.label(class="form-check-label") }}
-                </div>
-                </fieldset>
-                <div class="form-group pt-2">
-                    {{ form.submit(class="btn btn-primary") }}
-                </div>
-            <small class="text-muted">
-                <a href="{{ url_for('reset_password_token') }}">Forgot Password</a><br>
-                <span class="py-2">Need to Register? <a href="{{ url_for('register') }}">Click Here</a></span>
-            </small>
-        </form>
+            </div>
+        </div>
     </div>
-{% endblock %}
+</div>
+{% endblock content %}
