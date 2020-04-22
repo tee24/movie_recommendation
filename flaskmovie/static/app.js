@@ -1,8 +1,9 @@
+let endpoint = 'popular'
+
  //top rated ajax
 $(document).ready(function(){
-
   $("#topRated").click(function() {
-
+      endpoint = 'top_rated'
       req = $.ajax({
               url: '/update',
               type: "POST",
@@ -20,7 +21,7 @@ $(document).ready(function(){
 $(document).ready(function(){
 
   $("#upcoming").click(function() {
-
+      endpoint = 'upcoming'
       req = $.ajax({
               url: '/update',
               type: "POST",
@@ -82,27 +83,23 @@ $('.wrapper').slick({
   prevArrow: $('.back')
 });
 
-
 //infinite loading
 $(document).ready(function() {
-	var win = $(window);
-
-	// Each time the user scrolls
-	win.scroll(function() {
-		// End of the document reached?
-		if ($(document).height() - win.height() == win.scrollTop()) {
-			$('#loading').show();
-
-			req = $.ajax({
+if (top.location.pathname === '/'){
+$(window).scroll(function () {
+  if ($(window).scrollTop() > $('#movie_tiles').height() / 2) {
+    console.log('past halfway')
+    req = $.ajax({
               url: '/load',
               type: "POST",
-              data: { page : 2 }
+              data: { page : 1,
+                      endpoint: 'popular'}
             });
 
        req.done(function(html){
-            $('#movie_tiles').append(html);
-            $('#loading').hide();
+            $(html).appendTo('#movie_tiles');
        });
-		}
-	});
+  }
+});
+}
 });
