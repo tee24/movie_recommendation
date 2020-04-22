@@ -8,19 +8,27 @@ import requests_cache
 
 requests_cache.install_cache(cache_name='movie_cache', backend='sqlite', expire_after=86400)
 
-def movie_api_call(endpoint, page=1):
+def movie_api_call(endpoint, page=1, multiple_pages=False):
+	if multiple_pages:
+		movie = []
+		for i in range(1, page+1):
+			movie += movie_api_call(endpoint, page=i, multiple_pages=False)
+		return movie
 	movie = requests.get(f"https://api.themoviedb.org/3/movie/{endpoint}?api_key={key}&language=en-US&page={page}&region=US").json()['results']
 	return movie
+
 @app.route('/')
 def index():
-	movies  = movie_api_call('popular')
+	movies = movie_api_call('popular')
 	return render_template('index.html', movies=movies)
 
 @app.route('/load', methods=['GET', 'POST'])
 def load():
-	data = request.values.get('page')
-	print(data)
-	html = html_gen(movie_api_call('popular', 4))
+	page = request.values.get('page')
+	endpoint = request.values.get('endpoint')
+	print(endpoint)
+	html = html_gen(movie_api_call(endpoint=endpoint, page=page))
+	session['page'] = page
 	return html
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -172,13 +180,6 @@ def html_gen(list):
 		</div>
 	</div>
 		"""
-	html = f"""
-	<div class="container-fluid">
-	<div class="row mb-5">
-	{html}
-	</div>
-	</div>
-			"""
 	return html
 
 @app.route('/search', methods=['GET', 'POST'])
