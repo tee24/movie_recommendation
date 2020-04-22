@@ -8,12 +8,7 @@ import requests_cache
 
 requests_cache.install_cache(cache_name='movie_cache', backend='sqlite', expire_after=86400)
 
-def movie_api_call(endpoint, page=1, multiple_pages=False):
-	if multiple_pages:
-		movie = []
-		for i in range(1, page+1):
-			movie += movie_api_call(endpoint, page=i, multiple_pages=False)
-		return movie
+def movie_api_call(endpoint, page=1):
 	movie = requests.get(f"https://api.themoviedb.org/3/movie/{endpoint}?api_key={key}&language=en-US&page={page}&region=US").json()['results']
 	return movie
 
@@ -91,7 +86,6 @@ def movie(movie_id):
 	movie_credits = movie['credits']['cast']
 	movie_credits = [x for x in movie_credits if x['profile_path'] is not None]
 	movie_reviews = movie['reviews']['results']
-	movie_video = movie['videos']['results'][0]
 	if current_user.is_authenticated:
 		user_movies = MovieList.query.filter_by(user_id=current_user.id, movie_id=movie_id).first()
 	else:
@@ -117,8 +111,8 @@ def movie(movie_id):
 		else:
 			flash('Please sign in to post a comment!', 'info')
 	return render_template('movie.html', movie=movie, movie_credits=movie_credits,
-						   form=form, posts=my_movie.posts, movie_video=movie_video,
-						   movie_reviews=movie_reviews, user_movies=user_movies)
+						   form=form, posts=my_movie.posts, movie_reviews=movie_reviews,
+						   user_movies=user_movies)
 
 @app.route('/confirm/<token>', methods=['GET', 'POST'])
 def confirm_email(token):

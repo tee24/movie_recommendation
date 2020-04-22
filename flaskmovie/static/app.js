@@ -85,21 +85,27 @@ $('.wrapper').slick({
 
 //infinite loading
 $(document).ready(function() {
-if (top.location.pathname === '/'){
-$(window).scroll(function () {
-  if ($(window).scrollTop() > $('#movie_tiles').height() / 2) {
-    console.log('past halfway')
-    req = $.ajax({
-              url: '/load',
-              type: "POST",
-              data: { page : 1,
-                      endpoint: 'popular'}
-            });
-
-       req.done(function(html){
-            $(html).appendTo('#movie_tiles');
-       });
-  }
-});
-}
+    let callAllowed = true;
+    let page = 2
+    if (top.location.pathname === '/'){
+        $(window).scroll(function () {
+          if ($(window).scrollTop() > $('#movie_tiles').height() / 2) {
+              if (callAllowed){
+                callAllowed = false;
+                console.log('past halfway');
+                req = $.ajax({
+                          url: '/load',
+                          type: "POST",
+                          data: { page : page,
+                                  endpoint: endpoint}
+                        });
+                 req.done(function(html){
+                        $(html).appendTo('#movie_tiles');
+                        callAllowed = true;
+                        page++;
+                   });
+                   }
+          }
+        });
+    }
 });
