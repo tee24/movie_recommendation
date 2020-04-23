@@ -29,6 +29,7 @@ def load():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+	register_image = randint(1, 16)
 	form = RegistrationForm()
 	if form.validate_on_submit():
 		hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
@@ -38,15 +39,15 @@ def register():
 		user.confirmation_email()
 		flash('Account created, please check your email to verify your account', 'success')
 		return redirect(url_for('login'))
-	return render_template('register.html', form=form)
+	return render_template('register.html', form=form, register_image=register_image)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	hide_navbar = False
-	login_image = str(randint(1,3))
-	print(login_image)
+	login_image = randint(1,16)
 	form = LoginForm()
 	if form.validate_on_submit():
+		print(form.remember.data)
 		user = User.query.filter_by(email=form.email.data).first()
 		if user and bcrypt.check_password_hash(user.password, form.password.data):
 			login_user(user, remember=form.remember.data)

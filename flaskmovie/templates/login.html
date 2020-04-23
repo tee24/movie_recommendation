@@ -2,7 +2,7 @@
 {% block content %}
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-6 d-none d-md-flex background_image" style="background-image: url(/static/login_image_{{ login_image }}.jpg);"></div>
+        <div class="col-md-6 d-none d-md-flex background_image" style="background-image: url(/static/images/{{ login_image }}.jpg);"></div>
         <div class="col-md-6 bg-light">
             <div class="login_column d-flex align-items-center py-5">
                 <div class="container">
@@ -21,7 +21,7 @@
                                             {% endfor %}
                                         </div>
                                         {% else %}
-                                        {{ form.email(class="form-control rounded-pill border shadow-sm mt-4", placeholder="Email Address") }}
+                                        {{ form.email(class="form-control rounded-pill border shadow-sm mt-4 text-primary", placeholder="Email Address") }}
                                         {% endif %}
                                     </div>
                                     <div class="form-group">
@@ -33,12 +33,12 @@
                                             {% endfor %}
                                         </div>
                                         {% else %}
-                                        {{ form.password(class="form-control rounded-pill border shadow-sm mt-2", placeholder="Password") }}
+                                        {{ form.password(class="form-control rounded-pill border shadow-sm mt-2 text-primary",placeholder="Password") }}
                                         {% endif %}
                                     </div>
                                     <div class="form-check custom-control custom-checkbox">
                                         {{ form.remember(type="checkbox", class="custom-control-input") }}
-                                        {{ form.remember.label(class="form-check-label") }}
+                                        {{ form.remember.label(class="custom-control-label") }}
                                     </div>
                                 </fieldset>
                                 <div class="form-group pt-2">
