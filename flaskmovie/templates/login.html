@@ -2,7 +2,7 @@
 {% block content %}
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-6 d-none d-md-flex background_image"></div>
+        <div class="col-md-6 d-none d-md-flex background_image" style="background-image: url(/static/login_image_{{ login_image }}.jpg);"></div>
         <div class="col-md-6 bg-light">
             <div class="login_column d-flex align-items-center py-5">
                 <div class="container">
@@ -14,7 +14,7 @@
                                 <fieldset class="form-group">
                                     <div class="form-group">
                                         {% if form.email.errors %}
-                                        {{ form.email(class="form-control form-control-lg is-invalid") }}
+                                        {{ form.email(class="form-control rounded-pill border shadow-sm is-invalid") }}
                                         <div class="invalid-feedback">
                                             {% for error in form.email.errors %}
                                             <span>{{ error }}</span>
@@ -26,7 +26,7 @@
                                     </div>
                                     <div class="form-group">
                                         {% if form.password.errors %}
-                                        {{ form.password(class="form-control form-control-lg is-invalid") }}
+                                        {{ form.password(class="form-control rounded-pill border shadow-sm is-invalid") }}
                                         <div class="invalid-feedback">
                                             {% for error in form.password.errors %}
                                             <span>{{ error }}</span>

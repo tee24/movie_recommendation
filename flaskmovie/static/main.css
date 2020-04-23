@@ -101,12 +101,12 @@ visibility: hidden;
 }
 
 .background_image {
-  background-image: url("/static/login_image.jpg");
+
   background-size: cover;
   background-position: center center;
   min-height: 100vh;
 }
 
 .login_column{
-min-height: 80vh;
+min-height: 100vh;
 }
