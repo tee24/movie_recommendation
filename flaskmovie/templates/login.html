@@ -3,7 +3,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6 d-none d-md-flex background_image"></div>
-        <div class="col-md-6">
+        <div class="col-md-6 bg-light">
             <div class="login_column d-flex align-items-center py-5">
                 <div class="container">
                     <div class="row">
@@ -13,7 +13,6 @@
                                 {{ form.hidden_tag() }}
                                 <fieldset class="form-group">
                                     <div class="form-group">
-                                        {{ form.email.label(class="form-control-label") }}
                                         {% if form.email.errors %}
                                         {{ form.email(class="form-control form-control-lg is-invalid") }}
                                         <div class="invalid-feedback">
@@ -22,11 +21,10 @@
                                             {% endfor %}
                                         </div>
                                         {% else %}
-                                        {{ form.email(class="form-control form-control-lg") }}
+                                        {{ form.email(class="form-control rounded-pill border shadow-sm mt-4", placeholder="Email Address") }}
                                         {% endif %}
                                     </div>
                                     <div class="form-group">
-                                        {{ form.password.label(class="form-control-label") }}
                                         {% if form.password.errors %}
                                         {{ form.password(class="form-control form-control-lg is-invalid") }}
                                         <div class="invalid-feedback">
@@ -35,16 +33,16 @@
                                             {% endfor %}
                                         </div>
                                         {% else %}
-                                        {{ form.password(class="form-control form-control-lg") }}
+                                        {{ form.password(class="form-control rounded-pill border shadow-sm mt-2", placeholder="Password") }}
                                         {% endif %}
                                     </div>
-                                    <div class="form-check">
-                                        {{ form.remember(class="form-check-input") }}
+                                    <div class="form-check custom-control custom-checkbox">
+                                        {{ form.remember(type="checkbox", class="custom-control-input") }}
                                         {{ form.remember.label(class="form-check-label") }}
                                     </div>
                                 </fieldset>
                                 <div class="form-group pt-2">
-                                    {{ form.submit(class="btn btn-success btn-rounded") }}
+                                    {{ form.submit(class="btn btn-primary rounded-pill btn-block text-uppercase") }}
                                 </div>
                                 <small class="text-muted">
                                     <a href="{{ url_for('reset_password_token') }}">Forgot Password</a><br>

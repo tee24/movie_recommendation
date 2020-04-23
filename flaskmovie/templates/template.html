@@ -14,7 +14,7 @@
     <title>Hello, world!</title>
 </head>
 <body>
-
+{% if not hide_navbar %}
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="#">
         <img src="{{ url_for('static', filename='logo2.png') }}" width="40" height="40" alt="">
@@ -61,6 +61,7 @@
     </div>
 </nav>
 <span style="display:block; height: 66px;"></span>
+{% endif %}
 <!-- Error messages -->
 {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}

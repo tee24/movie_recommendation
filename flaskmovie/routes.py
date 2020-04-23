@@ -41,6 +41,7 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+	hide_navbar = True
 	form = LoginForm()
 	if form.validate_on_submit():
 		user = User.query.filter_by(email=form.email.data).first()
@@ -54,7 +55,7 @@ def login():
 				return redirect(url_for('index'))
 		else:
 			flash('Login Failed. Check Credentials', 'danger')
-	return render_template('login.html', form=form)
+	return render_template('login.html', form=form, hide_navbar=hide_navbar)
 
 @app.route('/logout')
 def logout():
