@@ -53,7 +53,7 @@
     </div>
 </div>
 <!--SEASON INFO-->
-    <h2 class="text-center display-4 py-5">Seasons</h2>
+<h2 class="text-center display-4 py-5">Seasons</h2>
 <!-- CAST SLICK CAROUSEL -->
 <div class="container-fluid slider" style="background-color: #2e2e2e;">
     <div class="slider-box">
@@ -62,13 +62,22 @@
         <div class="wrapper">
             {% for item in show.seasons %}
             <div class="post">
-                <a href="#"><img src="https://image.tmdb.org/t/p/w500/{{ item.poster_path }}" class="post-image-season"></a>
+                <a href="#id{{ item.id }}" data-toggle="tab"><img
+                        src="https://image.tmdb.org/t/p/w500/{{ item.poster_path }}" class="post-image-season"></a>
             </div>
             {% endfor %}
         </div>
     </div>
 </div>
 
+<div class="tab-content py-5">
+    <div class="tab-pane active" id="a">
+        <div class="container-fluid">
+            <div class="row">
+            </div>
+        </div>
+    </div>
+</div>
 
 
 {% endblock content %}
@@ -78,10 +87,5 @@
         <a class="nav-link active" href="#a" data-toggle="tab">The net ninja</a>
     </nav>
 
-    <div class="tab-content py-5">
-        <div class="tab-pane active" id="a">
-            <h3>The net ninja</h3>
-            <p></p>
-        </div>
-    </div>
+
 END -->
