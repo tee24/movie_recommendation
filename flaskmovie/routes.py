@@ -1,4 +1,4 @@
-from flask import render_template, request, url_for, flash, redirect, jsonify, session
+from flask import render_template, request, url_for, flash, redirect, session
 from flaskmovie import app, bcrypt, db, key
 from flaskmovie.forms import RegistrationForm, LoginForm, AccountUpdateForm, CommentForm, RequestResetPasswordForm, ResetPasswordForm
 from flaskmovie.models import Movie, User, Post, MovieList
@@ -223,3 +223,7 @@ def watchlist_remove(movie_id):
 		flash('Movie not in watchlist', 'danger')
 	return redirect(url_for('movie', movie_id=movie_id))
 
+
+@app.route('/graph')
+def graph():
+	return render_template('graph.html')
