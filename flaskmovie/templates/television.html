@@ -1,0 +1,55 @@
+{% extends "template.html" %}
+{% block content %}
+<!-- BANNER -->
+<div class="jumbotron jumbotron-fluid mb-0" id="banner"
+     style="background-image: url(https://image.tmdb.org/t/p/original/{{ show.backdrop_path }}); background-size: cover; height: 400px;">
+    <div class="container">
+    </div>
+</div>
+<!-- INFO -->
+<div class="container-fluid" id="movie_info">
+    <div class="row">
+        <div class="col-sm-12 col-lg-3 text-center">
+            <img src="https://image.tmdb.org/t/p/w185/{{ show.poster_path }}" id="icon">
+        </div>
+        <div class="col-sm-12 col-lg-3 align-self-center text-left">
+            <p><span class="font-weight-bold h2">{{ show.original_name }}</span></p>
+            <p>{{ show.overview }}</p>
+        </div>
+        <div class="col-sm-12 col-lg-3 align-self-center" id="movie_basic_data">
+            <p>
+                <span class="font-weight-bold">Genre:</span>
+                {% for genre in show.genres %}
+                {{ genre['name'] }}{{ "," if not loop.last }}
+                {% endfor %}
+            </p>
+            <p>
+                <span class="font-weight-bold">Length:</span>
+                {{ show.episode_run_time[0] }} minutes
+            </p>
+            <p>
+                <span class="font-weight-bold">First Aired:</span>
+                {{ show.first_air_date }}
+            </p>
+        </div>
+    </div>
+</div>
+<!-- CAST SLICK CAROUSEL -->
+<div class="container-fluid slider">
+    <div class="slider-box">
+        <i class="fas fa-caret-left fa-2x back"></i>
+        <i class="fas fa-caret-right fa-2x forward"></i>
+        <div class="wrapper">
+            {% for item in show_credits %}
+            <div class="post">
+                <img src="https://image.tmdb.org/t/p/w500/{{ item.profile_path }}" class="post-image">
+                <div class="post-info text-center">
+                    <span class="font-weight-bold">{{ item.name }}</span><br>
+                    <span class="text-muted">{{ item.character }}</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

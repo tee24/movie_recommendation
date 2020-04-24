@@ -8,11 +8,8 @@
             Nam fugit lucilius te, an mediocrem adversarium quo. Sea ea noluisse sapientem, et vix aliquam propriae
             philosophia, qui dicit antiopam cu.</p>
         <p>
-            <button type="button" class="btn btn-secondary m-2" id="topRated"><i class="fas fa-trophy mr-3"></i>Top
-                Rated
-            </button>
-            <button type="button" class="btn btn-secondary m-2" id="upcoming"><i class="fas fa-plus mr-3"></i>Upcoming
-            </button>
+            <button type="button" class="btn btn-secondary m-2" id="movies"><i class="fas fa-trophy mr-3"></i>Movies</button>
+            <button type="button" class="btn btn-secondary m-2" id="television"><i class="fas fa-plus mr-3"></i>Television</button>
         </p>
     </div>
 </div>
@@ -29,9 +26,6 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ item.original_title }}</h5>
                     <a href="{{ url_for('movie', movie_id=item.id) }}" class="stretched-link"></a>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted">{{ item.release_date }}</small>
                 </div>
             </div>
         </div>

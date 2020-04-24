@@ -9,21 +9,20 @@ from random import randint
 
 requests_cache.install_cache(cache_name='movie_cache', backend='sqlite', expire_after=86400)
 
-def movie_api_call(endpoint, page=1):
-	movie = requests.get(f"https://api.themoviedb.org/3/movie/{endpoint}?api_key={key}&language=en-US&page={page}&region=US").json()['results']
+def api_call(endpoint, page=1):
+	movie = requests.get(f"https://api.themoviedb.org/3/{endpoint}?api_key={key}&language=en-US&page={page}&region=US").json()['results']
 	return movie
 
 @app.route('/')
 def index():
-	movies = movie_api_call('popular')
+	movies = api_call('movie/popular')
 	return render_template('index.html', movies=movies)
 
 @app.route('/load', methods=['GET', 'POST'])
 def load():
 	page = request.values.get('page')
 	endpoint = request.values.get('endpoint')
-	print(endpoint)
-	html = html_gen(movie_api_call(endpoint=endpoint, page=page))
+	html = html_gen(api_call(endpoint=endpoint, page=page), tv='tv' in endpoint)
 	session['page'] = page
 	return html
 
@@ -157,10 +156,13 @@ def reset_password(token):
 
 @app.route('/update', methods=['GET', 'POST'])
 def update():
-	data = request.values.get('command')
-	return html_gen(movie_api_call(data))
+	endpoint = request.values.get('command')
+	tv = request.values.get('tv')
+	print(tv)
+	return html_gen(api_call(endpoint=endpoint), tv=tv)
 
-def html_gen(list):
+def html_gen(list, tv=False):
+	title = 'original_name' if tv else 'original_title'
 	html = ""
 	for result in list:
 		image_src = f"https://image.tmdb.org/t/p/w500/{result['poster_path']}" if result['poster_path'] is not None else url_for('static', filename='background.jpg')
@@ -170,11 +172,8 @@ def html_gen(list):
 			<img src="{image_src}" class="card-img-top movie-header"
 				 alt="image">
 			<div class="card-body">
-				<h5 class="card-title">{result['original_title']}</h5>
-				<a href="{url_for('movie', movie_id=result['id'])}" class="stretched-link"></a>
-			</div>
-			<div class="card-footer">
-				<small class="text-muted">{result['release_date']}</small>
+				<h5 class="card-title">{result[title]}</h5>
+				<a href="{url_for('television', television_id=result['id']) if tv else url_for('movie', movie_id=result['id'])}" class="stretched-link"></a>
 			</div>
 		</div>
 	</div>
@@ -183,11 +182,14 @@ def html_gen(list):
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
-	search = request.args.get('search')
-	movies = requests.get(f"https://api.themoviedb.org/3/search/movie?api_key={key}&language=en-US&query={search}&page=1&region=US").json()['results']
-	if not movies:
+	search_term = request.args.get('search')
+	search_results = requests.get(f"https://api.themoviedb.org/3/search/multi?api_key={key}&language=en-US&query={search_term}&page=1&region=US").json()['results']
+	for item in search_results:
+		if item['media_type'] == 'person':
+			search_results.remove(item)
+	if not search_results:
 		flash('No results found, please check your search!', 'info')
-	return render_template('search.html', movies=movies)
+	return render_template('search.html', search_results=search_results)
 
 @app.route('/watchlist/', methods=['GET', 'POST'])
 @login_required
@@ -223,6 +225,12 @@ def watchlist_remove(movie_id):
 		flash('Movie not in watchlist', 'danger')
 	return redirect(url_for('movie', movie_id=movie_id))
 
+@app.route('/television/<int:television_id>')
+def television(television_id):
+	show = requests.get(f"https://api.themoviedb.org/3/tv/{television_id}?api_key={key}&language=en-US&append_to_response=credits").json()
+	show_credits = show['credits']['cast']
+	show_credits = [x for x in show_credits if x['profile_path'] is not None]
+	return render_template('television.html', show=show, show_credits=show_credits)
 
 @app.route('/graph')
 def graph():

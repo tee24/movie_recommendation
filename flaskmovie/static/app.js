@@ -1,13 +1,13 @@
-let endpoint = 'popular'
+let endpoint = 'movie/popular'
 
- //top rated ajax
+ //movies ajax
 $(document).ready(function(){
-  $("#topRated").click(function() {
-      endpoint = 'top_rated'
+  $("#movies").click(function() {
+      endpoint = 'movie/popular'
       req = $.ajax({
               url: '/update',
               type: "POST",
-              data: { command : 'top_rated'}
+              data: { command : endpoint}
             });
 
        req.done(function(data){
@@ -17,15 +17,16 @@ $(document).ready(function(){
 
 });
 
- //upcoming ajax
+ //tv ajax
 $(document).ready(function(){
 
-  $("#upcoming").click(function() {
-      endpoint = 'upcoming'
+  $("#television").click(function() {
+      endpoint = 'tv/popular'
       req = $.ajax({
               url: '/update',
               type: "POST",
-              data: { command : 'upcoming'}
+              data: { command : endpoint,
+                      tv : true  }
             });
 
        req.done(function(data){
