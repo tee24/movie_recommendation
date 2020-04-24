@@ -52,4 +52,36 @@
         </div>
     </div>
 </div>
+<!--SEASON INFO-->
+    <h2 class="text-center display-4 py-5">Seasons</h2>
+<!-- CAST SLICK CAROUSEL -->
+<div class="container-fluid slider" style="background-color: #2e2e2e;">
+    <div class="slider-box">
+        <i class="fas fa-caret-left fa-2x back text-white"></i>
+        <i class="fas fa-caret-right fa-2x forward text-white"></i>
+        <div class="wrapper">
+            {% for item in show.seasons %}
+            <div class="post">
+                <a href="#"><img src="https://image.tmdb.org/t/p/w500/{{ item.poster_path }}" class="post-image-season"></a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+
 {% endblock content %}
+
+<!-- list grouo
+<nav class="nav justify-content-center nav-pills flex-column flex-md-row">
+        <a class="nav-link active" href="#a" data-toggle="tab">The net ninja</a>
+    </nav>
+
+    <div class="tab-content py-5">
+        <div class="tab-pane active" id="a">
+            <h3>The net ninja</h3>
+            <p></p>
+        </div>
+    </div>
+END -->
