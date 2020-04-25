@@ -54,7 +54,7 @@
 </div>
 <!--SEASON INFO-->
 <h2 class="text-center display-4 py-5">Seasons</h2>
-<!-- CAST SLICK CAROUSEL -->
+<!-- SEASON SLICK CAROUSEL -->
 <div class="container-fluid slider" style="background-color: #2e2e2e;">
     <div class="slider-box">
         <i class="fas fa-caret-left fa-2x back text-white"></i>
@@ -62,21 +62,18 @@
         <div class="wrapper">
             {% for item in show.seasons %}
             <div class="post">
-                <a href="#id{{ item.id }}" data-toggle="tab"><img
-                        src="https://image.tmdb.org/t/p/w500/{{ item.poster_path }}" class="post-image-season"></a>
+                    <img src="https://image.tmdb.org/t/p/w500/{{ item.poster_path }}" class="post-image-season" id="id{{ item.season_number }}">
             </div>
             {% endfor %}
         </div>
     </div>
 </div>
 
-<div class="tab-content py-5">
-    <div class="tab-pane active" id="a">
-        <div class="container-fluid">
+        <div class="container-fluid pt-5">
             <div class="row">
                 <div class="col-md-4"></div>
                 <div class="col-md-8">
-                    <div class="row">
+                    <div class="row" id="episode-tiles">
                         {% for episode in season.episodes %}
                         <div class="card m-1 episode-card" style="width: 18rem;">
                             <img class="card-img-top episode" src="https://image.tmdb.org/t/p/w500/{{ episode.still_path }}" alt="Card image cap">
@@ -91,16 +88,6 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
 
 {% endblock content %}
-
-<!-- list grouo
-<nav class="nav justify-content-center nav-pills flex-column flex-md-row">
-        <a class="nav-link active" href="#a" data-toggle="tab">The net ninja</a>
-    </nav>
-
-
-END -->

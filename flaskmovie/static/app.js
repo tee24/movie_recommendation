@@ -110,3 +110,25 @@ $(document).ready(function() {
         });
     }
 });
+
+$(document).ready(function(){
+  let pathname = window.location.pathname;
+  let show_id = pathname.substring(pathname.lastIndexOf('/') + 1);
+  $(".post-image-season").click(function() {
+      let season_number = this.id
+      req = $.ajax({
+              url: '/update_tv',
+              type: "POST",
+              data: { season_number : season_number,
+                      show_id: show_id}
+            });
+
+       req.done(function(data){
+            $('#episode-tiles').fadeOut(500, function() {
+            $(this).html(data).fadeIn(500);
+            });
+
+       });
+  });
+
+});

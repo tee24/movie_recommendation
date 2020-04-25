@@ -158,7 +158,6 @@ def reset_password(token):
 def update():
 	endpoint = request.values.get('command')
 	tv = request.values.get('tv')
-	print(tv)
 	return html_gen(api_call(endpoint=endpoint), tv=tv)
 
 def html_gen(list, tv=False):
@@ -231,9 +230,29 @@ def television(television_id):
 	season = requests.get(f"https://api.themoviedb.org/3/tv/{television_id}/season/1?api_key={key}&language=en-US&append_to_response=credits").json()
 	show_credits = show['credits']['cast']
 	show_credits = [x for x in show_credits if x['profile_path'] is not None]
+	season_two = requests.get(f"https://api.themoviedb.org/3/tv/{television_id}/season/2?api_key={key}&language=en-US&append_to_response=credits").json()
 
-	return render_template('television.html', show=show, show_credits=show_credits, season=season)
+	return render_template('television.html', show=show, show_credits=show_credits, season=season, season_two=season_two)
 
 @app.route('/graph')
 def graph():
 	return render_template('graph.html')
+
+@app.route('/update_tv', methods=['GET', 'POST'])
+def update_tv():
+	season_number = request.values.get('season_number')[2:]
+	show_id = request.values.get('show_id')
+	season = requests.get(f"https://api.themoviedb.org/3/tv/{show_id}/season/{season_number}?api_key={key}&language=en-US&append_to_response=credits").json()
+	html = ""
+	for episode in season['episodes']:
+		html += f"""
+<div class="card m-1 episode-card" style="width: 18rem;">
+<img class="card-img-top episode" src="https://image.tmdb.org/t/p/w500/{ episode['still_path'] }" alt="Card image cap">
+<div class="card-body">
+<span class="font-weight-bold">{ episode['name'] }</span>
+<span class="font-weight-bold">S{ episode['season_number'] }E{ episode['episode_number'] }</span><br>
+<span class="text-muted">{ episode['air_date'] }</span>
+</div>
+</div>
+		"""
+	return html
