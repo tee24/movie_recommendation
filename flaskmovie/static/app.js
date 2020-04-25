@@ -43,6 +43,7 @@ $('.wrapper').slick({
   draggable: true,
   slidesToShow: 6,
   slidesToScroll: 6,
+  arrows: false,
   responsive: [
     {
       breakpoint: 1600,
@@ -79,9 +80,15 @@ $('.wrapper').slick({
         slidesToScroll: 1
       }
     }
-  ],
-  nextArrow: $('.forward'),
-  prevArrow: $('.back')
+  ]
+});
+
+$('.forward').click(function(){
+  $(this).nextAll('.wrapper').slick('slickNext');
+});
+
+$('.back').click(function(){
+  $(this).nextAll('.wrapper').slick('slickPrev');
 });
 
 //infinite loading
@@ -111,6 +118,7 @@ $(document).ready(function() {
     }
 });
 
+//TV EPISODE INFO
 $(document).ready(function(){
   let pathname = window.location.pathname;
   let show_id = pathname.substring(pathname.lastIndexOf('/') + 1);
