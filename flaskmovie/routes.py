@@ -228,9 +228,11 @@ def watchlist_remove(movie_id):
 @app.route('/television/<int:television_id>')
 def television(television_id):
 	show = requests.get(f"https://api.themoviedb.org/3/tv/{television_id}?api_key={key}&language=en-US&append_to_response=credits").json()
+	season = requests.get(f"https://api.themoviedb.org/3/tv/{television_id}/season/1?api_key={key}&language=en-US&append_to_response=credits").json()
 	show_credits = show['credits']['cast']
 	show_credits = [x for x in show_credits if x['profile_path'] is not None]
-	return render_template('television.html', show=show, show_credits=show_credits)
+
+	return render_template('television.html', show=show, show_credits=show_credits, season=season)
 
 @app.route('/graph')
 def graph():
