@@ -31,6 +31,12 @@
                 <span class="font-weight-bold">First Aired:</span>
                 {{ show.first_air_date }}
             </p>
+            {% if show.next_episode_to_air is not none %}
+            <p>
+                <span class="font-weight-bold">Next Episode:</span>
+                {{ show.next_episode_to_air.name }} @ <span class="text-primary">{{ show.next_episode_to_air.air_date }}</span>
+            </p>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -53,7 +59,7 @@
     </div>
 </div>
 <!--SEASON INFO-->
-<h2 class="text-center display-4 py-5">Seasons</h2>
+<h2 class="text-center display-4 py-5 font-weight-bold">Seasons</h2>
 <!-- SEASON SLICK CAROUSEL -->
 <div class="container-fluid slider" style="background-color: #2e2e2e;">
     <div class="slider-box">
@@ -68,6 +74,8 @@
         </div>
     </div>
 </div>
+
+<h2 class="text-center display-4 py-5 font-weight-bold">Episodes</h2>
 
         <div class="container-fluid pt-5">
             <div class="row">
@@ -88,6 +96,7 @@
                 </div>
             </div>
         </div>
+
 
 
 {% endblock content %}
