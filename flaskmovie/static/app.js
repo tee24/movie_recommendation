@@ -136,7 +136,15 @@ $(document).ready(function(){
             $(this).html(data.html).fadeIn(500);
             });
 
+            ratingsChart.data.datasets[0].data = data.chart_info.ratings;
+            ratingsChart.data.labels = data.chart_info.names;
+            ratingsChart.update();
+
        });
   });
 
+});
+
+$(document).ready(function(){
+    $("#id1").click(); // load first season chart
 });
