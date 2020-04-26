@@ -1,13 +1,13 @@
-let endpoint = 'popular'
+let endpoint = 'movie/popular'
 
- //top rated ajax
+ //movies ajax
 $(document).ready(function(){
-  $("#topRated").click(function() {
-      endpoint = 'top_rated'
+  $("#movies").click(function() {
+      endpoint = 'movie/popular'
       req = $.ajax({
               url: '/update',
               type: "POST",
-              data: { command : 'top_rated'}
+              data: { command : endpoint}
             });
 
        req.done(function(data){
@@ -17,15 +17,16 @@ $(document).ready(function(){
 
 });
 
- //upcoming ajax
+ //tv ajax
 $(document).ready(function(){
 
-  $("#upcoming").click(function() {
-      endpoint = 'upcoming'
+  $("#television").click(function() {
+      endpoint = 'tv/popular'
       req = $.ajax({
               url: '/update',
               type: "POST",
-              data: { command : 'upcoming'}
+              data: { command : endpoint,
+                      tv : true  }
             });
 
        req.done(function(data){
@@ -42,6 +43,7 @@ $('.wrapper').slick({
   draggable: true,
   slidesToShow: 6,
   slidesToScroll: 6,
+  arrows: false,
   responsive: [
     {
       breakpoint: 1600,
@@ -78,9 +80,15 @@ $('.wrapper').slick({
         slidesToScroll: 1
       }
     }
-  ],
-  nextArrow: $('.forward'),
-  prevArrow: $('.back')
+  ]
+});
+
+$('.forward').click(function(){
+  $(this).nextAll('.wrapper').slick('slickNext');
+});
+
+$('.back').click(function(){
+  $(this).nextAll('.wrapper').slick('slickPrev');
 });
 
 //infinite loading
@@ -108,4 +116,35 @@ $(document).ready(function() {
           }
         });
     }
+});
+
+//TV EPISODE INFO
+$(document).ready(function(){
+  let pathname = window.location.pathname;
+  let show_id = pathname.substring(pathname.lastIndexOf('/') + 1);
+  $(".post-image-season").click(function() {
+      let season_number = this.id
+      req = $.ajax({
+              url: '/update_tv',
+              type: "POST",
+              data: { season_number : season_number,
+                      show_id: show_id}
+            });
+
+       req.done(function(data){
+            $('#episode-tiles').fadeOut(500, function() {
+            $(this).html(data.html).fadeIn(500);
+            });
+
+            ratingsChart.data.datasets[0].data = data.chart_info.ratings;
+            ratingsChart.data.labels = data.chart_info.names;
+            ratingsChart.update();
+
+       });
+  });
+
+});
+
+$(document).ready(function(){
+    $("#id1").click(); // load first season chart
 });

@@ -1,0 +1,121 @@
+{% extends "template.html" %}
+{% block content %}
+<!-- BANNER -->
+<div class="jumbotron jumbotron-fluid mb-0" id="banner"
+     style="background-image: url(https://image.tmdb.org/t/p/original/{{ show.backdrop_path }}); background-size: cover; height: 400px;">
+    <div class="container">
+    </div>
+</div>
+<!-- INFO -->
+<div class="container-fluid" id="movie_info">
+    <div class="row">
+        <div class="col-sm-12 col-lg-3 text-center">
+            <img src="https://image.tmdb.org/t/p/w185/{{ show.poster_path }}" id="icon">
+        </div>
+        <div class="col-sm-12 col-lg-3 align-self-center text-left">
+            <p><span class="font-weight-bold h2">{{ show.original_name }}</span></p>
+            <p>{{ show.overview }}</p>
+        </div>
+        <div class="col-sm-12 col-lg-3 align-self-center" id="movie_basic_data">
+            <p>
+                <span class="font-weight-bold">Genre:</span>
+                {% for genre in show.genres %}
+                {{ genre['name'] }}{{ "," if not loop.last }}
+                {% endfor %}
+            </p>
+            <p>
+                <span class="font-weight-bold">Length:</span>
+                {{ show.episode_run_time[0] }} minutes
+            </p>
+            <p>
+                <span class="font-weight-bold">First Aired:</span>
+                {{ show.first_air_date }}
+            </p>
+            {% if show.next_episode_to_air is not none %}
+            <p>
+                <span class="font-weight-bold">Next Episode:</span>
+                {{ show.next_episode_to_air.name }} @ <span class="text-primary">{{ show.next_episode_to_air.air_date }}</span>
+            </p>
+            {% endif %}
+        </div>
+        <div class="col-sm-12 col-lg-3 align-self-center">
+            {% if user_tv.watch_list == False or user_tv is none %}
+                <a href="{{ url_for('watchlist_add', id=show.id, tv=True) }}" class="btn btn-primary mb-2"><i
+                        class="fas fa-plus mr-2"></i>Add To Watchlist</a><br>
+            {% endif %}
+            {% if current_user.is_authenticated and user_tv.watch_list == True %}
+                <a href="{{ url_for('watchlist_remove', id=show.id, tv=True) }}" class="btn btn-danger mb-2"><i
+                        class="fas fa-minus mr-2"></i>Remove From Watchlist</a><br>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<!-- CAST SLICK CAROUSEL -->
+<div class="container-fluid slider">
+    <div class="slider-box">
+        <i class="fas fa-caret-left fa-2x back"></i>
+        <i class="fas fa-caret-right fa-2x forward"></i>
+        <div class="wrapper">
+            {% for item in show_credits %}
+            <div class="post">
+                <img src="https://image.tmdb.org/t/p/w500/{{ item.profile_path }}" class="post-image">
+                <div class="post-info text-center">
+                    <span class="font-weight-bold">{{ item.name }}</span><br>
+                    <span class="text-muted">{{ item.character }}</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!--SEASON INFO-->
+<h2 class="text-center display-4 py-5 font-weight-bold">Seasons</h2>
+<!-- SEASON SLICK CAROUSEL -->
+<div class="container-fluid slider" style="background-color: #2e2e2e;">
+    <div class="slider-box">
+        <i class="fas fa-caret-left fa-2x back text-white"></i>
+        <i class="fas fa-caret-right fa-2x forward text-white"></i>
+        <div class="wrapper">
+            {% for item in show.seasons[1:] %}
+            <div class="post">
+                    <img src="https://image.tmdb.org/t/p/w500/{{ item.poster_path }}" class="post-image-season" id="id{{ item.season_number }}">
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<h2 class="text-center display-4 py-5 font-weight-bold">Episodes</h2>
+
+        <div class="container-fluid pt-5">
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-8">
+                    <div class="row" id="episode-tiles">
+                        {% for episode in season.episodes %}
+                        <div class="card m-1 episode-card" style="width: 18rem;">
+                            <img class="card-img-top episode" src="https://image.tmdb.org/t/p/w500/{{ episode.still_path }}" alt="Card image cap">
+                            <div class="card-body">
+                                <span class="font-weight-bold">{{ episode.name }}</span>
+                                <span class="font-weight-bold">S{{ episode.season_number }}E{{ episode.episode_number }}</span><br>
+                                <span class="text-muted">{{ episode.air_date }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<h2 class="text-center display-4 py-5 font-weight-bold">Ratings</h2>
+
+<div class="container p-5">
+    <canvas id="seasonChart">
+    </canvas>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+<script src="{{ url_for('static', filename='chart.js') }}"></script>
+{% endblock scripts %}
