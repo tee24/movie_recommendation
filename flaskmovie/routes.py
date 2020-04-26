@@ -318,3 +318,10 @@ def update_tv():
 	payload = jsonify(payload)
 
 	return payload
+
+@app.route('/test', methods=['GET', 'POST'])
+def testing():
+	gte = request.values.get('gte')
+	lte = request.values.get('lte')
+	print(gte,lte)
+	return render_template('discover.html')

@@ -1,0 +1,31 @@
+{% extends "template.html" %}
+{% block styles %}
+<link href='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css' rel='stylesheet' type='text/css'>
+{% endblock styles %}
+{% block content %}
+<div class="container">
+<form method="POST">
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email address</label>
+    <input type="email" class="form-control" name="emailinfo" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+  </div>
+   <div class="form-group">
+     <p>
+  <label for="amount">Year</label>
+  <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+</p>
+       <div id="slider-range"></div>
+  </div>
+  <button type="button" id="button" class="btn btn-primary">Submit</button>
+</form>
+ </div>
+{% endblock content %}
+{% block scripts %}
+<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="{{ url_for('static', filename='slider.js') }}"></script>
+{% endblock scripts %}
