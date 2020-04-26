@@ -38,6 +38,16 @@
             </p>
             {% endif %}
         </div>
+        <div class="col-sm-12 col-lg-3 align-self-center">
+            {% if user_tv.watch_list == False or user_tv is none %}
+                <a href="{{ url_for('watchlist_add', id=show.id, tv=True) }}" class="btn btn-primary mb-2"><i
+                        class="fas fa-plus mr-2"></i>Add To Watchlist</a><br>
+            {% endif %}
+            {% if current_user.is_authenticated and user_tv.watch_list == True %}
+                <a href="{{ url_for('watchlist_remove', id=show.id, tv=True) }}" class="btn btn-danger mb-2"><i
+                        class="fas fa-minus mr-2"></i>Remove From Watchlist</a><br>
+            {% endif %}
+        </div>
     </div>
 </div>
 <!-- CAST SLICK CAROUSEL -->

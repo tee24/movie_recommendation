@@ -36,8 +36,12 @@
                         class="far fa-user-circle mr-1"></i>Account</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tooltip" title="Watchlist" href="{{ url_for('watchlist') }}"><i
-                        class="fas fa-film mr-1"></i>Watchlist</a>
+                <a class="nav-link" data-toggle="tooltip" title="Watchlist" href="{{ url_for('watchlist_movies') }}"><i
+                        class="fas fa-film mr-1"></i>My Movies</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tooltip" title="Watchlist" href="{{ url_for('watchlist_tv') }}"><i
+                        class="fas fa-tv mr-1"></i>My TV</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="tooltip" title="Logout" href="{{ url_for('logout') }}"><i

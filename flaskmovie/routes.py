@@ -1,7 +1,7 @@
 from flask import render_template, request, url_for, flash, redirect, session
 from flaskmovie import app, bcrypt, db, key
 from flaskmovie.forms import RegistrationForm, LoginForm, AccountUpdateForm, CommentForm, RequestResetPasswordForm, ResetPasswordForm
-from flaskmovie.models import Movie, User, Post, MovieList
+from flaskmovie.models import Movie, User, Post, MovieList, Tv, TvList
 from flask_login import login_user, current_user, logout_user, login_required
 import requests
 import requests_cache
@@ -190,39 +190,71 @@ def search():
 		flash('No results found, please check your search!', 'info')
 	return render_template('search.html', search_results=search_results)
 
-@app.route('/watchlist/', methods=['GET', 'POST'])
+@app.route('/watchlist/movies', methods=['GET', 'POST'])
 @login_required
-def watchlist():
+def watchlist_movies():
 	ids = [movie.movie_id for movie in current_user.movies if movie.watch_list == True]
 	watchlist = db.session.query(Movie).filter(Movie.tmdb_id.in_(ids)).all()
-	return render_template('watchlist.html', watchlist=watchlist)
+	tv = False
+	return render_template('watchlist.html', watchlist=watchlist, tv=tv)
 
-@app.route('/watchlist/add/<int:movie_id>', methods=['GET', 'POST'])
+@app.route('/watchlist/tv', methods=['GET', 'POST'])
 @login_required
-def watchlist_add(movie_id):
-	check = MovieList.query.filter_by(user_id=current_user.id, movie_id=movie_id).first()
-	if check:
-		check.watch_list = True
-		db.session.commit()
-	else:
-		movie_to_add = MovieList(user_id=current_user.id, movie_id=movie_id, watch_list=True, favourite_list=False)
-		db.session.add(movie_to_add)
-		db.session.commit()
-	flash('Movie added to watchlist', 'success')
-	return redirect(url_for('movie', movie_id=movie_id))
+def watchlist_tv():
+	ids = [show.show_id for show in current_user.tv if show.watch_list == True]
+	watchlist = db.session.query(Tv).filter(Tv.tmdb_show_id.in_(ids)).all()
+	tv = True
+	return render_template('watchlist.html', watchlist=watchlist, tv=tv)
 
-@app.route('/watchlist/remove/<int:movie_id>', methods=['GET', 'POST'])
+@app.route('/watchlist/add/<int:id>', methods=['GET', 'POST'])
 @login_required
-def watchlist_remove(movie_id):
-	check = MovieList.query.filter_by(user_id=current_user.id, movie_id=movie_id, watch_list=True).first()
-	if check:
-		check.watch_list = False
-		db.session.commit()
-		print(check)
-		flash('Movie removed from watchlist!', 'success')
+def watchlist_add(id):
+	tv = request.args.get('tv')
+	if tv:
+		check = TvList.query.filter_by(user_id=current_user.id, show_id=id).first()
+		if check:
+			check.watch_list = True
+			db.session.commit()
+		else:
+			show_to_add = TvList(user_id=current_user.id, show_id=id, watch_list=True)
+			db.session.add(show_to_add)
+			db.session.commit()
+		flash('TV show added to watchlist', 'success')
+		return redirect(url_for('television', television_id=id))
 	else:
-		flash('Movie not in watchlist', 'danger')
-	return redirect(url_for('movie', movie_id=movie_id))
+		check = MovieList.query.filter_by(user_id=current_user.id, movie_id=id).first()
+		if check:
+			check.watch_list = True
+			db.session.commit()
+		else:
+			movie_to_add = MovieList(user_id=current_user.id, movie_id=id, watch_list=True)
+			db.session.add(movie_to_add)
+			db.session.commit()
+		flash('Movie added to watchlist', 'success')
+		return redirect(url_for('movie', movie_id=id))
+
+@app.route('/watchlist/remove/<int:id>', methods=['GET', 'POST'])
+@login_required
+def watchlist_remove(id):
+	tv = request.args.get('tv')
+	if tv:
+		check = TvList.query.filter_by(user_id=current_user.id, show_id=id, watch_list=True).first()
+		if check:
+			check.watch_list = False
+			db.session.commit()
+			flash('Tv show removed from watchlist!', 'success')
+		else:
+			flash('Tv show not in watchlist', 'danger')
+		return redirect(url_for('television', television_id=id))
+	else:
+		check = MovieList.query.filter_by(user_id=current_user.id, movie_id=id, watch_list=True).first()
+		if check:
+			check.watch_list = False
+			db.session.commit()
+			flash('Movie removed from watchlist!', 'success')
+		else:
+			flash('Movie not in watchlist', 'danger')
+		return redirect(url_for('movie', movie_id=id))
 
 @app.route('/television/<int:television_id>')
 def television(television_id):
@@ -230,9 +262,21 @@ def television(television_id):
 	season = requests.get(f"https://api.themoviedb.org/3/tv/{television_id}/season/1?api_key={key}&language=en-US&append_to_response=credits").json()
 	show_credits = show['credits']['cast']
 	show_credits = [x for x in show_credits if x['profile_path'] is not None]
-	season_two = requests.get(f"https://api.themoviedb.org/3/tv/{television_id}/season/2?api_key={key}&language=en-US&append_to_response=credits").json()
 
-	return render_template('television.html', show=show, show_credits=show_credits, season=season, season_two=season_two)
+	if current_user.is_authenticated:
+		user_tv = TvList.query.filter_by(user_id=current_user.id, show_id=television_id).first()
+	else:
+		user_tv = None
+
+	tv = Tv.query.filter_by(tmdb_show_id=television_id).first()
+
+	if not tv:
+		show = Tv(tmdb_show_id=television_id, poster_path=show['poster_path'], original_name=show['original_name'])
+		db.session.add(show)
+		db.session.commit()
+		return redirect(url_for('television', television_id=television_id))
+
+	return render_template('television.html', show=show, show_credits=show_credits, season=season, user_tv=user_tv)
 
 @app.route('/graph')
 def graph():
