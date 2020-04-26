@@ -1,19 +1,26 @@
-let myChart = document.getElementById('myChart').getContext('2d');
-let massPopChart = new Chart(myChart, {
-type: 'bar',
+let seasonChart = document.getElementById('seasonChart').getContext('2d');
+let ratingsChart = new Chart(seasonChart, {
+type: 'line',
 data: {
-    labels: ['Boston', 'Worcester', 'Providence', 'Springfield', 'Bridgeport', 'New haven'],
+    labels: ['1', '2', '3', '4', '5', '6', '7' ],
     datasets: [{
-    label: 'Population',
     data: [
-        617594,
-        184045,
-        178042,
-        153060,
-        144229,
-        129779
+        7.9,
+        8.2,
+        6.4,
+        9.8,
+        6.7,
+        8.1,
+        9.2
     ],
-    backgroundColor: 'green'
+    fill: false,
+    label: 'Episode Rating',
+    borderColor: "#55bae7",
+    backgroundColor: "#e755ba",
+    pointBackgroundColor: "#000000",
+    pointBorderColor: "#000000",
+    pointHoverBackgroundColor: "#55bae7",
+    pointHoverBorderColor: "#55bae7"
     }
 
     ]
@@ -21,7 +28,7 @@ data: {
 options: {
     title:{
     display: true,
-    text: 'mass pop'
+    text: 'Rating Per Episode'
     }
 }
 });

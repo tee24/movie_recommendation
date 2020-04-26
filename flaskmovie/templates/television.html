@@ -107,6 +107,15 @@
             </div>
         </div>
 
+<h2 class="text-center display-4 py-5 font-weight-bold">Ratings</h2>
 
-
+<div class="container">
+    <canvas id="seasonChart">
+    </canvas>
+</div>
 {% endblock content %}
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+<script src="{{ url_for('static', filename='chart.js') }}"></script>
+{% endblock scripts %}

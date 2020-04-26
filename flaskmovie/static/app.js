@@ -133,7 +133,7 @@ $(document).ready(function(){
 
        req.done(function(data){
             $('#episode-tiles').fadeOut(500, function() {
-            $(this).html(data).fadeIn(500);
+            $(this).html(data.html).fadeIn(500);
             });
 
        });

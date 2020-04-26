@@ -1,10 +1,11 @@
-from flask import render_template, request, url_for, flash, redirect, session
+from flask import render_template, request, url_for, flash, redirect, session, jsonify
 from flaskmovie import app, bcrypt, db, key
 from flaskmovie.forms import RegistrationForm, LoginForm, AccountUpdateForm, CommentForm, RequestResetPasswordForm, ResetPasswordForm
 from flaskmovie.models import Movie, User, Post, MovieList, Tv, TvList
 from flask_login import login_user, current_user, logout_user, login_required
 import requests
 import requests_cache
+import json
 from random import randint
 
 requests_cache.install_cache(cache_name='movie_cache', backend='sqlite', expire_after=86400)
@@ -287,6 +288,17 @@ def update_tv():
 	season_number = request.values.get('season_number')[2:]
 	show_id = request.values.get('show_id')
 	season = requests.get(f"https://api.themoviedb.org/3/tv/{show_id}/season/{season_number}?api_key={key}&language=en-US&append_to_response=credits").json()
+
+	ratings = []
+	names = []
+	for episode in season['episodes']:
+		ratings.append(episode['vote_average'])
+		names.append(episode['name'])
+
+	graph = {}
+	graph['ratings'] = ratings
+	graph['names'] = names
+
 	html = ""
 	for episode in season['episodes']:
 		html += f"""
@@ -299,4 +311,10 @@ def update_tv():
 </div>
 </div>
 		"""
-	return html
+
+	payload = {}
+	payload['html'] = html
+	payload['chart_info'] = graph
+	payload = jsonify(payload)
+
+	return payload
