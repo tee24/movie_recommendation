@@ -1,39 +1,59 @@
 {% extends "template.html" %}
 {% block styles %}
-<link href='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css' rel='stylesheet' type='text/css'>
+<link href='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css' rel='stylesheet'
+      type='text/css'>
 {% endblock styles %}
 {% block content %}
-<div class="container">
-<form method="POST">
-  <div class="form-group">
-    <label for="exampleInputEmail1">Email address</label>
-    <input type="email" class="form-control" name="emailinfo" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-  </div>
-  <div class="form-group">
-    <label for="exampleInputPassword1">Password</label>
-    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-  </div>
-   <div class="form-group">
-     <p>
-  <label for="amount">Year</label>
-  <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
-</p>
-       <div id="slider-range"></div>
-  </div>
-  <button type="button" id="button" class="btn btn-primary">Submit</button>
-</form>
- </div>
+<div style="background: url(static/discover.jpg); background-size: cover; border-radius: 0;" class="jumbotron bg-cover text-white">
+    <div class="container-fluid py-5 text-center">
+        <h1 class="display-4 font-weight-bold">Discover Movies Now</h1>
+        <p class="font-italic mb-0">Need help deciding what to watch? No problem. Just fill in the below and we will pick some movies for you!</p>
+    </div>
+</div>
+<!-- Year -->
+<div class="container mt-5 mb-5">
+    <h2 class="text-center display-4 py-5">Year</h2>
+    <p>
+        <label for="year"></label>
+        <input type="text" id="year" readonly style="border:0; color:#f6931f; font-weight:bold;">
+    </p>
+    <div id="year-slider"></div>
+</div>
+
+<!-- Rating -->
+<div class="container mb-5">
+    <h2 class="text-center display-4 py-5">Rating</h2>
+    <p>
+        <label for="rating"></label>
+        <input type="text" id="rating" readonly style="border:0; color:#f6931f; font-weight:bold;">
+    </p>
+    <div id="rating-slider"></div>
+</div>
+
+<!-- Rating -->
+<div class="container mb-5">
+    <h2 class="text-center display-4 py-5">Runtime</h2>
+    <p>
+        <label for="runtime"></label>
+        <input type="text" id="runtime" readonly style="border:0; color:#f6931f; font-weight:bold;">
+    </p>
+    <div id="runtime-slider"></div>
+</div>
 
 
-<div class="container">
-<select name="states" id="example" class="form-control"  multiple="multiple" style="display: none;">
-  <option value="AL">Alabama</option>
-  <option value="AK">Alaska</option>
-  <option value="AZ">Arizona</option>
-  <option value="AR">Arkansas</option>
-  <option value="CA">California</option>
-</select>
+<div class="container py-5">
+    <h2 class="text-center display-4 py-5">Genres</h2>
+    <select id="genres" class="form-control" multiple="multiple" style="display: none;">
+        <option value="AL">Alabama</option>
+        <option value="AK">Alaska</option>
+        <option value="AZ">Arizona</option>
+        <option value="AR">Arkansas</option>
+        <option value="CA">California</option>
+    </select>
+</div>
+
+<div class="container text-center mb-4">
+    <button type="button" id="button" class="btn btn-primary text-center">Submit</button>
 </div>
 {% endblock content %}
 {% block scripts %}

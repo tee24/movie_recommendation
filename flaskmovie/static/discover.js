@@ -1,32 +1,48 @@
-$( function() {
-    $( "#slider-range" ).slider({
+function sliderCreator(sliderId, displayId, min, max, start, end) {
+    $(sliderId).slider({
       range: true,
       animate: true,
-      min: 1900,
-      max: 2020,
-      values: [ 1980, 2016 ],
+      min: min,
+      max: max,
+      values: [ start, end ],
       slide: function( event, ui ) {
-        $( "#amount" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+        $(displayId).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
       }
     });
     //set default values for label
-      $( "#amount" ).val($( "#slider-range" ).slider( "values", 0 ) +
-               " - " + $( "#slider-range" ).slider( "values", 1 ) );
-         });
+      $(displayId).val($(sliderId).slider( "values", 0 ) +
+               " - " + $(sliderId).slider( "values", 1 ) );
+         };
+
+
+sliderCreator('#year-slider', '#year', 1900, 2020, 1970, 2020);
+sliderCreator('#rating-slider', '#rating', 0, 10, 6, 10);
+sliderCreator('#runtime-slider', '#runtime', 60, 240, 70, 180);
+
+
 $( "#button" ).click(function() {
-  let gte = $( "#slider-range" ).slider( "values", 0 );
-  let lte = $( "#slider-range" ).slider( "values", 1 );
-  let email = $('#exampleInputEmail1').val();
-  let selected = $('select').val();
-  console.log(selected)
-  $.ajax({
+  let year_gte = $( "#year-slider" ).slider( "values", 0 );
+  let year_lte = $( "#year-slider" ).slider( "values", 1 );
+  let rating_gte = $( "#rating-slider" ).slider( "values", 0 );
+  let rating_lte = $( "#rating-slider" ).slider( "values", 1 );
+  let runtime_gte = $( "#runtime-slider" ).slider( "values", 0 );
+  let runtime_lte = $( "#runtime-slider" ).slider( "values", 1 );
+  let genres = $('#genres').val();
+
+  req = $.ajax({
               url: '/test',
               type: "POST",
-              data: { gte : gte,
-                      lte : lte,
-                        email : email,
-                        selected : selected}
+              data: { year_gte : year_gte,
+                      year_lte : year_lte,
+                      rating_gte : rating_gte,
+                      rating_lte : rating_lte,
+                      runtime_gte : runtime_gte,
+                      runtime_lte : runtime_lte,
+                      genres : genres,
+                  }
             });
+       });
+
 });
 
 $(function(){
