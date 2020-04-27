@@ -323,5 +323,7 @@ def update_tv():
 def testing():
 	gte = request.values.get('gte')
 	lte = request.values.get('lte')
-	print(gte,lte)
+	email = request.values.get('email')
+	selected = request.form.getlist("selected[]")
+	print(gte,lte, email, selected)
 	return render_template('discover.html')

@@ -16,10 +16,21 @@ $( function() {
 $( "#button" ).click(function() {
   let gte = $( "#slider-range" ).slider( "values", 0 );
   let lte = $( "#slider-range" ).slider( "values", 1 );
+  let email = $('#exampleInputEmail1').val();
+  let selected = $('select').val();
+  console.log(selected)
   $.ajax({
               url: '/test',
               type: "POST",
               data: { gte : gte,
-                      lte : lte  }
+                      lte : lte,
+                        email : email,
+                        selected : selected}
             });
+});
+
+$(function(){
+
+  $("select").bsMultiSelect();
+
 });
