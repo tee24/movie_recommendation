@@ -319,7 +319,25 @@ def update_tv():
 
 	return payload
 
-@app.route('/test', methods=['GET', 'POST'])
-def testing():
+@app.route('/discover', methods=['GET', 'POST'])
+def discover():
+	if request.method == "POST":
+		parameters = {}
+		parameters['primary_release_date.gte'] = "" if not request.form['min_year'] else f"{request.form['min_year']}-01-01"
+		parameters['primary_release_date.lte'] = "" if not request.form['max_year'] else f"{request.form['max_year']}-12-31"
+		parameters['with_runtime.gte'] = request.form['min_length']
+		parameters['with_runtime.lte'] = request.form['max_length']
+		parameters['with_genres'] = ','.join(request.form.getlist('genres'))
+		parameters = {k: v for k,v in parameters.items() if parameters[k]}
+
+		query = ""
+		for k,v in parameters.items():
+			query += f"{k}={v}&"
+		query = query[:-1]
+
+		discovered_movies = requests.get(f"https://api.themoviedb.org/3/discover/movie?api_key={key}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1{query}").json()['results']
+
+		return render_template('recommendations.html', discovered_movies=discovered_movies)
+
 	genre_list = requests.get(f"""https://api.themoviedb.org/3/genre/movie/list?api_key={key}&language=en-US""").json()['genres']
 	return render_template('discover.html', genre_list=genre_list)

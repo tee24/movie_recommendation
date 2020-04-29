@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm, RecaptchaField
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, Field
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from flaskmovie.models import User
 from flask_login import current_user

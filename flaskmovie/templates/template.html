@@ -58,6 +58,10 @@
                         class="fas fa-sign-in-alt mr-1"></i>Login</a>
             </li>
             {% endif %}
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tooltip" title="Discover" href="{{ url_for('discover') }}"><i
+                        class="fas fa-lightbulb mr-1"></i>Discover</a>
+            </li>
         </ul>
         <form class="form-inline my-2 my-lg-0" action="{{ url_for('search') }}">
             <input class="form-control mr-sm-2" name="search" type="search" placeholder="Search">

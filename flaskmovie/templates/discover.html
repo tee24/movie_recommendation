@@ -4,10 +4,63 @@
       type='text/css'>
 {% endblock styles %}
 {% block content %}
-<div style="background: url(static/discover.jpg); background-size: cover; border-radius: 0;" class="jumbotron bg-cover text-white">
+<div style="background: url(static/discover.jpg); background-size: cover; border-radius: 0; margin-bottom: 0;"
+     class="jumbotron bg-cover text-white">
     <div class="container-fluid py-5 text-center">
         <h1 class="display-4 font-weight-bold">Discover Movies Now</h1>
-        <p class="font-italic mb-0">Need help deciding what to watch? No problem. Just fill in the below and we will pick some movies for you!</p>
+        <p class="font-italic mb-0">Need help deciding what to watch? No problem. Just fill in the below and we will
+            pick some movies for you!</p>
+    </div>
+</div>
+<div class="container-fluid discover">
+    <div class="row">
+        <div class="col-10 mx-auto">
+            <div class="bg-white rounded-lg shadow-sm mt-5 p-5">
+                <form method="post" action="">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="runtimeMin">Min. Length</label>
+                                <input type="number" class="form-control" id="runtimeMin"
+                                        placeholder="Min. Length" name="min_length">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="runtimeMax">Max. Length</label>
+                                <input type="number" class="form-control" id="runtimeMax"
+                                        placeholder="Max. Length" name="max_length">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="runtimeMin">Min. Year</label>
+                                <input type="number" class="form-control" id="yearMin"
+                                        placeholder="Min. Year" name="min_year">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="runtimeMax">Max. Year</label>
+                                <input type="number" class="form-control" id="yearMax"
+                                        placeholder="Max. Year" name="max_year">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="genres">Genre</label>
+                        <select multiple class="form-control" id="genres" name="genres">
+                            {% for item in genre_list %}
+                            <option value="{{ item.id }}">{{ item.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock content %}
