@@ -321,18 +321,5 @@ def update_tv():
 
 @app.route('/test', methods=['GET', 'POST'])
 def testing():
-	year_gte = request.values.get('year_gte')
-	year_lte = request.values.get('year_lte')
-	rating_gte = request.values.get('rating_gte')
-	rating_lte = request.values.get('rating_lte')
-	runtime_gte = request.values.get('runtime_gte')
-	runtime_lte = request.values.get('runtime_lte')
-	genres = request.form.getlist("genres[]")
-
-	if year_lte:
-		discovered_movies =  requests.get(f"""https://api.themoviedb.org/3/discover/movie?api_key={key}&language=en-US&region=US&sort_by=popularity.desc
-		&include_adult=false&include_video=false&page=1&release_date.gte={year_gte}-01-01&release_date.lte={year_lte}-12-31&
-		vote_average.gte={rating_gte}&vote_average.lte={rating_lte}&with_runtime.gte={runtime_gte}&with_runtime.lte={runtime_lte}""").json()['results']
-		return render_template('recommendations.html', search_results=discovered_movies)
-
-	return render_template('discover.html')
+	genre_list = requests.get(f"""https://api.themoviedb.org/3/genre/movie/list?api_key={key}&language=en-US""").json()['genres']
+	return render_template('discover.html', genre_list=genre_list)
