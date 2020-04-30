@@ -332,12 +332,18 @@ def discover():
 
 		query = ""
 		for k,v in parameters.items():
-			query += f"{k}={v}&"
+			query += f"&{k}={v}&"
 		query = query[:-1]
 
-		discovered_movies = requests.get(f"https://api.themoviedb.org/3/discover/movie?api_key={key}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1{query}").json()['results']
+		sort = request.form['sort_by']
 
+		discovered_movies = requests.get(f"https://api.themoviedb.org/3/discover/movie?api_key={key}&language=en-US&sort_by={sort}&include_adult=false&include_video=false&page=1{query}").json()['results']
+		print(query)
 		return render_template('recommendations.html', discovered_movies=discovered_movies)
 
+	sort_by = ['popularity.asc', 'popularity.desc', 'release_date.asc', 'release_date.desc', 'revenue.asc',
+			   'revenue.desc', 'primary_release_date.asc', 'primary_release_date.desc', 'original_title.asc',
+			   'original_title.desc', 'vote_average.asc', 'vote_average.desc',
+			   'vote_count.asc', 'vote_count.desc']
 	genre_list = requests.get(f"""https://api.themoviedb.org/3/genre/movie/list?api_key={key}&language=en-US""").json()['genres']
-	return render_template('discover.html', genre_list=genre_list)
+	return render_template('discover.html', genre_list=genre_list, sort_by=sort_by)

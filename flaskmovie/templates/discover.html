@@ -17,47 +17,59 @@
         <div class="col-10 mx-auto">
             <div class="bg-white rounded-lg shadow-sm mt-5 p-5">
                 <form method="post" action="">
+                    <h3 class="display-4 m-5 text-center">Runtime</h3>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="runtimeMin">Min. Length</label>
-                                <input type="number" class="form-control" id="runtimeMin"
+                                <input type="number" class="form-control rounded-pill border shadow-sm" id="runtimeMin"
                                         placeholder="Min. Length" name="min_length">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="runtimeMax">Max. Length</label>
-                                <input type="number" class="form-control" id="runtimeMax"
+                                <input type="number" class="form-control rounded-pill border shadow-sm" id="runtimeMax"
                                         placeholder="Max. Length" name="max_length">
                             </div>
                         </div>
                     </div>
+                    <h3 class="display-4 m-5 text-center">Release Year</h3>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="runtimeMin">Min. Year</label>
-                                <input type="number" class="form-control" id="yearMin"
+                                <input type="number" class="form-control rounded-pill border shadow-sm" id="yearMin"
                                         placeholder="Min. Year" name="min_year">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="runtimeMax">Max. Year</label>
-                                <input type="number" class="form-control" id="yearMax"
+                                <input type="number" class="form-control rounded-pill border shadow-sm" id="yearMax"
                                         placeholder="Max. Year" name="max_year">
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="genres">Genre</label>
+                    <h3 class="display-4 m-5 text-center">Genres</h3>
+                    <div class="form-group mb-0">
                         <select multiple class="form-control" id="genres" name="genres">
                             {% for item in genre_list %}
                             <option value="{{ item.id }}">{{ item.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <small class="text-muted mt-0">Use CTRL to select more than one genre!</small>
+                    <div class="form-group mt-3 mb-0 ">
+                        <select class="custom-select custom-select-sm" name="sort_by">
+                            {% for item in sort_by %}
+                            {% if item == 'popularity.desc' %}
+                            <option selected value="{{ item }}">{{ item }}</option>
+                            {% else %}
+                            <option value="{{ item }}">{{ item }}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <small class="text-muted mt-0">Sort By...</small><br>
+
+                    <button type="submit" class="btn btn-primary mt-4">Submit</button>
                 </form>
             </div>
         </div>
