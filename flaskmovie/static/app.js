@@ -148,3 +148,13 @@ $(document).ready(function(){
 $(document).ready(function(){
     $("#id1").click(); // load first season chart
 });
+
+$(document).ready(function(){
+    $('.form-control').focus(function(){
+        $(this).css('background-color', 'rgb(232, 240, 254)');
+    });
+
+     $('.form-control').blur(function(){
+        $(this).css('background-color', '');
+    });
+});

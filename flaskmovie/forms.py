@@ -44,7 +44,7 @@ class LoginForm(FlaskForm):
 						validators=[DataRequired(), Email()])
 	password = PasswordField('Password', validators=[DataRequired()])
 	remember = BooleanField('Remember Me')
-	submit = SubmitField('Sign Up')
+	submit = SubmitField('Sign In')
 
 class CommentForm(FlaskForm):
 	comment = StringField('Comment', validators=[DataRequired(), Length(10,5000)])
