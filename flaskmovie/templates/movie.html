@@ -31,15 +31,19 @@
                 <span class="font-weight-bold">Release Date:</span>
                 {{ movie.release_date }}
             </p>
+            <p>
+                <a href="https://www.imdb.com/title/{{ movie.imdb_id }}"><img
+                        src="{{ url_for('static', filename='imdb_logo.png') }}" height="30px"></a>
+            </p>
         </div>
         <div class="col-sm-12 col-lg-3 align-self-center">
             {% if user_movies.watch_list == False or user_movies is none %}
-                <a href="{{ url_for('watchlist_add', id=movie.id) }}" class="btn btn-primary mb-2"><i
-                        class="fas fa-plus mr-2"></i>Add To Watchlist</a><br>
+            <a href="{{ url_for('watchlist_add', id=movie.id) }}" class="btn btn-primary mb-2"><i
+                    class="fas fa-plus mr-2"></i>Add To Watchlist</a><br>
             {% endif %}
             {% if current_user.is_authenticated and user_movies.watch_list == True %}
-                <a href="{{ url_for('watchlist_remove', id=movie.id) }}" class="btn btn-danger mb-2"><i
-                        class="fas fa-minus mr-2"></i>Remove From Watchlist</a><br>
+            <a href="{{ url_for('watchlist_remove', id=movie.id) }}" class="btn btn-danger mb-2"><i
+                    class="fas fa-minus mr-2"></i>Remove From Watchlist</a><br>
             {% endif %}
         </div>
     </div>
@@ -62,8 +66,40 @@
         </div>
     </div>
 </div>
+<!-- RECOMMENDATIONS -->
+<h2 class="text-center display-4 py-5">Recommended</h2><br>
+
+<div class="container-fluid mt-3">
+    <div class="row">
+        <div class="col-6" style="border: 5px green solid;">
+            <div class="row text-center">
+                {% for item in movie_recommendations[:8] %}
+                <div class="col-sm-6 col-md-3 mt-2 mb-2">
+                    <img src="https://image.tmdb.org/t/p/w185/{{ item.poster_path }}" class="img-fluid card-rec">
+                </div>
+                {% endfor %}
+
+
+            </div>
+        </div>
+        <div class="col-6" style="border: 5px red solid;">
+            <div class="row h-100 align-items-center text-center">
+                <div class="col-6" style="border: 5px blue solid;">
+                    <img src="https://image.tmdb.org/t/p/w342/{{ movie_recommendations[0].poster_path }}" class="img-fluid card-rec">
+                </div>
+                <div class="col-6" style="border: 5px red solid;">
+                    <h3>{{movie_recommendations[0].original_title}} ({{ movie_recommendations[0].release_date[:4]
+                        }})</h3>
+                    <p>{{ movie_recommendations[0].overview }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!-- COMMENTS -->
+<h2 class="text-center display-4 py-5">Comments</h2>
 <div class="container">
     <div class="row">
         <div class="col">

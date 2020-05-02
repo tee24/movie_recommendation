@@ -87,10 +87,11 @@ def account():
 
 @app.route('/movie/<int:movie_id>', methods=['GET', 'POST'])
 def movie(movie_id):
-	movie = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={key}&language=en-US&append_to_response=videos,credits,reviews").json()
+	movie = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={key}&language=en-US&append_to_response=videos,credits,reviews,recommendations").json()
 	movie_credits = movie['credits']['cast']
 	movie_credits = [x for x in movie_credits if x['profile_path'] is not None]
 	movie_reviews = movie['reviews']['results']
+	movie_recommendations = movie['recommendations']['results']
 	if current_user.is_authenticated:
 		user_movies = MovieList.query.filter_by(user_id=current_user.id, movie_id=movie_id).first()
 	else:
@@ -117,7 +118,7 @@ def movie(movie_id):
 			flash('Please sign in to post a comment!', 'info')
 	return render_template('movie.html', movie=movie, movie_credits=movie_credits,
 						   form=form, posts=my_movie.posts, movie_reviews=movie_reviews,
-						   user_movies=user_movies)
+						   movie_recommendations=movie_recommendations, user_movies=user_movies)
 
 @app.route('/confirm/<token>', methods=['GET', 'POST'])
 def confirm_email(token):
