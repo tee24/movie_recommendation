@@ -169,11 +169,11 @@ def html_gen(list, tv=False):
 		image_src = f"https://image.tmdb.org/t/p/w500/{result['poster_path']}" if result['poster_path'] is not None else url_for('static', filename='background.jpg')
 		html += f"""
 	<div class="col-6 col-sm-4 col-md-3 col-xl-2 py-1">
-		<div class="card h-100">
+		<div class="card movie-card h-100">
 			<img src="{image_src}" class="card-img-top movie-header"
 				 alt="image">
-			<div class="card-body">
-				<h5 class="card-title">{result[title]}</h5>
+			<div class="card-body align-items-center movie-card-body">
+				<h6 class="card-title">{result[title]}</h6>
 				<a href="{url_for('television', television_id=result['id']) if tv else url_for('movie', movie_id=result['id'])}" class="stretched-link"></a>
 			</div>
 		</div>

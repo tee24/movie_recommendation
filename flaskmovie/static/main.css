@@ -145,3 +145,30 @@ border: 2px solid transparent;
 .hide-element{
 display: none;
 }
+
+.movie-card {
+  transition: transform .5s ease;
+}
+
+
+.movie-card:hover{
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    transform: scale(1.1);
+    z-index: 9999;
+}
+
+.card-title{
+display: block;
+white-space: nowrap;
+text-overflow: ellipsis;
+width: 100%;
+padding-left: 5%;
+padding-right: 5%;
+overflow: hidden;
+}
+
+.movie-card-body{
+height:50px;
+overflow: hidden;
+}

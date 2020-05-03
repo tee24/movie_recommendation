@@ -17,14 +17,14 @@
     <div class="row mb-5"  id="movie_tiles">
         {% for item in movies %}
         <div class="col-6 col-sm-4 col-md-3 col-xl-2 py-1">
-            <div class="card h-100">
+            <div class="card movie-card h-100">
                 {% if item.poster_path is not none %}
                     <img src="https://image.tmdb.org/t/p/w500/{{ item.poster_path }}" class="card-img-top movie-header">
                 {% else %}
                     <img src="{{ url_for('static', filename='background.jpg') }}" class="card-img-top movie-header">
                 {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title">{{ item.original_title }}</h5>
+                <div class="card-body align-items-center movie-card-body">
+                    <h6 class="card-title pb-1">{{ item.original_title }}</h6>
                     <a href="{{ url_for('movie', movie_id=item.id) }}" class="stretched-link"></a>
                 </div>
             </div>
