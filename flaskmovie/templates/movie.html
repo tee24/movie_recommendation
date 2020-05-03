@@ -36,9 +36,9 @@
                         src="{{ url_for('static', filename='imdb_logo.png') }}" height="30px"></a>
             </p>
         </div>
-        <div class="col-sm-12 col-lg-3 align-self-center">
+        <div class="col-sm-12 col-lg-3 align-self-center pr-5">
             {% if user_movies.watch_list == False or user_movies is none %}
-            <a href="{{ url_for('watchlist_add', id=movie.id) }}" class="btn btn-primary mb-2"><i
+            <a href="{{ url_for('watchlist_add', id=movie.id) }}" class="btn btn-primary rounded-pill btn-block text-uppercase mb-2"><i
                     class="fas fa-plus mr-2"></i>Add To Watchlist</a><br>
             {% endif %}
             {% if current_user.is_authenticated and user_movies.watch_list == True %}
@@ -67,51 +67,61 @@
     </div>
 </div>
 <!-- RECOMMENDATIONS -->
-<h2 class="text-center display-4 py-5">Recommended</h2><br>
+<h2 class="text-center display-4 mt-5">Recommended</h2>
+<p class="text-muted text-center mt-0"><small>If you enjoyed <strong>{{ movie.original_title }}</strong> then check out these movies!</small></p><br>
 
+<!-- SMALL REC CARDS -->
 <div class="container-fluid mt-3">
     <div class="row">
-        <div class="col-6" style="border: 5px green solid;">
+        <div class="col-md-6">
             <div class="row text-center">
                 {% for item in movie_recommendations[:8] %}
                 {% if item == movie_recommendations[0] %}
-                <div class="col-sm-6 col-md-3 mt-2 mb-2">
+                <div class="col-sm-6 col-md-4 col-lg-3 mt-2 mb-2">
+                    <a href="{{ url_for('movie', movie_id=item.id) }}">
                     <img src="https://image.tmdb.org/t/p/w185/{{ item.poster_path }}"
                          class="img-fluid card-rec active-small" id="img-{{ loop.index }}">
+                    </a>
                 </div>
                 {% else %}
-                <div class="col-sm-6 col-md-3 mt-2 mb-2">
+                <div class="col-sm-6 col-md-4 col-lg-3 mt-2 mb-2">
+                    <a href="{{ url_for('movie', movie_id=item.id) }}">
                     <img src="https://image.tmdb.org/t/p/w185/{{ item.poster_path }}"
                          class="img-fluid card-rec" id="img-{{ loop.index }}">
+                    </a>
                 </div>
                 {% endif %}
                 {% endfor %}
-
-
             </div>
         </div>
-        <div class="col-6" style="border: 5px red solid;">
-            <div class="row h-100 align-items-center text-center">
-                <div class="col-6" style="border: 5px blue solid;">
+        <!-- LARGE REC CARD -->
+        <div class="col-md-6 mt-5 mt-md-0">
+            <div class="row h-100 text-center">
+                <div class="col-6">
                     {% for item in movie_recommendations %}
                     {% if item == movie_recommendations[0] %}
-                    <img src="https://image.tmdb.org/t/p/w342/{{ item.poster_path }}"
-                        id="card-rec-img-{{ loop.index }}" class="img-fluid card-rec active">
+                    <a href="{{ url_for('movie', movie_id=item.id) }}">
+                        <img src="https://image.tmdb.org/t/p/w342/{{ item.poster_path }}"
+                             id="card-rec-img-{{ loop.index }}" class="img-fluid card-rec active">
+                    </a>
                     {% else %}
-                    <img src="https://image.tmdb.org/t/p/w342/{{ item.poster_path }}"
-                         id="card-rec-img-{{ loop.index }}" class="img-fluid card-rec hide-element">
+                    <a href="{{ url_for('movie', movie_id=item.id) }}">
+                        <img src="https://image.tmdb.org/t/p/w342/{{ item.poster_path }}"
+                             id="card-rec-img-{{ loop.index }}" class="img-fluid card-rec hide-element">
+                    </a>
                     {% endif %}
                     {% endfor %}
                 </div>
-                <div class="col-6" style="border: 5px red solid;">
+                <!-- INFO -->
+                <div class="col-6 lead font-italic">
                     {% for item in movie_recommendations %}
                     {% if item == movie_recommendations[0] %}
-                    <div class="active" id="card-rec-text-{{ loop.index }}">
+                    <div class="active pr-4" id="card-rec-text-{{ loop.index }}">
                         <h3>{{ item.original_title }} ({{ item.release_date[:4] }})</h3>
                         <p>{{ item.overview }}</p>
                     </div>
                     {% else %}
-                    <div class="hide-element" id="card-rec-text-{{ loop.index }}">
+                    <div class="hide-element pr-4" id="card-rec-text-{{ loop.index }}">
                         <h3>{{ item.original_title }} ({{ item.release_date[:4] }})</h3>
                         <p>{{ item.overview }}</p>
                     </div>
