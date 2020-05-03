@@ -158,3 +158,36 @@ $(document).ready(function(){
         $(this).css('background-color', '');
     });
 });
+
+$(document).ready(function(){
+
+ $(".card-rec").hover(function(){
+    let imgId = '#card-rec-' + $(this).attr('id');
+    let textId = '#card-rec-text' + $(this).attr('id').substring(3);
+
+    $(this).css("border", "2px solid yellow");
+    $(this).css("margin", "-2px");
+
+    $(imgId).removeClass('hide-element');
+    $(textId).removeClass('hide-element');
+
+    if((! $(this).hasClass('active-small')) && (! $(this).hasClass('active'))){
+    $('.active').addClass('hide-element');
+    $('.active').removeClass('active');
+    $('.active-small').removeClass('active-small');
+    $(this).addClass('active-small');
+
+    };
+
+
+
+    $(imgId).addClass('active');
+    $(textId).addClass('active');
+
+    },
+
+    function(){
+    $(this).css("border", "");
+  });
+
+});
