@@ -42,7 +42,8 @@ class TvList(db.Model):
 	show_id = db.Column(db.Integer, db.ForeignKey('tv.tmdb_show_id'), nullable=False)
 	season_id = db.Column(db.Integer)
 	episode_id = db.Column(db.Integer)
-	watch_list = db.Column(db.Boolean, nullable=False)
+	watched_episode = db.Column(db.Boolean, nullable=False)
+	to_watch = db.Column(db.Boolean, nullable=False)
 
 class User(db.Model, UserMixin):
 	id = db.Column(db.Integer, primary_key=True)

@@ -203,7 +203,7 @@ def watchlist_movies():
 @app.route('/watchlist/tv', methods=['GET', 'POST'])
 @login_required
 def watchlist_tv():
-	ids = [show.show_id for show in current_user.tv if show.watch_list == True]
+	ids = (show.show_id for show in current_user.tv if show.to_watch == True)
 	watchlist = db.session.query(Tv).filter(Tv.tmdb_show_id.in_(ids)).all()
 	tv = True
 	return render_template('watchlist.html', watchlist=watchlist, tv=tv)
@@ -214,13 +214,8 @@ def watchlist_add(id):
 	tv = request.args.get('tv')
 	if tv:
 		check = TvList.query.filter_by(user_id=current_user.id, show_id=id).first()
-		if check:
-			check.watch_list = True
-			db.session.commit()
-		else:
-			show_to_add = TvList(user_id=current_user.id, show_id=id, watch_list=True)
-			db.session.add(show_to_add)
-			db.session.commit()
+		if not check:
+			add_tv_show_to_tv_list(id)
 		flash('TV show added to watchlist', 'success')
 		return redirect(url_for('television', television_id=id))
 	else:
@@ -235,14 +230,30 @@ def watchlist_add(id):
 		flash('Movie added to watchlist', 'success')
 		return redirect(url_for('movie', movie_id=id))
 
+def add_tv_show_to_tv_list(id):
+	show = requests.get(f"https://api.themoviedb.org/3/tv/{id}?api_key={key}&language=en-US").json()['seasons']
+	show = [season for season in show if int(season['season_number']) is not 0] # remove specials if they exist
+
+	if len(show) > 40:
+		return None
+	# we don't want to add too many episodes!
+
+	for season in show:
+		season_info = requests.get(f"https://api.themoviedb.org/3/tv/{id}/season/{season['season_number']}?api_key={key}&language=en-US").json()['episodes']
+		for episode in season_info:
+			episode_to_add = TvList(user_id=current_user.id, show_id=id, season_id=season['id'],
+									episode_id=episode['id'], watched_episode=False, to_watch=True)
+			db.session.add(episode_to_add)
+	db.session.commit()
+
 @app.route('/watchlist/remove/<int:id>', methods=['GET', 'POST'])
 @login_required
 def watchlist_remove(id):
 	tv = request.args.get('tv')
 	if tv:
-		check = TvList.query.filter_by(user_id=current_user.id, show_id=id, watch_list=True).first()
+		check = TvList.query.filter_by(user_id=current_user.id, show_id=id, to_watch=True).first()
 		if check:
-			check.watch_list = False
+			TvList.query.filter_by(user_id=current_user.id, show_id=id).delete()
 			db.session.commit()
 			flash('Tv show removed from watchlist!', 'success')
 		else:
