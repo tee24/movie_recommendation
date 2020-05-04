@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Muli&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
     {% block styles %}{% endblock %}
-    <title>Hello, world!</title>
+    <title>{{ title }}</title>
 </head>
 <body>
 {% if not hide_navbar %}

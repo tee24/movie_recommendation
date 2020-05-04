@@ -12,6 +12,7 @@ $(document).ready(function(){
 
        req.done(function(data){
             $('#movie_tiles').html(data);
+            $('title').html('Home - Movies');
        });
   });
 
@@ -31,6 +32,7 @@ $(document).ready(function(){
 
        req.done(function(data){
             $('#movie_tiles').html(data);
+            $('title').html('Home - Television');
        });
   });
 

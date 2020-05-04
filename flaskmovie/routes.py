@@ -17,7 +17,7 @@ def api_call(endpoint, page=1):
 @app.route('/')
 def index():
 	movies = api_call('movie/popular')
-	return render_template('index.html', movies=movies)
+	return render_template('index.html', movies=movies, title='Home - Movies')
 
 @app.route('/load', methods=['GET', 'POST'])
 def load():
@@ -39,7 +39,7 @@ def register():
 		user.confirmation_email()
 		flash('Account created, please check your email to verify your account', 'success')
 		return redirect(url_for('login'))
-	return render_template('register.html', form=form, register_image=register_image)
+	return render_template('register.html', form=form, register_image=register_image, title='Sign Up')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -59,7 +59,7 @@ def login():
 				return redirect(url_for('index'))
 		else:
 			flash('Login Failed. Check Credentials', 'danger')
-	return render_template('login.html', form=form, hide_navbar=hide_navbar, login_image=login_image)
+	return render_template('login.html', form=form, hide_navbar=hide_navbar, login_image=login_image, title='Sign In')
 
 @app.route('/logout')
 def logout():
@@ -83,7 +83,7 @@ def account():
 
 	elif request.method == "GET":
 		form.email.data = current_user.email
-	return render_template('account.html', form=form)
+	return render_template('account.html', form=form, title='Account')
 
 @app.route('/movie/<int:movie_id>', methods=['GET', 'POST'])
 def movie(movie_id):
@@ -118,7 +118,7 @@ def movie(movie_id):
 			flash('Please sign in to post a comment!', 'info')
 	return render_template('movie.html', movie=movie, movie_credits=movie_credits,
 						   form=form, posts=my_movie.posts, movie_reviews=movie_reviews,
-						   movie_recommendations=movie_recommendations, user_movies=user_movies)
+						   movie_recommendations=movie_recommendations, user_movies=user_movies, title=movie['original_title'])
 
 @app.route('/confirm/<token>', methods=['GET', 'POST'])
 def confirm_email(token):
@@ -172,7 +172,7 @@ def html_gen(list, tv=False):
 		<div class="card movie-card h-100">
 			<img src="{image_src}" class="card-img-top movie-header"
 				 alt="image">
-			<div class="card-body align-items-center movie-card-body">
+			<div class="card-body align-items-center text-center movie-card-body">
 				<h6 class="card-title">{result[title]}</h6>
 				<a href="{url_for('television', television_id=result['id']) if tv else url_for('movie', movie_id=result['id'])}" class="stretched-link"></a>
 			</div>
@@ -190,7 +190,7 @@ def search():
 			search_results.remove(item)
 	if not search_results:
 		flash('No results found, please check your search!', 'info')
-	return render_template('search.html', search_results=search_results)
+	return render_template('search.html', search_results=search_results, title='search')
 
 @app.route('/watchlist/movies', methods=['GET', 'POST'])
 @login_required
@@ -198,7 +198,7 @@ def watchlist_movies():
 	ids = [movie.movie_id for movie in current_user.movies if movie.watch_list == True]
 	watchlist = db.session.query(Movie).filter(Movie.tmdb_id.in_(ids)).all()
 	tv = False
-	return render_template('watchlist.html', watchlist=watchlist, tv=tv)
+	return render_template('watchlist.html', watchlist=watchlist, tv=tv, title='Movies')
 
 @app.route('/watchlist/tv', methods=['GET', 'POST'])
 @login_required
@@ -206,7 +206,7 @@ def watchlist_tv():
 	ids = [show.show_id for show in current_user.tv if show.watch_list == True]
 	watchlist = db.session.query(Tv).filter(Tv.tmdb_show_id.in_(ids)).all()
 	tv = True
-	return render_template('watchlist.html', watchlist=watchlist, tv=tv)
+	return render_template('watchlist.html', watchlist=watchlist, tv=tv, title='Television')
 
 @app.route('/watchlist/add/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -278,7 +278,7 @@ def television(television_id):
 		db.session.commit()
 		return redirect(url_for('television', television_id=television_id))
 
-	return render_template('television.html', show=show, show_credits=show_credits, season=season, user_tv=user_tv)
+	return render_template('television.html', show=show, show_credits=show_credits, season=season, user_tv=user_tv, title=show['original_name'])
 
 @app.route('/graph')
 def graph():
@@ -347,4 +347,4 @@ def discover():
 			   'original_title.desc', 'vote_average.asc', 'vote_average.desc',
 			   'vote_count.asc', 'vote_count.desc']
 	genre_list = requests.get(f"""https://api.themoviedb.org/3/genre/movie/list?api_key={key}&language=en-US""").json()['genres']
-	return render_template('discover.html', genre_list=genre_list, sort_by=sort_by)
+	return render_template('discover.html', genre_list=genre_list, sort_by=sort_by, title='Discover')
