@@ -172,3 +172,23 @@ overflow: hidden;
 height:50px;
 overflow: hidden;
 }
+
+.watched-button-watched{
+position: absolute;
+width: 30px;
+height: 30px;
+bottom: 7px;
+right: 7px;
+cursor: pointer;
+color: #32CD32;
+}
+
+.watched-button-unwatched{
+position: absolute;
+width: 30px;
+height: 30px;
+bottom: 7px;
+right: 7px;
+cursor: pointer;
+opacity: 0.1;
+}

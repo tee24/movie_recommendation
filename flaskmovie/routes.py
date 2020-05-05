@@ -39,7 +39,7 @@ def register():
 		user.confirmation_email()
 		flash('Account created, please check your email to verify your account', 'success')
 		return redirect(url_for('login'))
-	return render_template('register.html', form=form, register_image=register_image)
+	return render_template('accounts/register.html', form=form, register_image=register_image)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -59,7 +59,7 @@ def login():
 				return redirect(url_for('index'))
 		else:
 			flash('Login Failed. Check Credentials', 'danger')
-	return render_template('login.html', form=form, hide_navbar=hide_navbar, login_image=login_image)
+	return render_template('accounts/login.html', form=form, hide_navbar=hide_navbar, login_image=login_image)
 
 @app.route('/logout')
 def logout():
@@ -83,7 +83,7 @@ def account():
 
 	elif request.method == "GET":
 		form.email.data = current_user.email
-	return render_template('account.html', form=form)
+	return render_template('accounts/account.html', form=form)
 
 @app.route('/movie/<int:movie_id>', methods=['GET', 'POST'])
 def movie(movie_id):
@@ -139,7 +139,7 @@ def reset_password_token():
 		user.password_reset_email()
 		flash('A password reset link has been sent to your email!', 'info')
 		return redirect(url_for('index'))
-	return render_template('password_reset_request.html', form=form)
+	return render_template('accounts/password_reset_request.html', form=form)
 
 @app.route('/reset/password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
@@ -154,7 +154,7 @@ def reset_password(token):
 		db.session.commit()
 		flash('Your password has been updated!', 'success')
 		return redirect(url_for('login'))
-	return render_template('password_reset.html', form=form)
+	return render_template('accounts/password_reset.html', form=form)
 
 @app.route('/update', methods=['GET', 'POST'])
 def update():
@@ -198,15 +198,15 @@ def watchlist_movies():
 	ids = [movie.movie_id for movie in current_user.movies if movie.watch_list == True]
 	watchlist = db.session.query(Movie).filter(Movie.tmdb_id.in_(ids)).all()
 	tv = False
-	return render_template('watchlist.html', watchlist=watchlist, tv=tv)
+	return render_template('watchlist/watchlist.html', watchlist=watchlist, tv=tv)
 
 @app.route('/watchlist/tv', methods=['GET', 'POST'])
 @login_required
 def watchlist_tv():
-	ids = (show.show_id for show in current_user.tv if show.to_watch == True)
+	ids = set([show.show_id for show in current_user.tv if show.to_watch == True])
 	watchlist = db.session.query(Tv).filter(Tv.tmdb_show_id.in_(ids)).all()
 	tv = True
-	return render_template('watchlist.html', watchlist=watchlist, tv=tv)
+	return render_template('watchlist/watchlist.html', watchlist=watchlist, tv=tv)
 
 @app.route('/watchlist/add/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -359,3 +359,23 @@ def discover():
 			   'vote_count.asc', 'vote_count.desc']
 	genre_list = requests.get(f"""https://api.themoviedb.org/3/genre/movie/list?api_key={key}&language=en-US""").json()['genres']
 	return render_template('discover.html', genre_list=genre_list, sort_by=sort_by)
+
+@app.route('/watchlist/tv/<int:show_id>')
+def watchlist_tv_season(show_id):
+	seasons = requests.get(f"https://api.themoviedb.org/3/tv/{show_id}?api_key={key}&language=en-US").json()['seasons']
+	seasons = [season for season in seasons if season['name'] if int(season['season_number']) is not 0]
+	return render_template('watchlist/watchlist_season.html', seasons=seasons, show_id=show_id)
+
+@app.route('/watchlist/tv/<int:show_id>/<int:season_id>/<int:season_number>')
+def watchlist_tv_episode(show_id, season_id, season_number):
+	episodes = requests.get(f"https://api.themoviedb.org/3/tv/{show_id}/season/{season_number}?api_key={key}&language=en-US").json()['episodes']
+	episode_watched = []
+	for episode in episodes:
+		watched = TvList.query.filter_by(user_id=current_user.id, show_id=show_id, season_id=season_id, episode_id=episode['id']).first().watched_episode
+		episode_watched.append(watched)
+
+	return render_template('watchlist/watchlist_episode.html', episodes=episodes, episode_watched=episode_watched)
+
+@app.route('/mark_watched')
+def mark_watched():
+	pass
