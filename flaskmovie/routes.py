@@ -373,9 +373,17 @@ def watchlist_tv_episode(show_id, season_id, season_number):
 	for episode in episodes:
 		watched = TvList.query.filter_by(user_id=current_user.id, show_id=show_id, season_id=season_id, episode_id=episode['id']).first().watched_episode
 		episode_watched.append(watched)
+	print(episode_watched)
 
-	return render_template('watchlist/watchlist_episode.html', episodes=episodes, episode_watched=episode_watched)
+	return render_template('watchlist/watchlist_episode.html', episodes=episodes, episode_watched=episode_watched,
+						   season_id=season_id, show_id=show_id)
 
-@app.route('/mark_watched')
+@app.route('/mark_watched', methods=['GET', 'POST'])
 def mark_watched():
-	pass
+	ids = request.values.get('ids')[4:]
+	show_id, season_id, episode_id = [int(id) for id in ids.split('-')]
+	episode = TvList.query.filter_by(user_id=current_user.id, show_id=show_id, season_id=season_id, episode_id=episode_id).first()
+	episode.watched_episode = True
+	db.session.commit()
+	return ""
+

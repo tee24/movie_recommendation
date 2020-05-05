@@ -191,3 +191,25 @@ $(document).ready(function(){
   });
 
 });
+
+$(document).ready(function(){
+  $(".watched-button").click(function() {
+      let watchedButton = $(this);
+      req = $.ajax({
+              url: '/mark_watched',
+              type: "POST",
+              data: { ids : $(this).attr('id')}
+            });
+
+       req.done(function(){
+        if (watchedButton.hasClass('unwatched')){
+            watchedButton.removeClass('unwatched');
+            watchedButton.addClass('watched');
+        } else{
+            watchedButton.removeClass('watched');
+            watchedButton.addClass('unwatched');
+        }
+       });
+  });
+
+});
