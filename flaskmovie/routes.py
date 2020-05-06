@@ -381,9 +381,13 @@ def watchlist_tv_episode(show_id, season_id, season_number):
 @app.route('/mark_watched', methods=['GET', 'POST'])
 def mark_watched():
 	ids = request.values.get('ids')[4:]
+	add = int(request.values.get('add'))
 	show_id, season_id, episode_id = [int(id) for id in ids.split('-')]
 	episode = TvList.query.filter_by(user_id=current_user.id, show_id=show_id, season_id=season_id, episode_id=episode_id).first()
-	episode.watched_episode = True
+	if add == 1:
+		episode.watched_episode = True
+	else:
+		episode.watched_episode = False
 	db.session.commit()
 	return ""
 

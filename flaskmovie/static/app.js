@@ -195,10 +195,15 @@ $(document).ready(function(){
 $(document).ready(function(){
   $(".watched-button").click(function() {
       let watchedButton = $(this);
+      let add = 1;
+      if (watchedButton.hasClass('watched')){
+        add = 0;
+      }
       req = $.ajax({
               url: '/mark_watched',
               type: "POST",
-              data: { ids : $(this).attr('id')}
+              data: { ids : $(this).attr('id'),
+                       add: add}
             });
 
        req.done(function(){
