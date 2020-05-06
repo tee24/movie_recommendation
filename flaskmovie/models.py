@@ -32,9 +32,12 @@ class MovieList(db.Model):
 
 class Tv(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
-	tmdb_show_id = db.Column(db.String, nullable=False, unique=True)
+	tmdb_show_id = db.Column(db.Integer, nullable=False, unique=True)
 	poster_path = db.Column(db.Text)
 	original_name = db.Column(db.Text)
+
+	def __repr__(self):
+		return f"Tv('{self.id}', '{self.tmdb_show_id}', '{self.original_name}')\n"
 
 class TvList(db.Model):
 	id = db.Column(db.Integer, primary_key=True)

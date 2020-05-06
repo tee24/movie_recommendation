@@ -10,6 +10,15 @@
                 {% else %}
                     <img src="{{ url_for('static', filename='background.jpg') }}" class="card-img-top movie-header">
                 {% endif %}
+                {% if tv %}
+                {% if show_watched[loop.index - 1] == True %}
+                <i class="far fa-check-square fa-2x watched-button watched show"
+                   id="ids-{{ item.tmdb_show_id }}"></i>
+                {% else %}
+                <i class="far fa-check-square fa-2x watched-button unwatched show"
+                   id="ids-{{ item.tmdb_show_id }}"></i>
+                {% endif %}
+                {% endif %}
                 <div class="card-body">
                     {% if not tv %}
                     <h5 class="card-title">{{ item.original_title }}</h5>

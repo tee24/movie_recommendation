@@ -203,10 +203,22 @@ def watchlist_movies():
 @app.route('/watchlist/tv', methods=['GET', 'POST'])
 @login_required
 def watchlist_tv():
-	ids = set([show.show_id for show in current_user.tv if show.to_watch == True])
+	ids = list(set([show.show_id for show in current_user.tv if show.to_watch == True]))
+	ids = sorted(ids) # sort here and 2 lines down to guarantee show_watched is correct ordering
 	watchlist = db.session.query(Tv).filter(Tv.tmdb_show_id.in_(ids)).all()
+	watchlist.sort(key=lambda x: x.tmdb_show_id)
+	print(watchlist)
 	tv = True
-	return render_template('watchlist/watchlist.html', watchlist=watchlist, tv=tv)
+
+	show_watched = []
+	for show in ids:
+		watched_show = TvList.query.filter_by(user_id=current_user.id, show_id=show).all()
+		entire_show_watched = all([episode.watched_episode for episode in watched_show])
+		if entire_show_watched:
+			show_watched.append(True)
+		else:
+			show_watched.append(False)
+	return render_template('watchlist/watchlist.html', watchlist=watchlist, tv=tv, show_watched=show_watched)
 
 @app.route('/watchlist/add/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -392,6 +404,7 @@ def mark_watched():
 	ids = request.values.get('ids')[4:]
 	add = int(request.values.get('add'))
 	method = request.values.get('method')
+	print(ids, add, method)
 
 	if method == 'episode':
 		show_id, season_id, episode_id = [int(id) for id in ids.split('-')]
@@ -412,5 +425,14 @@ def mark_watched():
 				episode.watched_episode = False
 		db.session.commit()
 	elif method == 'show':
-		pass
+		print(ids)
+		show_id = int(ids)
+		episodes = TvList.query.filter_by(user_id=current_user.id, show_id=show_id).all()
+		if add == 1:
+			for episode in episodes:
+				episode.watched_episode = True
+		else:
+			for episode in episodes:
+				episode.watched_episode = False
+		db.session.commit()
 	return ""
