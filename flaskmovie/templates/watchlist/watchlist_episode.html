@@ -1,0 +1,26 @@
+{% extends "template.html" %}
+{% block content %}
+        <div class="container-fluid p-5">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row" id="episode-tiles">
+                        {% for episode in episodes %}
+                        <div class="card m-1 episode-card" style="width: 18rem;">
+                            <img class="card-img-top episode" src="https://image.tmdb.org/t/p/w500/{{ episode.still_path }}" alt="Card image cap">
+                            {% if episode_watched[loop.index - 1] == True %}
+                            <i class="far fa-check-square fa-2x watched-button watched" id="ids-{{ show_id }}-{{ season_id }}-{{ episode.id }}"></i>
+                            {% else %}
+                            <i class="far fa-check-square fa-2x watched-button unwatched" id="ids-{{ show_id }}-{{ season_id }}-{{ episode.id }}"></i>
+                            {% endif %}
+                            <div class="card-body">
+                                <span class="font-weight-bold">{{ episode.name }}</span>
+                                <span class="font-weight-bold">S{{ episode.season_number }}E{{ episode.episode_number }}</span><br>
+                                <span class="text-muted">{{ episode.air_date }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock content %}

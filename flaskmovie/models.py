@@ -32,9 +32,12 @@ class MovieList(db.Model):
 
 class Tv(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
-	tmdb_show_id = db.Column(db.String, nullable=False, unique=True)
+	tmdb_show_id = db.Column(db.Integer, nullable=False, unique=True)
 	poster_path = db.Column(db.Text)
 	original_name = db.Column(db.Text)
+
+	def __repr__(self):
+		return f"Tv('{self.id}', '{self.tmdb_show_id}', '{self.original_name}')\n"
 
 class TvList(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
@@ -42,7 +45,11 @@ class TvList(db.Model):
 	show_id = db.Column(db.Integer, db.ForeignKey('tv.tmdb_show_id'), nullable=False)
 	season_id = db.Column(db.Integer)
 	episode_id = db.Column(db.Integer)
-	watch_list = db.Column(db.Boolean, nullable=False)
+	watched_episode = db.Column(db.Boolean, nullable=False)
+	to_watch = db.Column(db.Boolean, nullable=False)
+
+	def __repr__(self):
+		return f"TvList('{self.id}', '{self.user_id}', '{self.show_id}', '{self.season_id}', '{self.episode_id}', '{self.watched_episode}')\n"
 
 class User(db.Model, UserMixin):
 	id = db.Column(db.Integer, primary_key=True)

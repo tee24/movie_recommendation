@@ -10,13 +10,22 @@
                 {% else %}
                     <img src="{{ url_for('static', filename='background.jpg') }}" class="card-img-top movie-header">
                 {% endif %}
-                <div class="card-body movie-card-body">
+                {% if tv %}
+                {% if show_watched[loop.index - 1] == True %}
+                <i class="far fa-check-square fa-2x watched-button watched show"
+                   id="ids-{{ item.tmdb_show_id }}"></i>
+                {% else %}
+                <i class="far fa-check-square fa-2x watched-button unwatched show"
+                   id="ids-{{ item.tmdb_show_id }}"></i>
+                {% endif %}
+                {% endif %}
+                <div class="card-body">
                     {% if not tv %}
                     <h6 class="card-title text-center pb-1">{{ item.original_title }}</h6>
                     <a href="{{ url_for('movie', movie_id=item.tmdb_id) }}" class="stretched-link"></a>
                     {% else %}
-                    <h6 class="card-title text-center pb-1">{{ item.original_name }}</h6>
-                    <a href="{{ url_for('television', television_id=item.tmdb_show_id) }}" class="stretched-link"></a>
+                    <h5 class="card-title">{{ item.original_name }}</h5>
+                    <a href="{{ url_for('watchlist_tv_season', show_id=item.tmdb_show_id) }}" class="stretched-link"></a>
                     {% endif %}
                 </div>
             </div>

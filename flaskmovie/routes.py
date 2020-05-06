@@ -39,7 +39,8 @@ def register():
 		user.confirmation_email()
 		flash('Account created, please check your email to verify your account', 'success')
 		return redirect(url_for('login'))
-	return render_template('register.html', form=form, register_image=register_image, title='Sign Up')
+
+	return render_template('accounts/register.html', form=form, register_image=register_image, title='Sign Up')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -59,7 +60,9 @@ def login():
 				return redirect(url_for('index'))
 		else:
 			flash('Login Failed. Check Credentials', 'danger')
-	return render_template('login.html', form=form, hide_navbar=hide_navbar, login_image=login_image, title='Sign In')
+
+	return render_template('accounts/login.html', form=form, hide_navbar=hide_navbar, login_image=login_image, title='Sign In')
+
 
 @app.route('/logout')
 def logout():
@@ -83,7 +86,8 @@ def account():
 
 	elif request.method == "GET":
 		form.email.data = current_user.email
-	return render_template('account.html', form=form, title='Account')
+
+	return render_template('accounts/account.html', form=form, title='Account')
 
 @app.route('/movie/<int:movie_id>', methods=['GET', 'POST'])
 def movie(movie_id):
@@ -139,7 +143,7 @@ def reset_password_token():
 		user.password_reset_email()
 		flash('A password reset link has been sent to your email!', 'info')
 		return redirect(url_for('index'))
-	return render_template('password_reset_request.html', form=form)
+	return render_template('accounts/password_reset_request.html', form=form)
 
 @app.route('/reset/password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
@@ -154,7 +158,7 @@ def reset_password(token):
 		db.session.commit()
 		flash('Your password has been updated!', 'success')
 		return redirect(url_for('login'))
-	return render_template('password_reset.html', form=form)
+	return render_template('accounts/password_reset.html', form=form)
 
 @app.route('/update', methods=['GET', 'POST'])
 def update():
@@ -198,15 +202,30 @@ def watchlist_movies():
 	ids = [movie.movie_id for movie in current_user.movies if movie.watch_list == True]
 	watchlist = db.session.query(Movie).filter(Movie.tmdb_id.in_(ids)).all()
 	tv = False
-	return render_template('watchlist.html', watchlist=watchlist, tv=tv, title='Movies')
+
+	return render_template('watchlist/watchlist.html', watchlist=watchlist, tv=tv, title='Movies')
+
 
 @app.route('/watchlist/tv', methods=['GET', 'POST'])
 @login_required
 def watchlist_tv():
-	ids = [show.show_id for show in current_user.tv if show.watch_list == True]
+	ids = list(set([show.show_id for show in current_user.tv if show.to_watch == True]))
+	ids = sorted(ids) # sort here and 2 lines down to guarantee show_watched is correct ordering
 	watchlist = db.session.query(Tv).filter(Tv.tmdb_show_id.in_(ids)).all()
+	watchlist.sort(key=lambda x: x.tmdb_show_id)
+	print(watchlist)
 	tv = True
-	return render_template('watchlist.html', watchlist=watchlist, tv=tv, title='Television')
+
+	show_watched = []
+	for show in ids:
+		watched_show = TvList.query.filter_by(user_id=current_user.id, show_id=show).all()
+		entire_show_watched = all([episode.watched_episode for episode in watched_show])
+		if entire_show_watched:
+			show_watched.append(True)
+		else:
+			show_watched.append(False)
+	return render_template('watchlist/watchlist.html', watchlist=watchlist, tv=tv, show_watched=show_watched, title='Television')
+
 
 @app.route('/watchlist/add/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -214,13 +233,8 @@ def watchlist_add(id):
 	tv = request.args.get('tv')
 	if tv:
 		check = TvList.query.filter_by(user_id=current_user.id, show_id=id).first()
-		if check:
-			check.watch_list = True
-			db.session.commit()
-		else:
-			show_to_add = TvList(user_id=current_user.id, show_id=id, watch_list=True)
-			db.session.add(show_to_add)
-			db.session.commit()
+		if not check:
+			add_tv_show_to_tv_list(id)
 		flash('TV show added to watchlist', 'success')
 		return redirect(url_for('television', television_id=id))
 	else:
@@ -235,14 +249,30 @@ def watchlist_add(id):
 		flash('Movie added to watchlist', 'success')
 		return redirect(url_for('movie', movie_id=id))
 
+def add_tv_show_to_tv_list(id):
+	show = requests.get(f"https://api.themoviedb.org/3/tv/{id}?api_key={key}&language=en-US").json()['seasons']
+	show = [season for season in show if int(season['season_number']) is not 0] # remove specials if they exist
+
+	if len(show) > 40:
+		return None
+	# we don't want to add too many episodes!
+
+	for season in show:
+		season_info = requests.get(f"https://api.themoviedb.org/3/tv/{id}/season/{season['season_number']}?api_key={key}&language=en-US").json()['episodes']
+		for episode in season_info:
+			episode_to_add = TvList(user_id=current_user.id, show_id=id, season_id=season['id'],
+									episode_id=episode['id'], watched_episode=False, to_watch=True)
+			db.session.add(episode_to_add)
+	db.session.commit()
+
 @app.route('/watchlist/remove/<int:id>', methods=['GET', 'POST'])
 @login_required
 def watchlist_remove(id):
 	tv = request.args.get('tv')
 	if tv:
-		check = TvList.query.filter_by(user_id=current_user.id, show_id=id, watch_list=True).first()
+		check = TvList.query.filter_by(user_id=current_user.id, show_id=id, to_watch=True).first()
 		if check:
-			check.watch_list = False
+			TvList.query.filter_by(user_id=current_user.id, show_id=id).delete()
 			db.session.commit()
 			flash('Tv show removed from watchlist!', 'success')
 		else:
@@ -347,4 +377,71 @@ def discover():
 			   'original_title.desc', 'vote_average.asc', 'vote_average.desc',
 			   'vote_count.asc', 'vote_count.desc']
 	genre_list = requests.get(f"""https://api.themoviedb.org/3/genre/movie/list?api_key={key}&language=en-US""").json()['genres']
+
 	return render_template('discover.html', genre_list=genre_list, sort_by=sort_by, title='Discover')
+
+
+@app.route('/watchlist/tv/<int:show_id>')
+def watchlist_tv_season(show_id):
+	seasons = requests.get(f"https://api.themoviedb.org/3/tv/{show_id}?api_key={key}&language=en-US").json()['seasons']
+	seasons = [season for season in seasons if season['name'] if int(season['season_number']) is not 0]
+
+	season_watched = []
+	for season in seasons:
+		watched = TvList.query.filter_by(user_id=current_user.id, show_id=show_id, season_id=season['id']).all()
+		single_season_watched = all([episode.watched_episode for episode in watched])
+		if single_season_watched:
+			season_watched.append(True)
+		else:
+			season_watched.append(False)
+
+	return render_template('watchlist/watchlist_season.html', seasons=seasons, show_id=show_id, season_watched=season_watched)
+
+@app.route('/watchlist/tv/<int:show_id>/<int:season_id>/<int:season_number>')
+def watchlist_tv_episode(show_id, season_id, season_number):
+	episodes = requests.get(f"https://api.themoviedb.org/3/tv/{show_id}/season/{season_number}?api_key={key}&language=en-US").json()['episodes']
+	episode_watched = []
+	for episode in episodes:
+		watched = TvList.query.filter_by(user_id=current_user.id, show_id=show_id, season_id=season_id, episode_id=episode['id']).first().watched_episode
+		episode_watched.append(watched)
+
+	return render_template('watchlist/watchlist_episode.html', episodes=episodes, episode_watched=episode_watched,
+						   season_id=season_id, show_id=show_id)
+
+@app.route('/mark_watched', methods=['GET', 'POST'])
+def mark_watched():
+	ids = request.values.get('ids')[4:]
+	add = int(request.values.get('add'))
+	method = request.values.get('method')
+	print(ids, add, method)
+
+	if method == 'episode':
+		show_id, season_id, episode_id = [int(id) for id in ids.split('-')]
+		episode = TvList.query.filter_by(user_id=current_user.id, show_id=show_id, season_id=season_id, episode_id=episode_id).first()
+		if add == 1:
+			episode.watched_episode = True
+		else:
+			episode.watched_episode = False
+		db.session.commit()
+	elif method == 'season':
+		show_id, season_id = [int(id) for id in ids.split('-')]
+		episodes = TvList.query.filter_by(user_id=current_user.id, show_id=show_id, season_id=season_id).all()
+		if add == 1:
+			for episode in episodes:
+				episode.watched_episode = True
+		else:
+			for episode in episodes:
+				episode.watched_episode = False
+		db.session.commit()
+	elif method == 'show':
+		print(ids)
+		show_id = int(ids)
+		episodes = TvList.query.filter_by(user_id=current_user.id, show_id=show_id).all()
+		if add == 1:
+			for episode in episodes:
+				episode.watched_episode = True
+		else:
+			for episode in episodes:
+				episode.watched_episode = False
+		db.session.commit()
+	return ""
