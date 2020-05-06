@@ -364,7 +364,17 @@ def discover():
 def watchlist_tv_season(show_id):
 	seasons = requests.get(f"https://api.themoviedb.org/3/tv/{show_id}?api_key={key}&language=en-US").json()['seasons']
 	seasons = [season for season in seasons if season['name'] if int(season['season_number']) is not 0]
-	return render_template('watchlist/watchlist_season.html', seasons=seasons, show_id=show_id)
+
+	season_watched = []
+	for season in seasons:
+		watched = TvList.query.filter_by(user_id=current_user.id, show_id=show_id, season_id=season['id']).all()
+		single_season_watched = all([episode.watched_episode for episode in watched])
+		if single_season_watched:
+			season_watched.append(True)
+		else:
+			season_watched.append(False)
+
+	return render_template('watchlist/watchlist_season.html', seasons=seasons, show_id=show_id, season_watched=season_watched)
 
 @app.route('/watchlist/tv/<int:show_id>/<int:season_id>/<int:season_number>')
 def watchlist_tv_episode(show_id, season_id, season_number):
@@ -373,7 +383,6 @@ def watchlist_tv_episode(show_id, season_id, season_number):
 	for episode in episodes:
 		watched = TvList.query.filter_by(user_id=current_user.id, show_id=show_id, season_id=season_id, episode_id=episode['id']).first().watched_episode
 		episode_watched.append(watched)
-	print(episode_watched)
 
 	return render_template('watchlist/watchlist_episode.html', episodes=episodes, episode_watched=episode_watched,
 						   season_id=season_id, show_id=show_id)
@@ -382,12 +391,26 @@ def watchlist_tv_episode(show_id, season_id, season_number):
 def mark_watched():
 	ids = request.values.get('ids')[4:]
 	add = int(request.values.get('add'))
-	show_id, season_id, episode_id = [int(id) for id in ids.split('-')]
-	episode = TvList.query.filter_by(user_id=current_user.id, show_id=show_id, season_id=season_id, episode_id=episode_id).first()
-	if add == 1:
-		episode.watched_episode = True
-	else:
-		episode.watched_episode = False
-	db.session.commit()
-	return ""
+	method = request.values.get('method')
 
+	if method == 'episode':
+		show_id, season_id, episode_id = [int(id) for id in ids.split('-')]
+		episode = TvList.query.filter_by(user_id=current_user.id, show_id=show_id, season_id=season_id, episode_id=episode_id).first()
+		if add == 1:
+			episode.watched_episode = True
+		else:
+			episode.watched_episode = False
+		db.session.commit()
+	elif method == 'season':
+		show_id, season_id = [int(id) for id in ids.split('-')]
+		episodes = TvList.query.filter_by(user_id=current_user.id, show_id=show_id, season_id=season_id).all()
+		if add == 1:
+			for episode in episodes:
+				episode.watched_episode = True
+		else:
+			for episode in episodes:
+				episode.watched_episode = False
+		db.session.commit()
+	elif method == 'show':
+		pass
+	return ""

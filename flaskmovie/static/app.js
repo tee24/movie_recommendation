@@ -193,17 +193,29 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){
-  $(".watched-button").click(function() {
+  $(".watched-button").click(function(e) {
+      e.preventDefault();
       let watchedButton = $(this);
       let add = 1;
+      let method = 'episode';
+
+      if (watchedButton.hasClass('season')){
+         method = 'season';
+      } else if (watchedButton.hasClass('show')){
+         method = 'show'
+      }
+
+
       if (watchedButton.hasClass('watched')){
         add = 0;
-      }
+      };
+
       req = $.ajax({
               url: '/mark_watched',
               type: "POST",
               data: { ids : $(this).attr('id'),
-                       add: add}
+                       add: add,
+                       method: method}
             });
 
        req.done(function(){
