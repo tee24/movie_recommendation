@@ -9,7 +9,7 @@ font-family: 'Muli', sans-serif;
 }
 
 #movie_tiles{
-padding: 0px 30px 0px 30px;
+padding: 0px 60px 0px 60px;
 }
 
 .fixed_button{
@@ -123,7 +123,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 }
 
-.card.episode-card:hover {
+.card.episode-card:hover{
   box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
 
@@ -146,16 +146,9 @@ border: 2px solid transparent;
 display: none;
 }
 
-.movie-card {
-  transition: transform .5s ease;
-}
-
-
-.movie-card:hover{
+.movie-header{
     border-radius: 10px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    transform: scale(1.05);
-    z-index: 9999;
 }
 
 .card-title{
@@ -165,11 +158,6 @@ text-overflow: ellipsis;
 width: 100%;
 padding-left: 5%;
 padding-right: 5%;
-overflow: hidden;
-}
-
-.movie-card-body{
-height:50px;
 overflow: hidden;
 }
 

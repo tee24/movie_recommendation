@@ -195,8 +195,8 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){
-  $(".watched-button").click(function(e) {
-      e.preventDefault();
+
+$(".watched-button").click(function() {
       let watchedButton = $(this);
       let add = 1;
       let method = 'episode';

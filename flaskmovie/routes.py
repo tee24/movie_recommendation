@@ -172,14 +172,12 @@ def html_gen(list, tv=False):
 	for result in list:
 		image_src = f"https://image.tmdb.org/t/p/w500/{result['poster_path']}" if result['poster_path'] is not None else url_for('static', filename='background.jpg')
 		html += f"""
-	<div class="col-6 col-sm-4 col-md-3 col-xl-2 py-1">
-		<div class="card movie-card h-100">
+	<div class="col-6 col-sm-4 col-md-3 col-xl-2 py-2">
+		<div class="card border-0 movie-card h-100">
+			<a href="{url_for('television', television_id=result['id']) if tv else url_for('movie', movie_id=result['id'])}" class="stretched-link">
 			<img src="{image_src}" class="card-img-top movie-header"
 				 alt="image">
-			<div class="card-body align-items-center text-center movie-card-body">
-				<h6 class="card-title">{result[title]}</h6>
-				<a href="{url_for('television', television_id=result['id']) if tv else url_for('movie', movie_id=result['id'])}" class="stretched-link"></a>
-			</div>
+				</a>
 		</div>
 	</div>
 		"""
@@ -212,8 +210,7 @@ def watchlist_tv():
 	ids = list(set([show.show_id for show in current_user.tv if show.to_watch == True]))
 	ids = sorted(ids) # sort here and 2 lines down to guarantee show_watched is correct ordering
 	watchlist = db.session.query(Tv).filter(Tv.tmdb_show_id.in_(ids)).all()
-	watchlist.sort(key=lambda x: x.tmdb_show_id)
-	print(watchlist)
+	watchlist = sorted(watchlist, key=lambda x: int(x.tmdb_show_id))
 	tv = True
 
 	show_watched = []
@@ -434,7 +431,6 @@ def mark_watched():
 				episode.watched_episode = False
 		db.session.commit()
 	elif method == 'show':
-		print(ids)
 		show_id = int(ids)
 		episodes = TvList.query.filter_by(user_id=current_user.id, show_id=show_id).all()
 		if add == 1:
