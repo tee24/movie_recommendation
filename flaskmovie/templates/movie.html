@@ -143,18 +143,22 @@
     <div class="row">
         <div class="col">
             <!-- /.card -->
-            <div class="card card-outline-secondary my-3">
-                <div class="card-header">
-                    Movie Comments
-                </div>
-                <div class="card-body">
-                    {% for post in posts %}
-                    <p>{{ post.message }}</p>
-                    <small class="text-muted">Posted by {{ post.author.username }} on {{
-                        post.date_time.strftime('%Y-%m-%d') }}
-                    </small>
-                    <hr>
-                    {% endfor %}
+            <div class="my-3">
+<!--                <div class="card-header">-->
+<!--                    Movie Comments-->
+<!--                </div>-->
+                {% for post in posts %}
+                 <blockquote class="blockquote blockquote-custom bg-white p-5 shadow rounded">
+                    <p class="mb-0 mt-2 font-italic">{{ post.message }}</p>
+                    <footer class="blockquote-footer pt-4 mt-4 border-top">
+                        <cite title="Source Title">
+                            <span class="font-weight-bold">{{ post.author.username }}</span>
+                        </cite>
+                        {{ post.date_time.strftime('%d-%m-%Y %H:%M') }}
+                    </footer>
+                </blockquote>
+                {% endfor %}
+            </div>
                     <form method="POST" action="">
                         {{ form.hidden_tag() }}
                         <fieldset class="form-group">
@@ -179,6 +183,5 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
+
 {% endblock content %}

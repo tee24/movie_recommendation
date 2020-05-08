@@ -183,3 +183,8 @@ cursor: pointer;
 opacity: 0.25;
 z-index: 2;
 }
+
+.blockquote-custom {
+  position: relative;
+  font-size: 1.1rem;
+}

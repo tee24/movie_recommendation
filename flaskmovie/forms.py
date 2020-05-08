@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm, RecaptchaField
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, Field
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, Field, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from flaskmovie.models import User
 from flask_login import current_user
@@ -47,7 +47,7 @@ class LoginForm(FlaskForm):
 	submit = SubmitField('Sign In')
 
 class CommentForm(FlaskForm):
-	comment = StringField('Comment', validators=[DataRequired(), Length(10,5000)])
+	comment = TextAreaField('Comment', validators=[DataRequired(), Length(10,5000)])
 	submit = SubmitField('Post Comment')
 
 class RequestResetPasswordForm(FlaskForm):
