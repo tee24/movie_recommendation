@@ -149,7 +149,7 @@
 <!--                </div>-->
                 {% for post in posts %}
                  <blockquote class="blockquote blockquote-custom bg-white p-5 shadow rounded">
-                    <p class="mb-0 mt-2 font-italic">{{ post.message }}</p>
+                    <p class="mb-0 mt-2 font-italic">{{ post.message|safe }}</p>
                     <footer class="blockquote-footer pt-4 mt-4 border-top">
                         <cite title="Source Title">
                             <span class="font-weight-bold">{{ post.author.username }}</span>
@@ -159,25 +159,24 @@
                 </blockquote>
                 {% endfor %}
             </div>
-                    <form method="POST" action="">
+                    <form method="POST" action="" class="mt-5">
                         {{ form.hidden_tag() }}
                         <fieldset class="form-group">
                             <div class="form-group">
-                                {{ form.comment.label(class="form-control-label") }}
                                 {% if form.comment.errors %}
-                                {{ form.comment(class="form-control form-control-lg is-invalid") }}
+                                {{ form.comment(class="form-control form-control-lg is-invalid summernote") }}
                                 <div class="invalid-feedback">
                                     {% for error in form.comment.errors %}
                                     <span>{{ error }}</span>
                                     {% endfor %}
                                 </div>
                                 {% else %}
-                                {{ form.comment(class="form-control form-control-lg") }}
+                                {{ form.comment(class="form-control form-control-lg summernote") }}
                                 {% endif %}
                             </div>
                         </fieldset>
-                        <div class="form-group pt-2">
-                            {{ form.submit(class="btn btn-primary") }}
+                        <div class="form-group text-center">
+                            {{ form.submit(class="btn btn-primary rounded-pill text-uppercase px-4 mb-2") }}
                         </div>
                     </form>
                 </div>

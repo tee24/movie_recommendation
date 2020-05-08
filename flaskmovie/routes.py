@@ -3,6 +3,7 @@ from flaskmovie import app, bcrypt, db, key
 from flaskmovie.forms import RegistrationForm, LoginForm, AccountUpdateForm, CommentForm, RequestResetPasswordForm, ResetPasswordForm
 from flaskmovie.models import Movie, User, Post, MovieList, Tv, TvList
 from flask_login import login_user, current_user, logout_user, login_required
+import bleach
 import requests
 import requests_cache
 import json
@@ -111,11 +112,13 @@ def movie(movie_id):
 	if form.validate_on_submit():
 		if current_user.is_authenticated:
 			if current_user.confirmed:
-				post = Post(message=form.comment.data, movie_id=my_movie.tmdb_id, user_id=current_user.id)
+				cleaned_message = bleach.clean(form.comment.data, tags=bleach.sanitizer.ALLOWED_TAGS)
+				post = Post(message=cleaned_message, movie_id=my_movie.tmdb_id, user_id=current_user.id)
 				db.session.add(post)
 				db.session.commit()
 				form.comment.data = ""
 				flash('Comment Posted', 'success')
+				return redirect(url_for('movie', movie_id=movie_id))
 			else:
 				flash('You must verify your email before commenting!', 'info')
 		else:
