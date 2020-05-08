@@ -165,20 +165,21 @@ overflow: hidden;
 position: absolute;
 width: 30px;
 height: 30px;
-bottom: 7px;
-right: 7px;
+top: 7px;
+left: 7px;
 cursor: pointer;
 color: #32CD32;
 z-index: 2;
+opacity: 0.85;
 }
 
 .watched-button.unwatched{
 position: absolute;
 width: 30px;
 height: 30px;
-bottom: 7px;
-right: 7px;
+top: 7px;
+left: 7px;
 cursor: pointer;
-opacity: 0.1;
+opacity: 0.25;
 z-index: 2;
 }

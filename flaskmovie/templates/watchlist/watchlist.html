@@ -3,8 +3,8 @@
 <div class="container-fluid mt-3" id="movie_tiles">
     <div class="row mb-5">
         {% for item in watchlist %}
-        <div class="col-6 col-sm-4 col-md-3 col-xl-2 py-1">
-            <div class="card h-100 movie-card">
+        <div class="col-6 col-sm-4 col-md-3 col-xl-2 py-2">
+            <div class="card border-0 h-100 movie-card">
                 {% if item.poster_path is not none %}
                     <img src="https://image.tmdb.org/t/p/w500/{{ item.poster_path }}" class="card-img-top movie-header">
                 {% else %}
@@ -12,22 +12,22 @@
                 {% endif %}
                 {% if tv %}
                 {% if show_watched[loop.index - 1] == True %}
-                <i class="far fa-check-square fa-2x watched-button watched show"
+                <i class="fas fa-check-square fa-2x watched-button watched show"
                    id="ids-{{ item.tmdb_show_id }}"></i>
                 {% else %}
-                <i class="far fa-check-square fa-2x watched-button unwatched show"
+                <i class="fas fa-check-square fa-2x watched-button unwatched show"
                    id="ids-{{ item.tmdb_show_id }}"></i>
                 {% endif %}
                 {% endif %}
-                <div class="card-body">
+<!--                <div class="card-body">-->
                     {% if not tv %}
-                    <h6 class="card-title text-center pb-1">{{ item.original_title }}</h6>
+<!--                    <h6 class="card-title text-center pb-1">{{ item.original_title }}</h6>-->
                     <a href="{{ url_for('movie', movie_id=item.tmdb_id) }}" class="stretched-link"></a>
                     {% else %}
-                    <h5 class="card-title">{{ item.original_name }}</h5>
+<!--                    <h5 class="card-title">{{ item.original_name }}</h5>-->
                     <a href="{{ url_for('watchlist_tv_season', show_id=item.tmdb_show_id) }}" class="stretched-link"></a>
                     {% endif %}
-                </div>
+<!--                </div>-->
             </div>
         </div>
         {% endfor %}

@@ -3,25 +3,25 @@
 <div class="container-fluid mt-3" id="movie_tiles">
     <div class="row mb-5">
         {% for item in seasons %}
-        <div class="col-6 col-sm-4 col-md-3 col-xl-2 py-1">
-            <div class="card h-100">
+        <div class="col-6 col-sm-4 col-md-3 col-xl-2 py-2">
+            <div class="card border-0 h-100">
                 {% if item.poster_path is not none %}
-                <img src="https://image.tmdb.org/t/p/w500/{{ item.poster_path }}" class="card-img-top movie-header">
+                <img src="https://image.tmdb.org/t/p/w500/{{ item.poster_path }}" class="card-img-top movie-header h-100">
                 {% else %}
                 <img src="{{ url_for('static', filename='background.jpg') }}" class="card-img-top movie-header">
                 {% endif %}
                 {% if season_watched[loop.index - 1] == True %}
-                <i class="far fa-check-square fa-2x watched-button watched season"
+                <i class="fas fa-check-square fa-2x watched-button watched season"
                    id="ids-{{ show_id }}-{{ item.id }}"></i>
                 {% else %}
-                <i class="far fa-check-square fa-2x watched-button unwatched season"
+                <i class="fas fa-check-square fa-2x watched-button unwatched season"
                    id="ids-{{ show_id }}-{{ item.id }}"></i>
                 {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title">{{ item.original_name }}</h5>
+<!--                <div class="card-body">-->
+<!--                    <h5 class="card-title">{{ item.original_name }}</h5>-->
                     <a href="{{ url_for('watchlist_tv_episode', show_id=show_id, season_number=item.season_number, season_id=item.id) }}"
                        class="stretched-link"></a>
-                </div>
+<!--                </div>-->
             </div>
         </div>
         {% endfor %}

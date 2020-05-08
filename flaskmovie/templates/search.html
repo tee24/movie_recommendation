@@ -3,23 +3,23 @@
 <div class="container-fluid mt-3" id="movie_tiles">
     <div class="row mb-5">
         {% for item in search_results %}
-        <div class="col-6 col-sm-4 col-md-3 col-xl-2 py-1">
-            <div class="card h-100">
+        <div class="col-6 col-sm-4 col-md-3 col-xl-2 py-2">
+            <div class="card border-0 h-100">
                 {% if item.poster_path is not none %}
-                    <img src="https://image.tmdb.org/t/p/w500/{{ item.poster_path }}" class="card-img-top movie-header">
+                    <img src="https://image.tmdb.org/t/p/w500/{{ item.poster_path }}" class="card-img-top movie-header h-100">
                 {% else %}
-                    <img src="{{ url_for('static', filename='background.jpg') }}" class="card-img-top movie-header">
+                    <img src="{{ url_for('static', filename='background.jpg') }}" class="card-img-top movie-header h-100">
                 {% endif %}
                 {% if item.media_type == "movie" %}
-                <div class="card-body">
-                    <h5 class="card-title">{{ item.original_title }}</h5>
+<!--                <div class="card-body">-->
+<!--                    <h5 class="card-title">{{ item.original_title }}</h5>-->
                     <a href="{{ url_for('movie', movie_id=item.id) }}" class="stretched-link"></a>
-                </div>
+<!--                </div>-->
                 {% else %}
-                <div class="card-body">
-                    <h5 class="card-title">{{ item.original_name }}</h5>
+<!--                <div class="card-body">-->
+<!--                    <h5 class="card-title">{{ item.original_name }}</h5>-->
                     <a href="{{ url_for('television', television_id=item.id) }}" class="stretched-link"></a>
-                </div>
+<!--                </div>-->
                 {% endif %}
             </div>
         </div>
