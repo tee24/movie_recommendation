@@ -76,7 +76,7 @@
         <i class="fas fa-caret-left fa-2x back text-white"></i>
         <i class="fas fa-caret-right fa-2x forward text-white"></i>
         <div class="wrapper">
-            {% for item in show.seasons[1:] %}
+            {% for item in show_seasons %}
             <div class="post">
                     <img src="https://image.tmdb.org/t/p/w500/{{ item.poster_path }}" class="post-image-season" id="id{{ item.season_number }}">
             </div>

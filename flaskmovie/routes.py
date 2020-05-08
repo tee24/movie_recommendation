@@ -291,6 +291,8 @@ def television(television_id):
 	season = requests.get(f"https://api.themoviedb.org/3/tv/{television_id}/season/1?api_key={key}&language=en-US&append_to_response=credits").json()
 	show_credits = show['credits']['cast']
 	show_credits = [x for x in show_credits if x['profile_path'] is not None]
+	show_seasons = show['seasons']
+	show_seasons = [season for season in show_seasons if int(season['season_number']) is not 0]
 
 	if current_user.is_authenticated:
 		user_tv = TvList.query.filter_by(user_id=current_user.id, show_id=television_id).first()
@@ -305,7 +307,8 @@ def television(television_id):
 		db.session.commit()
 		return redirect(url_for('television', television_id=television_id))
 
-	return render_template('television.html', show=show, show_credits=show_credits, season=season, user_tv=user_tv, title=show['original_name'])
+	return render_template('television.html', show=show, show_credits=show_credits, season=season,
+						   show_seasons=show_seasons, user_tv=user_tv, title=show['original_name'])
 
 @app.route('/graph')
 def graph():
