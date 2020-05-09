@@ -220,12 +220,20 @@ def watchlist_tv():
 	show_watched = []
 	for show in ids:
 		watched_show = TvList.query.filter_by(user_id=current_user.id, show_id=show).all()
-		entire_show_watched = all([episode.watched_episode if datetime.strptime(episode.episode_air_date, "%Y-%m-%d") < datetime.today() else True for episode in watched_show]) # if the episode hasn't aired yet then don't include in "watched"
+		entire_show_watched = all([episode.watched_episode if episode_aired(episode.episode_air_date) else True for episode in watched_show]) # if the episode hasn't aired yet then don't include in "watched"
 		if entire_show_watched:
 			show_watched.append(True)
 		else:
 			show_watched.append(False)
 	return render_template('watchlist/watchlist.html', watchlist=watchlist, tv=tv, show_watched=show_watched, title='Television')
+
+def episode_aired(date_string):
+	try:
+		date = datetime.strptime(date_string, "%Y-%m-%d")
+		return date < datetime.today()
+	except:
+		return False
+
 
 
 @app.route('/watchlist/add/<int:id>', methods=['GET', 'POST'])
@@ -393,9 +401,12 @@ def watchlist_tv_season(show_id):
 	season_watched = []
 	for season in seasons:
 		watched = TvList.query.filter_by(user_id=current_user.id, show_id=show_id, season_id=season['id']).all()
-		single_season_watched = all([episode.watched_episode if datetime.strptime(episode.episode_air_date, "%Y-%m-%d") < datetime.today() else True for episode in watched])
-		if single_season_watched:
-			season_watched.append(True)
+		single_season_watched = all([episode.watched_episode if episode_aired(episode.episode_air_date) else True for episode in watched])
+		if episode_aired(season['air_date']):
+			if single_season_watched:
+				season_watched.append(True)
+			else:
+				season_watched.append(False)
 		else:
 			season_watched.append(False)
 
@@ -431,7 +442,7 @@ def mark_watched():
 		episodes = TvList.query.filter_by(user_id=current_user.id, show_id=show_id, season_id=season_id).all()
 		if add == 1:
 			for episode in episodes:
-				if datetime.strptime(episode.episode_air_date, "%Y-%m-%d") < datetime.today():
+				if episode_aired(episode.episode_air_date):
 					episode.watched_episode = True
 		else:
 			for episode in episodes:
@@ -442,7 +453,7 @@ def mark_watched():
 		episodes = TvList.query.filter_by(user_id=current_user.id, show_id=show_id).all()
 		if add == 1:
 			for episode in episodes:
-				if datetime.strptime(episode.episode_air_date, "%Y-%m-%d") < datetime.today():
+				if episode_aired(episode.episode_air_date):
 					episode.watched_episode = True
 		else:
 			for episode in episodes:
