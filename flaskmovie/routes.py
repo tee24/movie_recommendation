@@ -3,6 +3,7 @@ from flaskmovie import app, bcrypt, db, key
 from flaskmovie.forms import RegistrationForm, LoginForm, AccountUpdateForm, CommentForm, RequestResetPasswordForm, ResetPasswordForm
 from flaskmovie.models import Movie, User, Post, MovieList, Tv, TvList
 from flask_login import login_user, current_user, logout_user, login_required
+from datetime import datetime
 import bleach
 import requests
 import requests_cache
@@ -219,7 +220,7 @@ def watchlist_tv():
 	show_watched = []
 	for show in ids:
 		watched_show = TvList.query.filter_by(user_id=current_user.id, show_id=show).all()
-		entire_show_watched = all([episode.watched_episode for episode in watched_show])
+		entire_show_watched = all([episode.watched_episode if datetime.strptime(episode.episode_air_date, "%Y-%m-%d") < datetime.today() else True for episode in watched_show]) # if the episode hasn't aired yet then don't include in "watched"
 		if entire_show_watched:
 			show_watched.append(True)
 		else:
@@ -261,7 +262,7 @@ def add_tv_show_to_tv_list(id):
 		season_info = requests.get(f"https://api.themoviedb.org/3/tv/{id}/season/{season['season_number']}?api_key={key}&language=en-US").json()['episodes']
 		for episode in season_info:
 			episode_to_add = TvList(user_id=current_user.id, show_id=id, season_id=season['id'],
-									episode_id=episode['id'], watched_episode=False, to_watch=True)
+									episode_id=episode['id'], episode_air_date=episode['air_date'], watched_episode=False, to_watch=True)
 			db.session.add(episode_to_add)
 	db.session.commit()
 
@@ -392,7 +393,7 @@ def watchlist_tv_season(show_id):
 	season_watched = []
 	for season in seasons:
 		watched = TvList.query.filter_by(user_id=current_user.id, show_id=show_id, season_id=season['id']).all()
-		single_season_watched = all([episode.watched_episode for episode in watched])
+		single_season_watched = all([episode.watched_episode if datetime.strptime(episode.episode_air_date, "%Y-%m-%d") < datetime.today() else True for episode in watched])
 		if single_season_watched:
 			season_watched.append(True)
 		else:
@@ -416,7 +417,6 @@ def mark_watched():
 	ids = request.values.get('ids')[4:]
 	add = int(request.values.get('add'))
 	method = request.values.get('method')
-	print(ids, add, method)
 
 	if method == 'episode':
 		show_id, season_id, episode_id = [int(id) for id in ids.split('-')]
@@ -431,7 +431,8 @@ def mark_watched():
 		episodes = TvList.query.filter_by(user_id=current_user.id, show_id=show_id, season_id=season_id).all()
 		if add == 1:
 			for episode in episodes:
-				episode.watched_episode = True
+				if datetime.strptime(episode.episode_air_date, "%Y-%m-%d") < datetime.today():
+					episode.watched_episode = True
 		else:
 			for episode in episodes:
 				episode.watched_episode = False
@@ -441,7 +442,8 @@ def mark_watched():
 		episodes = TvList.query.filter_by(user_id=current_user.id, show_id=show_id).all()
 		if add == 1:
 			for episode in episodes:
-				episode.watched_episode = True
+				if datetime.strptime(episode.episode_air_date, "%Y-%m-%d") < datetime.today():
+					episode.watched_episode = True
 		else:
 			for episode in episodes:
 				episode.watched_episode = False

@@ -45,6 +45,7 @@ class TvList(db.Model):
 	show_id = db.Column(db.Integer, db.ForeignKey('tv.tmdb_show_id'), nullable=False)
 	season_id = db.Column(db.Integer)
 	episode_id = db.Column(db.Integer)
+	episode_air_date = db.Column(db.String)
 	watched_episode = db.Column(db.Boolean, nullable=False)
 	to_watch = db.Column(db.Boolean, nullable=False)
 
