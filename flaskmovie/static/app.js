@@ -257,3 +257,29 @@ $('.summernote').summernote({
   ]
 });
 });
+
+$(document).ready(function(){
+  $(document).on('click', '.page-selector', function() {
+      let id = $(this).attr('id');
+      req = $.ajax({
+              url: '/movie/comments/update',
+              type: "POST",
+              data: { id : id}
+            });
+
+       req.done(function(data){
+            console.log(data.comments_html);
+
+            $('html, body').animate({
+                scrollTop: $("#comment-header").offset().top - 50 // Scroll 50px less
+            }, 1000);
+
+            $('#movie-comments').fadeOut(500, function() {
+            $(this).html(data.comments_html).fadeIn(500);
+            });
+
+            $('#pages').html(data.pages_html);
+
+            });
+       });
+  });

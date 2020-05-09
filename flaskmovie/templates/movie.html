@@ -138,16 +138,20 @@
 
 
 <!-- COMMENTS -->
-<h2 class="text-center display-4 py-5">Comments</h2>
+<h2 class="text-center display-4 pt-5" id="comment-header">Comments</h2>
+{% if not posts.items %}
+<p class="text-muted text-center mt-0"><small>There are no comments for <strong>{{ movie.original_title }}</strong> be the first?</small></p><br>
+{% endif %}
 <div class="container">
     <div class="row">
         <div class="col">
             <!-- /.card -->
-            <div class="my-3">
+            <div class="my-3" id="movie-comments">
 <!--                <div class="card-header">-->
 <!--                    Movie Comments-->
 <!--                </div>-->
-                {% for post in posts %}
+
+                {% for post in posts.items %}
                  <blockquote class="blockquote blockquote-custom bg-white p-5 shadow rounded">
                     <p class="mb-0 mt-2 font-italic">{{ post.message|safe }}</p>
                     <footer class="blockquote-footer pt-4 mt-4 border-top">
@@ -158,6 +162,18 @@
                     </footer>
                 </blockquote>
                 {% endfor %}
+            </div>
+
+                 <div id="pages">
+                     {% if posts.items %}
+                {% for page in posts.iter_pages(left_edge=2, left_current=1, right_current=3, right_edge=2)  %}
+                    {% if page %}
+                     <button type="button" id="id-{{ movie.id }}-page-{{ page }}" class="btn btn-outline-secondary page-selector">{{ page }}</button>
+                    {% else %}
+                    ...
+                    {% endif %}
+                {% endfor %}
+                     {% endif %}
             </div>
                     <form method="POST" action="" class="mt-5">
                         {{ form.hidden_tag() }}

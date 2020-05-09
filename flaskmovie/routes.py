@@ -102,6 +102,7 @@ def movie(movie_id):
 		user_movies = MovieList.query.filter_by(user_id=current_user.id, movie_id=movie_id).first()
 	else:
 		user_movies = None
+
 	my_movie = Movie.query.filter_by(tmdb_id=movie_id).first()
 	if not my_movie:
 		new_movie = Movie(tmdb_id=movie_id, original_title=movie['original_title'],
@@ -109,6 +110,7 @@ def movie(movie_id):
 		db.session.add(new_movie)
 		db.session.commit()
 		return redirect(url_for('movie', movie_id=movie_id))
+	posts = Post.query.filter_by(movie_id=my_movie.tmdb_id).paginate(per_page=10, page=1)
 	form = CommentForm()
 	if form.validate_on_submit():
 		if current_user.is_authenticated:
@@ -125,8 +127,9 @@ def movie(movie_id):
 		else:
 			flash('Please sign in to post a comment!', 'info')
 	return render_template('movie.html', movie=movie, movie_credits=movie_credits,
-						   form=form, posts=my_movie.posts, movie_reviews=movie_reviews,
-						   movie_recommendations=movie_recommendations, user_movies=user_movies, title=movie['original_title'])
+						   form=form, movie_reviews=movie_reviews,
+						   movie_recommendations=movie_recommendations, user_movies=user_movies,
+						   title=movie['original_title'], posts=posts)
 
 @app.route('/confirm/<token>', methods=['GET', 'POST'])
 def confirm_email(token):
@@ -460,3 +463,37 @@ def mark_watched():
 				episode.watched_episode = False
 		db.session.commit()
 	return ""
+
+@app.route('/movie/comments/update', methods=['GET', 'POST'])
+def movie_comments_update():
+	id = request.values.get('id')
+	movie_id = int(id.split('-')[1])
+	page = int(id.split('-')[3])
+	posts = Post.query.filter_by(movie_id=movie_id).paginate(per_page=10, page=page)
+	comments_html = """"""
+	for post in posts.items:
+		comment = f"""
+<blockquote class="blockquote blockquote-custom bg-white p-5 shadow rounded">
+                    <p class="mb-0 mt-2 font-italic">{post.message}</p>
+                    <footer class="blockquote-footer pt-4 mt-4 border-top">
+                        <cite title="Source Title">
+                            <span class="font-weight-bold">{ post.author.username }</span>
+                        </cite>
+                        { post.date_time.strftime('%d-%m-%Y %H:%M') }
+                    </footer>
+                </blockquote>
+"""
+		comments_html += comment
+
+	pages_html = """<div id="pages">"""
+	for page in posts.iter_pages(left_edge=2, left_current=1, right_current=3, right_edge=2):
+		if page:
+			a = f"""<button type="button" id="id-{ movie_id }-page-{ page }" class="btn btn-outline-secondary page-selector">{ page }</button> \n"""
+		else:
+			a = "... \n"
+		pages_html += a
+	pages_html += "</div>"
+
+	data = {'pages_html' : pages_html, 'comments_html': comments_html}
+
+	return data
