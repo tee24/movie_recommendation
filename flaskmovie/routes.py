@@ -468,8 +468,8 @@ def mark_watched():
 def movie_comments_update():
 	id = request.values.get('id')
 	movie_id = int(id.split('-')[1])
-	page = int(id.split('-')[3])
-	posts = Post.query.filter_by(movie_id=movie_id).paginate(per_page=10, page=page)
+	page_num = int(id.split('-')[3])
+	posts = Post.query.filter_by(movie_id=movie_id).paginate(per_page=10, page=page_num)
 	comments_html = """"""
 	for post in posts.items:
 		comment = f"""
@@ -488,7 +488,10 @@ def movie_comments_update():
 	pages_html = """<div id="pages">"""
 	for page in posts.iter_pages(left_edge=2, left_current=1, right_current=3, right_edge=2):
 		if page:
-			a = f"""<button type="button" id="id-{ movie_id }-page-{ page }" class="btn btn-outline-secondary page-selector">{ page }</button> \n"""
+			if page == page_num:
+				a = f"""<button type="button" id="id-{ movie_id }-page-{ page }" class="btn btn-secondary page-selector">{ page }</button> \n"""
+			else:
+				a = f"""<button type="button" id="id-{movie_id}-page-{page}" class="btn btn-outline-secondary page-selector">{page}</button> \n"""
 		else:
 			a = "... \n"
 		pages_html += a

@@ -168,7 +168,11 @@
                      {% if posts.items %}
                 {% for page in posts.iter_pages(left_edge=2, left_current=1, right_current=3, right_edge=2)  %}
                     {% if page %}
+                     {% if loop.index == 1 %}
+                     <button type="button" id="id-{{ movie.id }}-page-{{ page }}" class="btn btn-secondary page-selector">{{ page }}</button>
+                     {% else %}
                      <button type="button" id="id-{{ movie.id }}-page-{{ page }}" class="btn btn-outline-secondary page-selector">{{ page }}</button>
+                     {% endif %}
                     {% else %}
                     ...
                     {% endif %}
