@@ -1,0 +1,18 @@
+{% for post in posts.items %}
+<blockquote class="blockquote blockquote-custom bg-white p-5 shadow rounded">
+    <p class="mb-0 mt-2 font-italic">{{ post.message|safe }}</p>
+    <footer class="blockquote-footer pt-4 mt-4 border-top">
+        <cite title="Source Title">
+            <span class="font-weight-bold">{{ post.author.username }}</span>
+        </cite>
+        {{ post.date_time.strftime('%d-%m-%Y %H:%M') }}
+        {% if post.author.username == current_user.username %}
+        <!-- Button trigger modal -->
+        <i class="fas fa-pencil-alt ml-2 edit-comment" data-toggle="modal"
+           data-target="#exampleModalCenter" id="id-{{ post.id }}"></i>
+        <i class="fas fa-trash ml-2 delete-comment" data-toggle="modal"
+           data-target="#exampleModalCenter2" id="delete-{{ post.id }}"></i>
+        {% endif %}
+    </footer>
+</blockquote>
+{% endfor %}

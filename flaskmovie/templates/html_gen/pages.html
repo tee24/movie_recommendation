@@ -1,0 +1,19 @@
+<div id="pages">
+    {% if posts.items %}
+    {% for page in posts.iter_pages(left_edge=2, left_current=1, right_current=3, right_edge=2) %}
+    {% if page %}
+    {% if loop.index == page_num %}
+    <button type="button" id="id-{{ movie_id }}-page-{{ page }}" class="btn btn-secondary page-selector">{{
+        page }}
+    </button>
+    {% else %}
+    <button type="button" id="id-{{ movie_id }}-page-{{ page }}"
+            class="btn btn-outline-secondary page-selector">{{ page }}
+    </button>
+    {% endif %}
+    {% else %}
+    ...
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+</div>
