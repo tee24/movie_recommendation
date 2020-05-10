@@ -110,12 +110,13 @@ def movie(movie_id):
 		db.session.add(new_movie)
 		db.session.commit()
 		return redirect(url_for('movie', movie_id=movie_id))
-	posts = Post.query.filter_by(movie_id=my_movie.tmdb_id).paginate(per_page=10, page=1)
+	posts = Post.query.filter_by(movie_id=my_movie.tmdb_id).order_by(Post.date_time.desc()).paginate(per_page=10, page=1)
 	form = CommentForm()
 	if form.validate_on_submit():
 		if current_user.is_authenticated:
 			if current_user.confirmed:
-				cleaned_message = bleach.clean(form.comment.data, tags=bleach.sanitizer.ALLOWED_TAGS)
+				print(form.comment.data)
+				cleaned_message = post_cleaner(form.comment.data)
 				post = Post(message=cleaned_message, movie_id=my_movie.tmdb_id, user_id=current_user.id)
 				db.session.add(post)
 				db.session.commit()
@@ -469,34 +470,55 @@ def movie_comments_update():
 	id = request.values.get('id')
 	movie_id = int(id.split('-')[1])
 	page_num = int(id.split('-')[3])
-	posts = Post.query.filter_by(movie_id=movie_id).paginate(per_page=10, page=page_num)
-	comments_html = """"""
-	for post in posts.items:
-		comment = f"""
-<blockquote class="blockquote blockquote-custom bg-white p-5 shadow rounded">
-                    <p class="mb-0 mt-2 font-italic">{post.message}</p>
-                    <footer class="blockquote-footer pt-4 mt-4 border-top">
-                        <cite title="Source Title">
-                            <span class="font-weight-bold">{ post.author.username }</span>
-                        </cite>
-                        { post.date_time.strftime('%d-%m-%Y %H:%M') }
-                    </footer>
-                </blockquote>
-"""
-		comments_html += comment
+	posts = Post.query.filter_by(movie_id=movie_id).order_by(Post.date_time.desc()).paginate(per_page=10, page=page_num)
 
-	pages_html = """<div id="pages">"""
-	for page in posts.iter_pages(left_edge=2, left_current=1, right_current=3, right_edge=2):
-		if page:
-			if page == page_num:
-				a = f"""<button type="button" id="id-{ movie_id }-page-{ page }" class="btn btn-secondary page-selector">{ page }</button> \n"""
-			else:
-				a = f"""<button type="button" id="id-{movie_id}-page-{page}" class="btn btn-outline-secondary page-selector">{page}</button> \n"""
-		else:
-			a = "... \n"
-		pages_html += a
-	pages_html += "</div>"
-
-	data = {'pages_html' : pages_html, 'comments_html': comments_html}
+	data = {'pages_html' : render_template('html_gen/pages.html', posts=posts, movie_id=movie_id, page_num=page_num),
+			'comments_html': render_template('html_gen/comments.html', posts=posts)}
 
 	return data
+
+@app.route('/get/post', methods=['GET', 'POST'])
+def get_post():
+	post_id = int(request.values.get('postId')[3:])
+	post = Post.query.filter_by(id=post_id).first()
+	return post.message[3: len(post.message) - 4] # remove <p> tags
+
+@app.route('/movie/update/post/<int:post_id>', methods=['GET', 'POST'])
+@login_required
+def update_post(post_id):
+	post = Post.query.filter_by(id=post_id).first()
+	movie_id = post.movie_id
+	if request.method == 'POST':
+		if post.user_id == current_user.id:
+			new_comment = post_cleaner(request.form['comment'])
+			post.message = new_comment
+			db.session.commit()
+			flash("Comment Updated!", 'success')
+		else:
+			flash("You are not authorized to change that message!", 'danger')
+	return redirect(url_for('movie', movie_id=movie_id))
+
+@app.route('/movie/delete/post/<int:post_id>', methods=['GET', 'POST'])
+@login_required
+def delete_post(post_id):
+	post = Post.query.filter_by(id=post_id).first()
+	movie_id = post.movie_id
+	if request.method == 'POST':
+		if post.user_id == current_user.id:
+			db.session.delete(post)
+			db.session.commit()
+			flash("Comment Deleted!", 'success')
+		else:
+			flash("You are not authorized to change that message!", 'danger')
+	return redirect(url_for('movie', movie_id=movie_id))
+
+def post_cleaner(string):
+	cleaned_message = bleach.clean(string,
+								   tags=bleach.sanitizer.ALLOWED_TAGS + ['p', 'sub', 'sup', 'u', 'span', 'font',
+																		 'strike', 'br', 'font'],
+								   attributes={'*': ['style', 'color']},
+								   styles=['color', 'font-size'])
+	return cleaned_message
+
+
+

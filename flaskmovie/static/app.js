@@ -268,7 +268,6 @@ $(document).ready(function(){
             });
 
        req.done(function(data){
-            console.log(data.comments_html);
 
             $('html, body').animate({
                 scrollTop: $("#comment-header").offset().top - 50 // Scroll 50px less
@@ -283,3 +282,61 @@ $(document).ready(function(){
             });
        });
   });
+
+$(document).ready(function(){
+
+  $(document).on('click', '.edit-comment', function() {
+     let postId = $(this).attr('id');
+      $('.modal-body form').attr('action', 'update/post/' + postId.substring(3));
+
+$('.editsummernote').summernote({
+  toolbar: [
+    // [groupName, [list of button]]
+    ['style', ['bold', 'italic', 'underline', 'clear']],
+    ['font', ['strikethrough', 'superscript', 'subscript']],
+    ['fontsize', ['fontsize']],
+    ['color', ['color']],
+    ['para', ['ul', 'ol', 'paragraph']],
+    ['height', ['height']]
+  ]
+});
+
+$('.editsummernote').summernote('reset');
+
+      req = $.ajax({
+              url: '/get/post',
+              type: "POST",
+              data: { postId : postId}
+            });
+
+       req.done(function(data){
+
+            $('.editsummernote').summernote('editor.pasteHTML', data);
+       });
+  });
+
+});
+
+$(document).ready(function(){
+$(document).on('click', '.delete-comment', function() {
+    let pathname = window.location.pathname;
+    let postId = $(this).attr('id');
+
+      $(document).on('click', '.delete-comment-modal', function() {
+
+      let route = 'delete/post/' + postId.substring(7);
+
+      console.log('hello');
+      req = $.ajax({
+              url: route,
+              type: "POST",
+              data: { postId : postId}
+            });
+
+       req.done(function(redirect){
+            window.location.replace(pathname);
+
+       });
+  });
+});
+});

@@ -38,11 +38,13 @@
         </div>
         <div class="col-sm-12 col-lg-3 align-self-center pr-5">
             {% if user_movies.watch_list == False or user_movies is none %}
-            <a href="{{ url_for('watchlist_add', id=movie.id) }}" class="btn btn-primary rounded-pill btn-block text-uppercase mb-2"><i
+            <a href="{{ url_for('watchlist_add', id=movie.id) }}"
+               class="btn btn-primary rounded-pill btn-block text-uppercase mb-2"><i
                     class="fas fa-plus mr-2"></i>Add To Watchlist</a><br>
             {% endif %}
             {% if current_user.is_authenticated and user_movies.watch_list == True %}
-            <a href="{{ url_for('watchlist_remove', id=movie.id) }}" class="btn btn-danger rounded-pill btn-block text-uppercase mb-2"><i
+            <a href="{{ url_for('watchlist_remove', id=movie.id) }}"
+               class="btn btn-danger rounded-pill btn-block text-uppercase mb-2"><i
                     class="fas fa-minus mr-2"></i>Remove From Watchlist</a><br>
             {% endif %}
         </div>
@@ -71,7 +73,9 @@
 </div>
 <!-- RECOMMENDATIONS -->
 <h2 class="text-center display-4 mt-5">Recommended</h2>
-<p class="text-muted text-center mt-0"><small>If you enjoyed <strong>{{ movie.original_title }}</strong> then check out these movies!</small></p><br>
+<p class="text-muted text-center mt-0">
+    <small>If you enjoyed <strong>{{ movie.original_title }}</strong> then check out these movies!</small>
+</p><br>
 
 <!-- SMALL REC CARDS -->
 <div class="container-fluid mt-3">
@@ -82,15 +86,15 @@
                 {% if item == movie_recommendations[0] %}
                 <div class="col-sm-6 col-md-4 col-lg-3 mt-2 mb-2">
                     <a href="{{ url_for('movie', movie_id=item.id) }}">
-                    <img src="https://image.tmdb.org/t/p/w185/{{ item.poster_path }}"
-                         class="img-fluid card-rec active-small" id="img-{{ loop.index }}">
+                        <img src="https://image.tmdb.org/t/p/w185/{{ item.poster_path }}"
+                             class="img-fluid card-rec active-small" id="img-{{ loop.index }}">
                     </a>
                 </div>
                 {% else %}
                 <div class="col-sm-6 col-md-4 col-lg-3 mt-2 mb-2">
                     <a href="{{ url_for('movie', movie_id=item.id) }}">
-                    <img src="https://image.tmdb.org/t/p/w185/{{ item.poster_path }}"
-                         class="img-fluid card-rec" id="img-{{ loop.index }}">
+                        <img src="https://image.tmdb.org/t/p/w185/{{ item.poster_path }}"
+                             class="img-fluid card-rec" id="img-{{ loop.index }}">
                     </a>
                 </div>
                 {% endif %}
@@ -140,67 +144,140 @@
 <!-- COMMENTS -->
 <h2 class="text-center display-4 pt-5" id="comment-header">Comments</h2>
 {% if not posts.items %}
-<p class="text-muted text-center mt-0"><small>There are no comments for <strong>{{ movie.original_title }}</strong> be the first?</small></p><br>
+<p class="text-muted text-center mt-0">
+    <small>There are no comments for <strong>{{ movie.original_title }}</strong> be the first?</small>
+</p><br>
 {% endif %}
 <div class="container">
     <div class="row">
         <div class="col">
             <!-- /.card -->
             <div class="my-3" id="movie-comments">
-<!--                <div class="card-header">-->
-<!--                    Movie Comments-->
-<!--                </div>-->
+                <!--                <div class="card-header">-->
+                <!--                    Movie Comments-->
+                <!--                </div>-->
 
                 {% for post in posts.items %}
-                 <blockquote class="blockquote blockquote-custom bg-white p-5 shadow rounded">
+                <blockquote class="blockquote blockquote-custom bg-white p-5 shadow rounded">
                     <p class="mb-0 mt-2 font-italic">{{ post.message|safe }}</p>
                     <footer class="blockquote-footer pt-4 mt-4 border-top">
                         <cite title="Source Title">
                             <span class="font-weight-bold">{{ post.author.username }}</span>
                         </cite>
                         {{ post.date_time.strftime('%d-%m-%Y %H:%M') }}
+                        {% if post.author.username == current_user.username %}
+                        <!-- Button trigger modal -->
+                        <i class="fas fa-pencil-alt ml-2 edit-comment" data-toggle="modal"
+                           data-target="#exampleModalCenter" id="id-{{ post.id }}"></i>
+                        <i class="fas fa-trash ml-2 delete-comment" data-toggle="modal"
+                           data-target="#exampleModalCenter2" id="delete-{{ post.id }}"></i>
+                        {% endif %}
                     </footer>
                 </blockquote>
                 {% endfor %}
             </div>
 
-                 <div id="pages">
-                     {% if posts.items %}
-                {% for page in posts.iter_pages(left_edge=2, left_current=1, right_current=3, right_edge=2)  %}
-                    {% if page %}
-                     {% if loop.index == 1 %}
-                     <button type="button" id="id-{{ movie.id }}-page-{{ page }}" class="btn btn-secondary page-selector">{{ page }}</button>
-                     {% else %}
-                     <button type="button" id="id-{{ movie.id }}-page-{{ page }}" class="btn btn-outline-secondary page-selector">{{ page }}</button>
-                     {% endif %}
-                    {% else %}
-                    ...
-                    {% endif %}
+            <div id="pages">
+                {% if posts.items %}
+                {% for page in posts.iter_pages(left_edge=2, left_current=1, right_current=3, right_edge=2) %}
+                {% if page %}
+                {% if loop.index == 1 %}
+                <button type="button" id="id-{{ movie.id }}-page-{{ page }}" class="btn btn-secondary page-selector">{{
+                    page }}
+                </button>
+                {% else %}
+                <button type="button" id="id-{{ movie.id }}-page-{{ page }}"
+                        class="btn btn-outline-secondary page-selector">{{ page }}
+                </button>
+                {% endif %}
+                {% else %}
+                ...
+                {% endif %}
                 {% endfor %}
-                     {% endif %}
+                {% endif %}
             </div>
-                    <form method="POST" action="" class="mt-5">
-                        {{ form.hidden_tag() }}
-                        <fieldset class="form-group">
-                            <div class="form-group">
-                                {% if form.comment.errors %}
-                                {{ form.comment(class="form-control form-control-lg is-invalid summernote") }}
-                                <div class="invalid-feedback">
-                                    {% for error in form.comment.errors %}
-                                    <span>{{ error }}</span>
-                                    {% endfor %}
-                                </div>
-                                {% else %}
-                                {{ form.comment(class="form-control form-control-lg summernote") }}
-                                {% endif %}
-                            </div>
-                        </fieldset>
-                        <div class="form-group text-center">
-                            {{ form.submit(class="btn btn-primary rounded-pill text-uppercase px-4 mb-2") }}
+            <form method="POST" action="" class="mt-5">
+                {{ form.hidden_tag() }}
+                <fieldset class="form-group">
+                    <div class="form-group">
+                        {% if form.comment.errors %}
+                        {{ form.comment(class="form-control form-control-lg is-invalid summernote") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.comment.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
                         </div>
-                    </form>
+                        {% else %}
+                        {{ form.comment(class="form-control form-control-lg summernote") }}
+                        {% endif %}
+                    </div>
+                </fieldset>
+                <div class="form-group text-center">
+                    {{ form.submit(class="btn btn-primary rounded-pill text-uppercase px-4 mb-2") }}
                 </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Comment Edit Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Edit Comment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="update/post" class="mt-5">
+                    {{ form.hidden_tag() }}
+                    <fieldset class="form-group">
+                        <div class="form-group">
+                            {% if form.comment.errors %}
+                            {{ form.comment(class="form-control form-control-lg is-invalid editsummernote") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.comment.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            {{ form.comment(class="form-control form-control-lg editsummernote") }}
+                            {% endif %}
+                        </div>
+                    </fieldset>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        {{ form.submit(class="btn btn-primary px-4") }}
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- Delete Comment Modal -->
+<div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle2" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle2">Delete Comment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        Are you sure you want to delete this comment?<br>
+          <small>This action <span class="font-weight-bold">cannot</span> be undone!</small>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger delete-comment-modal">Delete comment</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock content %}
