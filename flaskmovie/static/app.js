@@ -321,20 +321,26 @@ $(document).ready(function(){
 $(document).on('click', '.delete-comment', function() {
     let pathname = window.location.pathname;
     let postId = $(this).attr('id');
+    let post = $(this).parent().parent()
 
       $(document).on('click', '.delete-comment-modal', function() {
 
       let route = 'delete/post/' + postId.substring(7);
 
-      console.log('hello');
       req = $.ajax({
               url: route,
               type: "POST",
               data: { postId : postId}
             });
 
-       req.done(function(redirect){
-            window.location.replace(pathname);
+       req.done(function(){
+       let number_of_comments = $('.blockquote.blockquote-custom.bg-white.p-5.shadow.rounded').length;
+            post.fadeOut(500, function(){
+            if (number_of_comments == 1){
+                $('.page-selector').remove();
+            }
+            post.remove();
+            });
 
        });
   });

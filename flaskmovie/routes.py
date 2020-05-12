@@ -54,14 +54,14 @@ def login():
 		user = User.query.filter_by(email=form.email.data).first()
 		if user and bcrypt.check_password_hash(user.password, form.password.data):
 			login_user(user, remember=form.remember.data)
-			flash('You have successfully logged in', 'success')
+			flash('You have successfully logged in!', 'success')
 			next = request.args.get('next')
 			if next:
 				return redirect(next)
 			else:
 				return redirect(url_for('index'))
 		else:
-			flash('Login Failed. Check Credentials', 'danger')
+			flash('Login Failed. Check Credentials!', 'danger')
 
 	return render_template('accounts/login.html', form=form, hide_navbar=hide_navbar, login_image=login_image, title='Sign In')
 
@@ -69,7 +69,7 @@ def login():
 @app.route('/logout')
 def logout():
 	logout_user()
-	flash('You have logged out', 'success')
+	flash('You have logged out!', 'success')
 	return redirect(url_for('index'))
 
 @app.route('/account', methods=['GET', 'POST'])
@@ -121,7 +121,7 @@ def movie(movie_id):
 				db.session.add(post)
 				db.session.commit()
 				form.comment.data = ""
-				flash('Comment Posted', 'success')
+				flash('Comment Posted!', 'success')
 				return redirect(url_for('movie', movie_id=movie_id))
 			else:
 				flash('You must verify your email before commenting!', 'info')
@@ -136,7 +136,7 @@ def movie(movie_id):
 def confirm_email(token):
 	user = User.confirm_token(token)
 	if not user:
-		flash('Invalid token', 'danger')
+		flash('Invalid token!', 'danger')
 		return redirect(url_for('index'))
 	user.confirmed = True
 	db.session.commit()
@@ -157,7 +157,7 @@ def reset_password_token():
 def reset_password(token):
 	user = User.confirm_token(token)
 	if not user:
-		flash('Invalid token', 'danger')
+		flash('Invalid token!', 'danger')
 		return redirect(url_for('login'))
 	form = ResetPasswordForm()
 	if form.validate_on_submit():
@@ -289,7 +289,7 @@ def watchlist_remove(id):
 			db.session.commit()
 			flash('Tv show removed from watchlist!', 'success')
 		else:
-			flash('Tv show not in watchlist', 'danger')
+			flash('Tv show not in watchlist!', 'danger')
 		return redirect(url_for('television', television_id=id))
 	else:
 		check = MovieList.query.filter_by(user_id=current_user.id, movie_id=id, watch_list=True).first()
@@ -298,7 +298,7 @@ def watchlist_remove(id):
 			db.session.commit()
 			flash('Movie removed from watchlist!', 'success')
 		else:
-			flash('Movie not in watchlist', 'danger')
+			flash('Movie not in watchlist!', 'danger')
 		return redirect(url_for('movie', movie_id=id))
 
 @app.route('/television/<int:television_id>')
@@ -507,10 +507,7 @@ def delete_post(post_id):
 		if post.user_id == current_user.id:
 			db.session.delete(post)
 			db.session.commit()
-			flash("Comment Deleted!", 'success')
-		else:
-			flash("You are not authorized to change that message!", 'danger')
-	return redirect(url_for('movie', movie_id=movie_id))
+	return ""
 
 def post_cleaner(string):
 	cleaned_message = bleach.clean(string,
@@ -520,5 +517,13 @@ def post_cleaner(string):
 								   styles=['color', 'font-size'])
 	return cleaned_message
 
-
+@app.route('/account/resend/verification')
+@login_required
+def resend_verification_email():
+	if current_user.confirmed == False:
+		current_user.confirmation_email()
+		flash('Verification has been sent again, please check your email to verify your account!', 'success')
+	else:
+		flash('You are already verified!', 'success')
+	return redirect(url_for('account'))
 
