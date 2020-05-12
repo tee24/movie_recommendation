@@ -65,14 +65,12 @@
                         </div>
                     </fieldset>
                 </form>
-
-
-
-
-
-
-
-
+                            <small class="text-muted">
+                                    Email Verified: <span class="py-2 font-weight-bold">{{ current_user.confirmed }}</span>
+                                {% if not current_user.confirmed %}
+                                <a class="px-2" href="{{ url_for('resend_verification_email') }}">Click Here To Resend Email Verification</a>
+                                {% endif %}
+                                </small>
                         </div>
                     </div>
                 </div>
