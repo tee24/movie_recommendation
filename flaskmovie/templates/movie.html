@@ -59,6 +59,7 @@
             {% for item in movie_credits %}
             <div class="post">
                 {% if item.profile_path is none %}
+                <img src="{{ url_for('static', filename='background2.jpg') }}" class="post-image">
                 {% else %}
                 <img src="https://image.tmdb.org/t/p/w500/{{ item.profile_path }}" class="post-image">
                 {% endif %}

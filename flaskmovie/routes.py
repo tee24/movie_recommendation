@@ -95,7 +95,6 @@ def account():
 def movie(movie_id):
 	movie = requests.get(f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={key}&language=en-US&append_to_response=videos,credits,reviews,recommendations").json()
 	movie_credits = movie['credits']['cast']
-	movie_credits = [x for x in movie_credits if x['profile_path'] is not None]
 	movie_reviews = movie['reviews']['results']
 	movie_recommendations = movie['recommendations']['results']
 	if current_user.is_authenticated:
@@ -247,8 +246,11 @@ def watchlist_add(id):
 	if tv:
 		check = TvList.query.filter_by(user_id=current_user.id, show_id=id).first()
 		if not check:
-			add_tv_show_to_tv_list(id)
-		flash('TV show added to watchlist', 'success')
+			added = add_tv_show_to_tv_list(id)
+			if added:
+				flash('TV show added to watchlist', 'success')
+			else:
+				flash('Sorry tracking is not available for this show at the moment!', 'info')
 		return redirect(url_for('television', television_id=id))
 	else:
 		check = MovieList.query.filter_by(user_id=current_user.id, movie_id=id).first()
@@ -266,9 +268,8 @@ def add_tv_show_to_tv_list(id):
 	show = requests.get(f"https://api.themoviedb.org/3/tv/{id}?api_key={key}&language=en-US").json()['seasons']
 	show = [season for season in show if int(season['season_number']) is not 0] # remove specials if they exist
 
-	if len(show) > 40:
-		return None
-	# we don't want to add too many episodes!
+	if len(show) > 35:
+		return False
 
 	for season in show:
 		season_info = requests.get(f"https://api.themoviedb.org/3/tv/{id}/season/{season['season_number']}?api_key={key}&language=en-US").json()['episodes']
@@ -277,6 +278,7 @@ def add_tv_show_to_tv_list(id):
 									episode_id=episode['id'], episode_air_date=episode['air_date'], watched_episode=False, to_watch=True)
 			db.session.add(episode_to_add)
 	db.session.commit()
+	return True
 
 @app.route('/watchlist/remove/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -306,7 +308,6 @@ def television(television_id):
 	show = requests.get(f"https://api.themoviedb.org/3/tv/{television_id}?api_key={key}&language=en-US&append_to_response=credits").json()
 	season = requests.get(f"https://api.themoviedb.org/3/tv/{television_id}/season/1?api_key={key}&language=en-US&append_to_response=credits").json()
 	show_credits = show['credits']['cast']
-	show_credits = [x for x in show_credits if x['profile_path'] is not None]
 	show_seasons = show['seasons']
 	show_seasons = [season for season in show_seasons if int(season['season_number']) is not 0]
 
@@ -346,18 +347,7 @@ def update_tv():
 	graph['ratings'] = ratings
 	graph['names'] = names
 
-	html = ""
-	for episode in season['episodes']:
-		html += f"""
-<div class="card m-1 episode-card" style="width: 18rem;">
-<img class="card-img-top episode" src="https://image.tmdb.org/t/p/w500/{ episode['still_path'] }" alt="Card image cap">
-<div class="card-body">
-<span class="font-weight-bold">{ episode['name'] }</span>
-<span class="font-weight-bold">S{ episode['season_number'] }E{ episode['episode_number'] }</span><br>
-<span class="text-muted">{ episode['air_date'] }</span>
-</div>
-</div>
-		"""
+	html = render_template('html_gen/episode_cards.html', episodes=season['episodes'])
 
 	payload = {}
 	payload['html'] = html

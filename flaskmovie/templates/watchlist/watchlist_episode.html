@@ -6,7 +6,11 @@
                     <div class="row" id="episode-tiles">
                         {% for episode in episodes %}
                         <div class="card m-1 episode-card" style="width: 18rem;">
+                            {% if episode.still_path is none %}
+                            <img class="card-img-top episode" src="{{ url_for('static', filename='episode_background.jpg') }}">
+                            {% else %}
                             <img class="card-img-top episode" src="https://image.tmdb.org/t/p/w500/{{ episode.still_path }}" alt="Card image cap">
+                            {% endif %}
                             {% if episode_watched[loop.index - 1] == True %}
                             <i class="fas fa-check-square fa-2x watched-button watched" id="ids-{{ show_id }}-{{ season_id }}-{{ episode.id }}"></i>
                             {% else %}

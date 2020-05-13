@@ -58,7 +58,11 @@
         <div class="wrapper">
             {% for item in show_credits %}
             <div class="post">
+                {% if item.profile_path is none %}
+                <img src="{{ url_for('static', filename='background2.jpg') }}" class="post-image">
+                {% else %}
                 <img src="https://image.tmdb.org/t/p/w500/{{ item.profile_path }}" class="post-image">
+                {% endif %}
                 <div class="post-info text-center">
                     <span class="font-weight-bold">{{ item.name }}</span><br>
                     <span class="text-muted">{{ item.character }}</span>
@@ -69,7 +73,7 @@
     </div>
 </div>
 <!--SEASON INFO-->
-<h2 class="text-center display-4 py-5 font-weight-bold">Seasons</h2>
+<h2 class="text-center display-4 py-5">Seasons</h2>
 <!-- SEASON SLICK CAROUSEL -->
 <div class="container-fluid slider" style="background-color: #2e2e2e;">
     <div class="slider-box">
@@ -78,23 +82,30 @@
         <div class="wrapper">
             {% for item in show_seasons %}
             <div class="post">
+                {% if item.poster_path is none %}
+                    <img src="{{ url_for('static', filename='background.jpg') }}" class="post-image-season" id="id{{ item.season_number }}">
+                {% else %}
                     <img src="https://image.tmdb.org/t/p/w500/{{ item.poster_path }}" class="post-image-season" id="id{{ item.season_number }}">
+                {% endif %}
             </div>
             {% endfor %}
         </div>
     </div>
 </div>
 
-<h2 class="text-center display-4 py-5 font-weight-bold">Episodes</h2>
+<h2 class="text-center display-4 py-5">Episodes</h2>
 
         <div class="container-fluid pt-5">
-            <div class="row">
-                <div class="col-md-4"></div>
-                <div class="col-md-8">
-                    <div class="row" id="episode-tiles">
+            <div class="row text-center">
+                <div class="col-md-12">
+                    <div class="row justify-content-center" id="episode-tiles">
                         {% for episode in season.episodes %}
                         <div class="card m-1 episode-card" style="width: 18rem;">
+                            {% if episode.still_path is not none %}
+                            <img class="card-img-top episode" src="{{ url_for('static', filename='episode_background.jpg') }}" alt="Card image cap">
+                            {% else %}
                             <img class="card-img-top episode" src="https://image.tmdb.org/t/p/w500/{{ episode.still_path }}" alt="Card image cap">
+                            {% endif %}
                             <div class="card-body">
                                 <span class="font-weight-bold">{{ episode.name }}</span>
                                 <span class="font-weight-bold">S{{ episode.season_number }}E{{ episode.episode_number }}</span><br>
@@ -107,7 +118,7 @@
             </div>
         </div>
 
-<h2 class="text-center display-4 py-5 font-weight-bold">Ratings</h2>
+<h2 class="text-center display-4 py-5">Ratings</h2>
 
 <div class="container p-5">
     <canvas id="seasonChart">
