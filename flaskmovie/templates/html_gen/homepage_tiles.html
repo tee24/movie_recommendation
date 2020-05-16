@@ -1,0 +1,28 @@
+{% for result in list %}
+<div class="col-6 col-md-4 col-xl-2 py-2">
+    {% if tv %}
+    {% if loop.index <= 20 - page %}
+    <div class="card border-0 movie-card h-100" data-toggle="tooltip" title="{{ result.original_name }}">
+        {% else %}
+        <div class="card border-0 movie-card h-100 hide-element" data-toggle="tooltip" title="{{ result.original_name }}">
+            {% endif %}
+        <a href="{{ url_for('television', television_id=result.id) }}" class="stretched-link">
+            {% else %}
+            {% if loop.index <= 20 - page %}
+          <div class="card border-0 movie-card h-100" data-toggle="tooltip" title="{{ result.original_title }}">
+              {% else %}
+              <div class="card border-0 movie-card h-100 hide-element" data-toggle="tooltip" title="{{ result.original_title }}">
+              {% endif %}
+        <a href="{{ url_for('movie', movie_id=result.id) }}" class="stretched-link">
+            {% endif %}
+        {% if result.poster_path is none %}
+            <img src="{{ url_for('static', filename='background.jpg') }}" class="card-img-top movie-header"
+             alt="image">
+            {% else %}
+            <img src="https://image.tmdb.org/t/p/w500/{{ result.poster_path }}" class="card-img-top movie-header"
+             alt="image">
+            {% endif %}
+            </a>
+    </div>
+</div>
+{% endfor %}

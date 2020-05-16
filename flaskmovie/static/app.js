@@ -114,7 +114,6 @@ $(document).ready(function() {
           if ($(window).scrollTop() >= ($(document).height() - $(window).height())) {
               if (callAllowed){
                 callAllowed = false;
-                console.log('past halfway');
                 req = $.ajax({
                           url: '/load',
                           type: "POST",
@@ -122,6 +121,7 @@ $(document).ready(function() {
                                   endpoint: endpoint}
                         });
                  req.done(function(html){
+                        $('.hide-element').removeClass('hide-element');
                         $(html).appendTo('#movie_tiles');
                         callAllowed = true;
                         page++;

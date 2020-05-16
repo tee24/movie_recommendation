@@ -26,7 +26,7 @@ def index():
 def load():
 	page = request.values.get('page')
 	endpoint = request.values.get('endpoint')
-	html = html_gen(api_call(endpoint=endpoint, page=page), tv='tv' in endpoint)
+	html = html_gen(api_call(endpoint=endpoint, page=page), page=page, tv='tv' in endpoint)
 	session['page'] = page
 	return html
 
@@ -174,21 +174,10 @@ def update():
 	tv = request.values.get('tv')
 	return html_gen(api_call(endpoint=endpoint), tv=tv)
 
-def html_gen(list, tv=False):
-	title = 'original_name' if tv else 'original_title'
-	html = ""
-	for result in list:
-		image_src = f"https://image.tmdb.org/t/p/w500/{result['poster_path']}" if result['poster_path'] is not None else url_for('static', filename='background.jpg')
-		html += f"""
-	<div class="col-6 col-sm-4 col-md-3 col-xl-2 py-2">
-		<div class="card border-0 movie-card h-100" data-toggle="tooltip" title="{result[title]}">
-			<a href="{url_for('television', television_id=result['id']) if tv else url_for('movie', movie_id=result['id'])}" class="stretched-link">
-			<img src="{image_src}" class="card-img-top movie-header"
-				 alt="image">
-				</a>
-		</div>
-	</div>
-		"""
+def html_gen(list, page=1, tv=False):
+	page = int(page)
+	page = 2 * (page%3)
+	html = render_template('html_gen/homepage_tiles.html', list=list, tv=tv, page=page)
 	return html
 
 @app.route('/search', methods=['GET', 'POST'])

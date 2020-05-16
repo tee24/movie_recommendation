@@ -17,9 +17,14 @@
 <div class="container-fluid mt-3">
     <div class="row mb-5"  id="movie_tiles">
         {% for item in movies %}
-        <div class="col-6 col-md-3 col-xl-2 py-2">
+        <div class="col-6 col-md-4 col-xl-2 py-2">
+            {% if loop.index == 19 or loop.index == 20 %}
+            <div class="card border-0 movie-card h-100 hide-element" data-toggle="tooltip" title="{{ item.original_title }}">
+                <a href="{{ url_for('movie', movie_id=item.id) }}">
+            {% else %}
             <div class="card border-0 movie-card h-100" data-toggle="tooltip" title="{{ item.original_title }}">
                 <a href="{{ url_for('movie', movie_id=item.id) }}">
+            {% endif %}
                 {% if item.poster_path is not none %}
                     <img src="https://image.tmdb.org/t/p/w500/{{ item.poster_path }}" class="card-img-top movie-header">
                 {% else %}
