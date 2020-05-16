@@ -201,3 +201,7 @@ cursor: pointer;
 .fa-pencil-alt:hover {
     color: black;
 }
+
+.slick-track {
+    margin:auto;
+}

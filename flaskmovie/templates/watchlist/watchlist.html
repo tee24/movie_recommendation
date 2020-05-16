@@ -4,7 +4,11 @@
     <div class="row mb-5">
         {% for item in watchlist %}
         <div class="col-6 col-sm-4 col-md-3 col-xl-2 py-2">
-            <div class="card border-0 h-100 movie-card">
+            {% if not tv %}
+            <div class="card border-0 h-100 movie-card" data-toggle="tooltip" title="{{ item.original_title }}">
+            {% else %}
+            <div class="card border-0 h-100 movie-card" data-toggle="tooltip" title="{{ item.original_name }}">
+            {% endif %}
                 {% if item.poster_path is not none %}
                     <img src="https://image.tmdb.org/t/p/w500/{{ item.poster_path }}" class="card-img-top movie-header">
                 {% else %}

@@ -1,16 +1,26 @@
 {% extends "template.html" %}
 {% block content %}
 <!-- BANNER -->
+{% if movie.backdrop_path is none %}
+<div class="jumbotron jumbotron-fluid text-center mb-0" style="background-color: black;">
+    <div class="container">
+        <img src="{{ url_for('static', filename='logo.png') }}" id="website-logo">
+    </div>
+</div>
+{% else %}
 <div class="jumbotron jumbotron-fluid mb-0" id="banner"
      style="background-image: url(https://image.tmdb.org/t/p/original/{{ movie.backdrop_path }}); background-size: cover; height: 400px;">
     <div class="container">
     </div>
 </div>
+{% endif %}
 <!-- INFO -->
 <div class="container-fluid" id="movie_info">
     <div class="row">
         <div class="col-sm-12 col-lg-3 text-center">
+            {% if movie.poster_path is not none %}
             <img src="https://image.tmdb.org/t/p/w185/{{ movie.poster_path }}" id="icon">
+            {% endif %}
         </div>
         <div class="col-sm-12 col-lg-3 align-self-center text-center">
             <p><span class="font-weight-bold h2">{{ movie.original_title }}</span></p>
@@ -51,6 +61,7 @@
     </div>
 </div>
 <!-- CAST SLICK CAROUSEL -->
+{% if movie_credits|length > 0 %}
 <div class="container-fluid slider">
     <div class="slider-box">
         <i class="fas fa-caret-left fa-2x back"></i>
@@ -72,7 +83,9 @@
         </div>
     </div>
 </div>
+{% endif %}
 <!-- RECOMMENDATIONS -->
+{% if movie_recommendations|length > 0 %}
 <h2 class="text-center display-4 mt-5">Recommended</h2>
 <p class="text-muted text-center mt-0">
     <small>If you enjoyed <strong>{{ movie.original_title }}</strong> then check out these movies!</small>
@@ -140,8 +153,7 @@
         </div>
     </div>
 </div>
-
-
+{% endif %}
 <!-- COMMENTS -->
 <h2 class="text-center display-4 pt-5" id="comment-header">Comments</h2>
 {% if not posts.items %}

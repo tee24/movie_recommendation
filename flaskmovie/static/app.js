@@ -44,6 +44,7 @@ $(document).ready(function(){
        req.done(function(data){
             $('#movie_tiles').html(data);
             $('title').html('Home - Television');
+            $('[data-toggle="tooltip"]').tooltip();
        });
   });
 
@@ -110,7 +111,7 @@ $(document).ready(function() {
     let page = 2
     if (top.location.pathname === '/'){
         $(window).scroll(function () {
-          if ($(window).scrollTop() > $('#movie_tiles').height() / 2) {
+          if ($(window).scrollTop() >= ($(document).height() - $(window).height())) {
               if (callAllowed){
                 callAllowed = false;
                 console.log('past halfway');
@@ -124,6 +125,7 @@ $(document).ready(function() {
                         $(html).appendTo('#movie_tiles');
                         callAllowed = true;
                         page++;
+                        $('[data-toggle="tooltip"]').tooltip();
                    });
                    }
           }
@@ -345,4 +347,8 @@ $(document).on('click', '.delete-comment', function() {
        });
   });
 });
+});
+
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();
 });

@@ -4,7 +4,7 @@
     <div class="row mb-5">
         {% for item in discovered_movies %}
         <div class="col-6 col-sm-4 col-md-3 col-xl-2 py-2">
-            <div class="card h-100">
+            <div class="card border-0 movie-card h-100">
                 {% if item.poster_path is not none %}
                 <img src="https://image.tmdb.org/t/p/w500/{{ item.poster_path }}" class="card-img-top movie-header">
                 {% else %}

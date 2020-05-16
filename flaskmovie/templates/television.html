@@ -1,16 +1,26 @@
 {% extends "template.html" %}
 {% block content %}
 <!-- BANNER -->
+{% if show.backdrop_path is none %}
+<div class="jumbotron jumbotron-fluid text-center mb-0" style="background-color: black;">
+    <div class="container">
+        <img src="{{ url_for('static', filename='logo.png') }}" id="website-logo">
+    </div>
+</div>
+{% else %}
 <div class="jumbotron jumbotron-fluid mb-0" id="banner"
      style="background-image: url(https://image.tmdb.org/t/p/original/{{ show.backdrop_path }}); background-size: cover; height: 400px;">
     <div class="container">
     </div>
 </div>
+{% endif %}
 <!-- INFO -->
 <div class="container-fluid" id="movie_info">
     <div class="row">
         <div class="col-sm-12 col-lg-3 text-center">
+            {% if show.poster_path is not none %}
             <img src="https://image.tmdb.org/t/p/w185/{{ show.poster_path }}" id="icon">
+            {% endif %}
         </div>
         <div class="col-sm-12 col-lg-3 align-self-center text-center">
             <p><span class="font-weight-bold h2">{{ show.original_name }}</span></p>
@@ -51,6 +61,7 @@
     </div>
 </div>
 <!-- CAST SLICK CAROUSEL -->
+{% if show_credits|length > 0 %}
 <div class="container-fluid slider">
     <div class="slider-box">
         <i class="fas fa-caret-left fa-2x back"></i>
@@ -72,7 +83,9 @@
         </div>
     </div>
 </div>
+{% endif %}
 <!--SEASON INFO-->
+{% if show_seasons|length > 0 %}
 <h2 class="text-center display-4 py-5">Seasons</h2>
 <!-- SEASON SLICK CAROUSEL -->
 <div class="container-fluid slider" style="background-color: #2e2e2e;">
@@ -92,7 +105,9 @@
         </div>
     </div>
 </div>
+{% endif %}
 
+{% if season.episodes|length > 0 %}
 <h2 class="text-center display-4 py-5">Episodes</h2>
 
         <div class="container-fluid pt-5">
@@ -124,6 +139,7 @@
     <canvas id="seasonChart">
     </canvas>
 </div>
+{% endif %}
 {% endblock content %}
 
 {% block scripts %}

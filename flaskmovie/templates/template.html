@@ -29,38 +29,38 @@
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tooltip" title="Home" data-placement="bottom"
+                <a class="nav-link" data-placement="bottom"
                    href="{{ url_for('index') }}"><i class="fas fa-home mr-1"></i>Home</a>
             </li>
             {% if current_user.is_authenticated %}
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tooltip" title="Account" href="{{ url_for('account') }}"><i
+                <a class="nav-link" href="{{ url_for('account') }}"><i
                         class="far fa-user-circle mr-1"></i>Account</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tooltip" title="Watchlist" href="{{ url_for('watchlist_movies') }}"><i
+                <a class="nav-link" href="{{ url_for('watchlist_movies') }}"><i
                         class="fas fa-film mr-1"></i>My Movies</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tooltip" title="Watchlist" href="{{ url_for('watchlist_tv') }}"><i
+                <a class="nav-link" href="{{ url_for('watchlist_tv') }}"><i
                         class="fas fa-tv mr-1"></i>My TV</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tooltip" title="Logout" href="{{ url_for('logout') }}"><i
+                <a class="nav-link" href="{{ url_for('logout') }}"><i
                         class="fas fa-sign-out-alt mr-1"></i>Logout</a>
             </li>
             {% else %}
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tooltip" title="Register" href="{{ url_for('register') }}"><i
+                <a class="nav-link" href="{{ url_for('register') }}"><i
                         class="fas fa-user-plus mr-1"></i>Register</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tooltip" title="Login" href="{{ url_for('login') }}"><i
+                <a class="nav-link" href="{{ url_for('login') }}"><i
                         class="fas fa-sign-in-alt mr-1"></i>Login</a>
             </li>
             {% endif %}
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tooltip" title="Discover" href="{{ url_for('discover') }}"><i
+                <a class="nav-link" href="{{ url_for('discover') }}"><i
                         class="fas fa-lightbulb mr-1"></i>Discover</a>
             </li>
         </ul>
