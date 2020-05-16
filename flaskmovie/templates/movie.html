@@ -22,7 +22,7 @@
             <img src="https://image.tmdb.org/t/p/w185/{{ movie.poster_path }}" id="icon">
             {% endif %}
         </div>
-        <div class="col-sm-12 col-lg-3 align-self-center text-center">
+        <div class="col-sm-12 col-lg-3 align-self-center text-center py-2">
             <p><span class="font-weight-bold h2">{{ movie.original_title }}</span></p>
             <p>{{ movie.overview }}</p>
         </div>
@@ -100,15 +100,25 @@
                 {% if item == movie_recommendations[0] %}
                 <div class="col-sm-6 col-md-4 col-lg-3 mt-2 mb-2">
                     <a href="{{ url_for('movie', movie_id=item.id) }}">
+                        {% if item.poster_path is none %}
+                        <img src="{{ url_for('static', filename='background2.jpg') }}"
+                             class="img-fluid card-rec active-small" id="img-{{ loop.index }}">
+                        {% else %}
                         <img src="https://image.tmdb.org/t/p/w185/{{ item.poster_path }}"
                              class="img-fluid card-rec active-small" id="img-{{ loop.index }}">
+                        {% endif %}
                     </a>
                 </div>
                 {% else %}
                 <div class="col-sm-6 col-md-4 col-lg-3 mt-2 mb-2">
                     <a href="{{ url_for('movie', movie_id=item.id) }}">
+                        {% if item.poster_path is none %}
+                        <img src="{{ url_for('static', filename='background2.jpg') }}"
+                             class="img-fluid card-rec" id="img-{{ loop.index }}">
+                        {% else %}
                         <img src="https://image.tmdb.org/t/p/w185/{{ item.poster_path }}"
                              class="img-fluid card-rec" id="img-{{ loop.index }}">
+                        {% endif %}
                     </a>
                 </div>
                 {% endif %}
@@ -122,13 +132,23 @@
                     {% for item in movie_recommendations %}
                     {% if item == movie_recommendations[0] %}
                     <a href="{{ url_for('movie', movie_id=item.id) }}">
+                        {% if item.poster_path is none %}
+                        <img src="{{ url_for('static', filename='background2.jpg') }}"
+                             id="card-rec-img-{{ loop.index }}" class="img-fluid card-rec active">
+                        {% else %}
                         <img src="https://image.tmdb.org/t/p/w342/{{ item.poster_path }}"
                              id="card-rec-img-{{ loop.index }}" class="img-fluid card-rec active">
+                        {% endif %}
                     </a>
                     {% else %}
                     <a href="{{ url_for('movie', movie_id=item.id) }}">
+                        {% if item.poster_path is none %}
+                        <img src="{{ url_for('static', filename='background2.jpg') }}"
+                             id="card-rec-img-{{ loop.index }}" class="img-fluid card-rec hide-element">
+                        {% else %}
                         <img src="https://image.tmdb.org/t/p/w342/{{ item.poster_path }}"
                              id="card-rec-img-{{ loop.index }}" class="img-fluid card-rec hide-element">
+                        {% endif %}
                     </a>
                     {% endif %}
                     {% endfor %}

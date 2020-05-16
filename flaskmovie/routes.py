@@ -19,7 +19,8 @@ def api_call(endpoint, page=1):
 @app.route('/')
 def index():
 	movies = api_call('movie/popular')
-	return render_template('index.html', movies=movies, title='Home - Movies')
+	footer = False
+	return render_template('index.html', movies=movies, title='Home - Movies', footer=footer)
 
 @app.route('/load', methods=['GET', 'POST'])
 def load():

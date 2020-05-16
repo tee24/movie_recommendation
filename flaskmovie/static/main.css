@@ -205,3 +205,12 @@ cursor: pointer;
 .slick-track {
     margin:auto;
 }
+
+.movie-card{
+background-color: transparent;
+}
+
+.jumbotron{
+background: rgb(193,193,193);
+background: linear-gradient(180deg, rgba(193,193,193,1) 0%, rgba(233,233,233,1) 48%, rgba(255,255,255,1) 100%);
+}
