@@ -1,0 +1,8 @@
+{% extends "template.html" %}
+{% block content %}
+<h1 class="text-center mt-5 display-4">Error (500)</h1>
+<p class="text-italic text-muted text-center mt-2">Something went wrong!<p>
+    <div class="text-center mt-5">
+    <img src="{{ url_for('static', filename='error.png') }}" style="height:200px;">
+</div>
+{% endblock content %}

@@ -182,7 +182,7 @@ def html_gen(list, page=1, tv=False):
 @app.route('/search', methods=['GET', 'POST'])
 def search():
 	search_term = request.args.get('search')
-	search_results = requests.get(f"https://api.themoviedb.org/3/search/multi?api_key={key}&language=en-US&query={search_term}&page=1&region=US").json()['results']
+	search_results = requests.get(f"https://api.themoviedb.org/3/search/multi?api_key={key}&language=en-US&query={search_term}&page=1&region=US").json()['results'][:-2]
 	for item in search_results:
 		if item['media_type'] == 'person':
 			search_results.remove(item)
@@ -521,3 +521,10 @@ def resend_verification_email():
 		flash('You are already verified!', 'success')
 	return redirect(url_for('account'))
 
+@app.errorhandler(404)
+def page_not_found(e):
+	return render_template('errors/404.html'), 404
+
+@app.errorhandler(500)
+def page_not_found(e):
+	return render_template('errors/500.html'), 500
