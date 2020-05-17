@@ -26,9 +26,10 @@ class MovieList(db.Model):
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 	movie_id = db.Column(db.Integer, db.ForeignKey('movie.tmdb_id'), nullable=False)
 	watch_list = db.Column(db.Boolean, nullable=False)
+	watched = db.Column(db.Boolean, default=False, nullable=False)
 
 	def __repr__(self):
-		return f"Post('{self.id}', '{self.user_id}', '{self.movie_id}', '{self.watch_list}')"
+		return f"MovieList('{self.id}', '{self.user_id}', '{self.movie_id}', '{self.watch_list}', '{self.watched}')"
 
 class Tv(db.Model):
 	id = db.Column(db.Integer, primary_key=True)

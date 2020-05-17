@@ -22,6 +22,14 @@
                 <i class="fas fa-check-square fa-2x watched-button unwatched show"
                    id="ids-{{ item.tmdb_show_id }}"></i>
                 {% endif %}
+                {% else %}
+                {% if watched[loop.index - 1] == True %}
+                <i class="fas fa-check-square fa-2x watched-button watched movie"
+                   id="ids-{{ item.tmdb_id }}"></i>
+                {% else %}
+                <i class="fas fa-check-square fa-2x watched-button unwatched movie"
+                   id="ids-{{ item.tmdb_id }}"></i>
+                {% endif %}
                 {% endif %}
 <!--                <div class="card-body">-->
                     {% if not tv %}

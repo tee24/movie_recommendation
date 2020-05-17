@@ -195,10 +195,13 @@ def search():
 @login_required
 def watchlist_movies():
 	ids = [movie.movie_id for movie in current_user.movies if movie.watch_list == True]
+	ids = sorted(ids)
 	watchlist = db.session.query(Movie).filter(Movie.tmdb_id.in_(ids)).all()
+	watchlist = sorted(watchlist, key=lambda x: int(x.tmdb_id))
+	watched = [movie.watched for movie in sorted(current_user.movies, key=lambda x: x.movie_id)]
 	tv = False
 
-	return render_template('watchlist/watchlist.html', watchlist=watchlist, tv=tv, title='Movies')
+	return render_template('watchlist/watchlist.html', watchlist=watchlist, tv=tv, watched=watched, title='Movies')
 
 
 @app.route('/watchlist/tv', methods=['GET', 'POST'])
@@ -364,8 +367,7 @@ def discover():
 
 		sort = request.form['sort_by']
 
-		discovered_movies = requests.get(f"https://api.themoviedb.org/3/discover/movie?api_key={key}&language=en-US&sort_by={sort}&include_adult=false&include_video=false&page=1{query}").json()['results']
-		print(query)
+		discovered_movies = requests.get(f"https://api.themoviedb.org/3/discover/movie?api_key={key}&language=en-US&sort_by={sort}&include_adult=false&include_video=false&page=1{query}").json()['results'][:-2]
 		return render_template('recommendations.html', discovered_movies=discovered_movies)
 
 	sort_by = ['popularity.asc', 'popularity.desc', 'release_date.asc', 'release_date.desc', 'revenue.asc',
@@ -442,6 +444,14 @@ def mark_watched():
 		else:
 			for episode in episodes:
 				episode.watched_episode = False
+		db.session.commit()
+	elif method == 'movie':
+		movie_id = int(ids)
+		movie = MovieList.query.filter_by(user_id=current_user.id, movie_id=movie_id).first()
+		if add == 1:
+			movie.watched = True
+		else:
+			movie.watched = False
 		db.session.commit()
 	return ""
 

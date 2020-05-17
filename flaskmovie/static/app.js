@@ -11,10 +11,12 @@ window.addEventListener( "pageshow", function ( event ) {
 });
 
 let endpoint = 'movie/popular'
+let page = 2;
  //movies ajax
 $(document).ready(function(){
   $("#movies").click(function() {
-      endpoint = 'movie/popular'
+      page = 2;
+      endpoint = 'movie/popular';
       req = $.ajax({
               url: '/update',
               type: "POST",
@@ -33,7 +35,8 @@ $(document).ready(function(){
 $(document).ready(function(){
 
   $("#television").click(function() {
-      endpoint = 'tv/popular'
+      page = 2;
+      endpoint = 'tv/popular';
       req = $.ajax({
               url: '/update',
               type: "POST",
@@ -108,7 +111,6 @@ $('.back').click(function(){
 //infinite loading
 $(document).ready(function() {
     let callAllowed = true;
-    let page = 2
     if (top.location.pathname === '/'){
         $(window).scroll(function () {
           if ($(window).scrollTop() >= ($(document).height() - $(window).height())) {
@@ -217,13 +219,16 @@ $(".watched-button").click(function() {
       if (watchedButton.hasClass('season')){
          method = 'season';
       } else if (watchedButton.hasClass('show')){
-         method = 'show'
+         method = 'show';
+      } else if (watchedButton.hasClass('movie')){
+         method = 'movie';
       }
 
 
       if (watchedButton.hasClass('watched')){
         add = 0;
       };
+
 
       req = $.ajax({
               url: '/mark_watched',
