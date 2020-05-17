@@ -171,17 +171,18 @@ left: 7px;
 cursor: pointer;
 color: #32CD32;
 z-index: 2;
-opacity: 0.85;
+opacity: 1;
 }
 
 .watched-button.unwatched{
 position: absolute;
 width: 30px;
 height: 30px;
+color: #ffffff;
 top: 7px;
 left: 7px;
 cursor: pointer;
-opacity: 0.25;
+opacity: 1;
 z-index: 2;
 }
 

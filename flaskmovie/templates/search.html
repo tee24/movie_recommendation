@@ -11,15 +11,9 @@
                     <img src="{{ url_for('static', filename='background.jpg') }}" class="card-img-top movie-header h-100">
                 {% endif %}
                 {% if item.media_type == "movie" %}
-<!--                <div class="card-body">-->
-<!--                    <h5 class="card-title">{{ item.original_title }}</h5>-->
                     <a href="{{ url_for('movie', movie_id=item.id) }}" class="stretched-link" data-toggle="tooltip" title="{{ item.original_title }}"></a>
-<!--                </div>-->
                 {% else %}
-<!--                <div class="card-body">-->
-<!--                    <h5 class="card-title">{{ item.original_name }}</h5>-->
                     <a href="{{ url_for('television', television_id=item.id) }}" class="stretched-link" data-toggle="tooltip" title="{{ item.original_name }}"></a>
-<!--                </div>-->
                 {% endif %}
             </div>
         </div>

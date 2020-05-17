@@ -19,8 +19,7 @@ def api_call(endpoint, page=1):
 @app.route('/')
 def index():
 	movies = api_call('movie/popular')
-	footer = False
-	return render_template('index.html', movies=movies, title='Home - Movies', footer=footer)
+	return render_template('index.html', movies=movies, title='Home - Movies')
 
 @app.route('/load', methods=['GET', 'POST'])
 def load():
@@ -380,6 +379,7 @@ def discover():
 
 
 @app.route('/watchlist/tv/<int:show_id>')
+@login_required
 def watchlist_tv_season(show_id):
 	seasons = requests.get(f"https://api.themoviedb.org/3/tv/{show_id}?api_key={key}&language=en-US").json()['seasons']
 	seasons = [season for season in seasons if season['name'] if int(season['season_number']) is not 0]
@@ -399,6 +399,7 @@ def watchlist_tv_season(show_id):
 	return render_template('watchlist/watchlist_season.html', seasons=seasons, show_id=show_id, season_watched=season_watched)
 
 @app.route('/watchlist/tv/<int:show_id>/<int:season_id>/<int:season_number>')
+@login_required
 def watchlist_tv_episode(show_id, season_id, season_number):
 	episodes = requests.get(f"https://api.themoviedb.org/3/tv/{show_id}/season/{season_number}?api_key={key}&language=en-US").json()['episodes']
 	episode_watched = []
@@ -410,6 +411,7 @@ def watchlist_tv_episode(show_id, season_id, season_number):
 						   season_id=season_id, show_id=show_id)
 
 @app.route('/mark_watched', methods=['GET', 'POST'])
+@login_required
 def mark_watched():
 	ids = request.values.get('ids')[4:]
 	add = int(request.values.get('add'))
@@ -456,6 +458,7 @@ def mark_watched():
 	return ""
 
 @app.route('/movie/comments/update', methods=['GET', 'POST'])
+@login_required
 def movie_comments_update():
 	id = request.values.get('id')
 	movie_id = int(id.split('-')[1])
@@ -468,6 +471,7 @@ def movie_comments_update():
 	return data
 
 @app.route('/get/post', methods=['GET', 'POST'])
+@login_required
 def get_post():
 	post_id = int(request.values.get('postId')[3:])
 	post = Post.query.filter_by(id=post_id).first()
