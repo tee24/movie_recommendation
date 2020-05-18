@@ -3,4 +3,3 @@ venv/
 __pycache__/
 flaskmovie/site.db
 movie_cache.sqlite
-flaskmovie/static/images/
